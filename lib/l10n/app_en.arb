@@ -1,0 +1,6 @@
+{
+    "locatio_services_failed_title": "Enable Location Services for better map use",
+    "locatio_services_failed_content": "You well get navigation services When you turn on the location service.",
+    "location_server_failed_open": "Turn On in Settings",
+    "location_server_failed_cancel": "No Thanks"
+}

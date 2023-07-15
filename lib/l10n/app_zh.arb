@@ -1,0 +1,18 @@
+{
+  "locatio_services_failed_title": "请打开定位服务",
+  "@locatio_services_failed_title": {
+    "description": "用于定位服务未开启弹窗的标题，介绍需要开启定位服务"
+  },
+  "locatio_services_failed_content": "打开定位服务后，您将获得导航服务。",
+  "@locatio_services_failed_content": {
+    "description": "用于定位服务未开启弹窗的内容，主要是讲开启定位后能获得功能"
+  },
+  "location_server_failed_open": "在设置中打开",
+  "@location_server_failed_open": {
+    "description": "用于定位服务未开启弹窗的打开按钮"
+  },
+  "location_server_failed_cancel": "下次再说",
+  "@location_server_failed_cancel": {
+    "description": "用于定位服务未开启弹窗取消按钮"
+  }
+}

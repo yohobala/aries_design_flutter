@@ -1,0 +1,8 @@
+arb-dir: lib/l10n
+template-arb-file: app_zh.arb
+# 确定生成的输出文件是作为合成包生成还是在 Flutter 项目中的指定目录中生成。默认情况下，此标志为 true。
+# 当synthetic-package设置为 false 时，它会在默认情况下由 arb-dir 指定的目录中生成本地化文件。如果指定output-dir，则会在此处生成文件
+synthetic-package: false
+out-dir: lib/l10n
+output-localization-file: app_localizations.dart
+output-class: AriLocalizations
