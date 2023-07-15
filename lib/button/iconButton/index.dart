@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 typedef AriIconButtonOnPressed = void Function(
     ValueNotifier<int> selectIndex, AnimationController animationController);
 
-/// 图标按钮
 class AriIconButton extends StatefulWidget {
+  //*--- 构造函数 ---*
+  /// 图标按钮
   AriIconButton(
       {Key? key,
       required this.icons,
@@ -24,6 +25,7 @@ class AriIconButton extends StatefulWidget {
         style = ValueNotifier<ButtonStyle>(style ?? ButtonStyle()),
         super(key: key);
 
+  //*--- 公有变量 ---*
   /// 图标列表，根据[selectIndex]显示相应的图标
   final List<Widget> icons;
 
@@ -47,7 +49,7 @@ class AriIconButton extends StatefulWidget {
 }
 
 class AriIconButtonState extends State<AriIconButton>
-    with TickerProviderStateMixin, WidgetsBindingObserver {
+    with TickerProviderStateMixin {
   //*--- 公有变量 ---*
   bool isFav = false;
 

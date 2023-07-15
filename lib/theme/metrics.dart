@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -98,11 +100,19 @@ class AriThemeDuration {
   final Duration mapDuration = _Duration.long4;
 }
 
+/// 文本样式
 class AriThemeTextStyle {
+  /// 对话框标题
   final TextStyle dialogTitle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w700,
   );
+}
+
+/// 模糊
+class AriThemeFilter {
+  /// 标准模糊效果
+  final ImageFilter standard = ImageFilter.blur(sigmaX: 20, sigmaY: 20);
 }
 
 /// 按钮的数值方面的样式
@@ -150,4 +160,13 @@ class AriThemeButton {
   ///
   /// 因为是圆形或正方形，所以长宽一样
   final double segmentedIconButtonSize = 40;
+}
+
+class AriThemeModal {
+  final BoxDecoration bottomSheet = BoxDecoration(
+    borderRadius: BorderRadius.only(
+      topLeft: AriTheme.borderRadius.standard,
+      topRight: AriTheme.borderRadius.standard,
+    ),
+  );
 }

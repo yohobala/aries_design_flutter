@@ -9,10 +9,10 @@ final ariThemeDataDark = generateColorTheme(
 );
 
 final AriThemeColor ariThemeDark = AriThemeColor(
-  colorScheme: _colorScheme,
-  shadow: _boxShadow,
-  button: _button,
-);
+    colorScheme: _colorScheme,
+    shadow: _boxShadow,
+    button: _button,
+    modal: _modal);
 
 final ColorScheme _colorScheme = ColorScheme(
   brightness: Brightness.dark,
@@ -55,6 +55,12 @@ AriThemeBoxShadow _boxShadow = AriThemeBoxShadow(
     blurRadius: 6, // 模仿 FloatingActionButton 的 elevation
     offset: Offset(0, 3), // 模仿 FloatingActionButton 的阴影偏移
   ),
+  bottomSheet: BoxShadow(
+    color: _colorScheme.shadow.withOpacity(0.2), // 设置透明度
+    spreadRadius: 0, // 不要扩散阴影
+    blurRadius: 6, // 模仿 FloatingActionButton 的 elevation
+    offset: Offset(0, -5), // 模仿 FloatingActionButton 的阴影偏移
+  ),
 );
 
 AriThemeColorButton _button = AriThemeColorButton(
@@ -78,4 +84,13 @@ AriThemeColorButton _button = AriThemeColorButton(
       _boxShadow.standard,
     ],
   ),
+);
+
+AriThemeColorModal _modal = AriThemeColorModal(
+  bottomSheet: BoxDecoration(
+      color: _colorScheme.surface.withOpacity(0.5),
+      borderRadius: AriTheme.modal.bottomSheet.borderRadius,
+      boxShadow: [
+        _boxShadow.bottomSheet,
+      ]),
 );

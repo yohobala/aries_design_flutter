@@ -4,6 +4,8 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
 class AriDialog extends StatefulWidget {
+  //*--- 构造函数 ---*
+  /// 对话框
   const AriDialog(
       {Key? key,
       required this.title,
@@ -12,6 +14,7 @@ class AriDialog extends StatefulWidget {
       this.buttonWidth = 0.8})
       : super(key: key);
 
+  //*--- 公有变量 ---*
   /// 标题
   final Widget? title;
 

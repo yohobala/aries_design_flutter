@@ -72,8 +72,14 @@ class AriTheme {
   /// 文本样式
   static final AriThemeTextStyle textStyle = AriThemeTextStyle();
 
+  /// 模糊效果
+  static final AriThemeFilter filter = AriThemeFilter();
+
   /// 按钮
   static final AriThemeButton button = AriThemeButton();
+
+  /// 弹出框
+  static final AriThemeModal modal = AriThemeModal();
 }
 
 /// Aries的颜色主题
@@ -91,10 +97,14 @@ class AriThemeColor {
   /// 按钮
   final AriThemeColorButton button;
 
+  /// 弹出框
+  final AriThemeColorModal modal;
+
   AriThemeColor({
     required this.colorScheme,
     required this.shadow,
     required this.button,
+    required this.modal,
   });
 }
 
@@ -102,8 +112,10 @@ class AriThemeColor {
 class AriThemeBoxShadow {
   final BoxShadow standard;
 
+  final BoxShadow bottomSheet;
   const AriThemeBoxShadow({
     required this.standard,
+    required this.bottomSheet,
   });
 }
 
@@ -122,5 +134,14 @@ class AriThemeColorButton {
     required this.gradientButton,
     required this.segmentedIconButton,
     required this.segmentedIconButtonContainer,
+  });
+}
+
+class AriThemeColorModal {
+  /// 底部弹出框
+  final BoxDecoration bottomSheet;
+
+  const AriThemeColorModal({
+    required this.bottomSheet,
   });
 }

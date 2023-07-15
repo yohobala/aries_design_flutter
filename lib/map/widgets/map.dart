@@ -100,6 +100,15 @@ class AriMapState extends State<AriMap> with WidgetsBindingObserver {
     //移动到设备定位
     ariMapController.goToPosition();
 
+    /*
+     * 只有添加了WidgetsBinding.instance?.addObserver(this);
+     * 才会触发didChangePlatformBrightness，didChangeAppLifecycleState等方法
+     * 
+     * WidgetsBinding.instance?.addObserver(this); 
+     * 这一行代码是将当前对象添加为系统事件的观察者，其中 this 通常指向一个 WidgetsBindingObserver 的实例。
+     * 当你把一个 WidgetsBindingObserver 添加为观察者之后，这个观察者的 didChangePlatformBrightness 方法就会在平台亮度发生变化时被调用
+     * 一旦你不再需要监听平台亮度的变化，你应该使用 WidgetsBinding.instance?.removeObserver(this); 来移除观察者，避免内存泄漏。
+     */
     WidgetsBinding.instance.addObserver(this);
   }
 

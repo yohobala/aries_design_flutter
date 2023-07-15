@@ -3,6 +3,7 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 
 class GradientButton extends StatelessWidget {
   //*--- 构造函数 ---*
+  /// 渐变按钮
   const GradientButton({
     Key? key,
     required this.child,
@@ -34,8 +35,8 @@ class GradientButton extends StatelessWidget {
    */
   @override
   Widget build(BuildContext context) {
-    AriThemeColor themeColor = AriThemeController()
-        .getTheme(WidgetsBinding.instance?.window.platformBrightness);
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+    AriThemeColor themeColor = AriThemeController().getTheme(brightness);
 
     return Container(
       width: width ?? AriTheme.button.buttonSize.resolve({}).width,

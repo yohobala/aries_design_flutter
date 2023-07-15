@@ -1,10 +1,12 @@
 import 'package:aries_design_flutter/button/iconButton/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../theme/index.dart';
 import '../index.dart';
 
 /// 图标按钮容器
 class AriSegmentedIconButton extends StatefulWidget {
+  //*--- 构造函数 ---*
   /// 分段图标按钮
   ///
   /// - `buttons` 按钮列表
@@ -17,6 +19,7 @@ class AriSegmentedIconButton extends StatefulWidget {
       this.direction = Axis.vertical})
       : width = width ??= AriTheme.button.segmentedIconButtonSize;
 
+  //*--- 公有变量 ---*
   /// 按钮列表
   final List<AriIconButton> buttons;
 
@@ -30,57 +33,56 @@ class AriSegmentedIconButton extends StatefulWidget {
   State<StatefulWidget> createState() => _AriSegmentedIconButton();
 }
 
-class _AriSegmentedIconButton extends State<AriSegmentedIconButton>
-    with WidgetsBindingObserver {
+class _AriSegmentedIconButton extends State<AriSegmentedIconButton> {
   //*--- 私有变量 ---*
-  Brightness? _brightness;
+  // Brightness _brightness;
 
   //*--- 生命周期 ---*
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
-    _brightness = WidgetsBinding.instance?.window.platformBrightness;
-  }
-
-  /*
-   * 这个生命周期是为了实现当灯光模式改变的时候，按钮的颜色也跟着改变 
-   */
-  @override
-  didChangeAppLifecycleState(AppLifecycleState state) {
-    // 应用程序处于前台
-    if (state == AppLifecycleState.resumed) {
-      Brightness? _brightness =
-          WidgetsBinding.instance?.window.platformBrightness;
-      if (_brightness != _brightness && _brightness != null) {
-        _brightness = _brightness;
-        setState(() {});
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    AriThemeColor themeColor = AriThemeController().getTheme(_brightness);
+    // 获取系统的亮度和主题
+    // 一个状态管理库 Provider。
+    // 在顶层的Widget中获取亮度值，并将其提供给应用中的其他部分。
+    // 这样，当亮度变化时，只有依赖于亮度值的部分会被重建，其他部分不会受到影响。
+    // 通过 下面的代码，添加
+    // ```dart
+    // Provider<Brightness>.value(
+    //   value: brightness,
+    //   child: MyHomePage(),
+    // );
+    // ```
+    // 之后就可以在子节点获取Provider.of<Brightness>(context);
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+    AriThemeColor themeColor = AriThemeController().getTheme(brightness);
 
-    /// 建立按钮列表
+    // 建立按钮列表
     var buttonList = _BuildButtonList(
             buttons: widget.buttons,
             width: widget.width,
             direction: widget.direction,
             style: themeColor.button.segmentedIconButton)
         .build();
+
+    // 设置容器样式
     Decoration decoration = themeColor.button.segmentedIconButtonContainer;
     if (buttonList.length == 1) {
       decoration = themeColor.button.segmentedIconButtonContainer.copyWith(
           borderRadius: BorderRadius.all(AriTheme.borderRadius.circle));
     }
     if (widget.direction == Axis.horizontal) {
-      return Container(
-        width: widget.width,
-        decoration: decoration,
-        child: Row(
-          children: buttonList,
+      return Provider<Brightness>.value(
+        value: brightness,
+        child: Container(
+          width: widget.width,
+          decoration: decoration,
+          child: Row(
+            children: buttonList,
+          ),
         ),
       );
     } else {
@@ -96,7 +98,6 @@ class _AriSegmentedIconButton extends State<AriSegmentedIconButton>
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 }
