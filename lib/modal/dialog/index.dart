@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 class AriDialog extends StatefulWidget {
   //*--- 构造函数 ---*
   /// 对话框
+  ///
+  /// - `title` 标题
+  /// - `content` 内容
+  /// - `buttons` 按钮
+  /// - `buttonWidth` 按钮宽度，默认为0.8
   const AriDialog(
       {Key? key,
       required this.title,
@@ -71,13 +76,10 @@ class AriDialogState extends State<AriDialog> {
 /// buttonBuilder的示例：
 /// ```dart
 /// List<Widget> buttonBuilder(BuildContext innerContext) {
-///   return // 按钮[
-///       // 打开设置按钮
-///      [
+///   return [
 ///     FilledButton.tonal(
 ///         onPressed: () => {},
 ///         child: Text("ok")
-///     // 取消按钮
 ///     TextButton(
 ///         onPressed: () => {Navigator.pop(innerContext, 'Cancel')},
 ///         child: Text("Cancel")

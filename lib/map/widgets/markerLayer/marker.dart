@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 
+/// 标记widget
+///
+/// 用在[Marker]的builder中构建自定义的标记
+///
+/// 在AriMapMarker生成实例的时候，会自动调用该widget
+///
 class AriMapMarkerWidget extends StatefulWidget {
+  /// 标记widget
+  ///
+  /// - `type`: 标记类型
   const AriMapMarkerWidget({
     Key? key,
     required this.type,
@@ -39,6 +48,7 @@ class AriMapMarkerWidgetState extends State<AriMapMarkerWidget> {
   }
 }
 
+/// 普通标记
 class _NormalWidget extends StatelessWidget {
   const _NormalWidget({Key? key}) : super(key: key);
 
@@ -48,6 +58,7 @@ class _NormalWidget extends StatelessWidget {
   }
 }
 
+/// 位置标记
 class _PostionWidget extends StatelessWidget {
   const _PostionWidget({Key? key}) : super(key: key);
 

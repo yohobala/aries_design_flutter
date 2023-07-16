@@ -4,7 +4,18 @@ import 'package:provider/provider.dart';
 import '../../../theme/index.dart';
 import '../index.dart';
 
-/// 图标按钮容器
+/// 分段图标按钮
+///
+/// 支持横向排列和纵向排列
+///
+/// 如果只有一个button，会变成圆形按钮
+///
+/// *示例代码*
+/// ```dart
+/// AriSegmentedIconButton(buttons: [
+///   AriMapLocationButton(ariMapController: ariMapController),
+/// ])
+/// ```
 class AriSegmentedIconButton extends StatefulWidget {
   //*--- 构造函数 ---*
   /// 分段图标按钮

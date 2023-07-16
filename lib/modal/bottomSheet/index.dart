@@ -15,6 +15,7 @@ class AriBottomSheet extends StatefulWidget {
 class AriBottomSheetState extends State<AriBottomSheet> {
   @override
   Widget build(BuildContext context) {
+    AriTheme.insets.extraLarge;
     Brightness brightness = MediaQuery.of(context).platformBrightness;
     AriThemeColor theme = AriThemeController().getTheme(brightness);
     return FractionallySizedBox(
@@ -29,30 +30,23 @@ class AriBottomSheetState extends State<AriBottomSheet> {
             child: BackdropFilter(
               filter: AriTheme.filter.standard,
               child: Container(
-                child: Center(child: Text('Hello, World!')),
+                child: _build(),
               ),
             ),
           ),
         ),
       ),
-      //     Container(
-      //   decoration: BoxDecoration(
-      //     borderRadius: AriTheme.modal.bottomSheet.borderRadius,
-      //     boxShadow: [
-      //       theme.shadow.standarOffsetDy,
-      //     ],
-      //   ),
-      //   child: ClipRRect(
-      //     borderRadius: BorderRadius.circular(10),
-      //     child: Container(
-      //       child: BackdropFilter(
-      //         filter: AriTheme.filter.standard,
-      //         child: Container(
-      //           child: Center(child: Text('Hello, World!')),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
+    );
+  }
+
+  Widget _build() {
+    return Column(
+      children: [
+        Text("标题"),
+        Text("功能"),
+        Text("图像"),
+        Text("文本"),
+      ],
     );
   }
 }

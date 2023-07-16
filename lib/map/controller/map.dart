@@ -20,6 +20,25 @@ const double initZoom = 13.0;
 ///     - 外部调用
 ///     - [AriMapState]中监听地图事件["MapEventMoveEnd"]会触发
 ///     - [goToPosition]会触发
+///
+/// *示例代码*
+/// ```dart
+/// final AriMapController ariMapController =
+///     AriMapController(
+///       center: LatLng(39.904989, 116.405285),
+///       initMarkerLayers: [
+///         AriMapMarkerLayer(
+///           key: "test1",
+///           name: "测试图层1",
+///           initMarkers: [
+///             AriMapMarker(latLng: LatLng(26.19, 118.6)),
+///           ]),
+///         AriMapMarkerLayer(
+///           key: "test2",
+///           name: "测试图层2")
+///       ],
+///     );
+/// ```
 class AriMapController {
   //*--- 构造函数 ---*
   /// 地图控制器，用于地图组件的控制
@@ -29,25 +48,6 @@ class AriMapController {
   /// - `minZoom`: 最小缩放级别，默认1
   /// - `center`: 中心点，默认`LatLng(0, 0)`
   /// - `initMarkerLayers`: 初始化的标记层，默认为空
-  ///
-  /// *示例代码*
-  /// ```dart
-  /// final AriMapController ariMapController =
-  ///     AriMapController(
-  ///       center: LatLng(39.904989, 116.405285),
-  ///       initMarkerLayers: [
-  ///         AriMapMarkerLayer(
-  ///           key: "test1",
-  ///           name: "测试图层1",
-  ///           initMarkers: [
-  ///             AriMapMarker(latLng: LatLng(26.19, 118.6)),
-  ///           ]),
-  ///         AriMapMarkerLayer(
-  ///           key: "test2",
-  ///           name: "测试图层2")
-  ///       ],
-  ///     );
-  /// ```
   AriMapController(
       {double zoom = 13.0,
       double maxZoom = 18,

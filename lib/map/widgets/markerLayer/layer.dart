@@ -3,15 +3,19 @@ import 'package:flutter_map/flutter_map.dart';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 
+/// 地图标记图层
 class AriMapMarkerLayerWidget extends StatefulWidget {
   /// 单个地图标记层
+  ///
+  /// - `layer`: 标记层
+  /// - `layerKey`: 标记层的key
   const AriMapMarkerLayerWidget({
     Key? key,
     required this.layer,
     required this.layerKey,
   }) : super(key: key);
 
-  /// 地图标记控制器
+  /// 地图标记层
   final AriMapMarkerLayer layer;
 
   /// 当前地图标记层索引
@@ -52,6 +56,15 @@ class AriMapMarkerLayerState extends State<AriMapMarkerLayerWidget> {
   }
 }
 
+/// 地图标记图层集合
+///
+/// 通过读取ariMapMarkerController.layers，
+///
+/// 对每个layer调用[AriMapMarkerLayerWidget]构建图层
+///
+/// 最后返回一个图层列表
+///
+/// 一般用在[AriMap]的build中
 class AriMapMarkerLayersWidget extends StatefulWidget {
   /// 地图标记层集合
   const AriMapMarkerLayersWidget({

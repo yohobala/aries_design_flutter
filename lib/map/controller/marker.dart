@@ -10,6 +10,16 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 ///   - 作用
 ///     - `存在`: 更新
 ///     - `不存在`: 添加
+///
+/// *示例代码*
+/// ```dart
+/// AriMapMarkerController ariMapMarkerController =
+///    AriMapMarkerController(initLayers: []);
+/// AriMapMarker marker = AriMapMarker(
+///   latLng: LatLng(26.19, 118.6),
+///);
+/// ariMapMarkerController.updateMaker(marker);
+/// ```
 class AriMapMarkerController extends ChangeNotifier {
   //*--- 构造函数 ---*
   /// 地图标记控制器

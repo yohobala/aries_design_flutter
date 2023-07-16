@@ -4,9 +4,6 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-/// 间距
-///
-/// 一般是用于widget之间的间距
 class AriThemeInsets {
   final double extraSmall = 3;
   final double small = 5;
@@ -16,9 +13,6 @@ class AriThemeInsets {
   final double extraLarge = 30;
 }
 
-/// widget与屏幕的间距
-///
-/// 一般用于设定与屏幕的间距
 class AriThemeWindowsInsets {
   final double top = AriTheme.insets.medium;
   final double bottom = AriTheme.insets.medium;
@@ -26,7 +20,6 @@ class AriThemeWindowsInsets {
   final double right = AriTheme.insets.medium;
 }
 
-/// 圆角
 class AriThemeBorderRadius {
   final Radius zero = Radius.zero;
   final Radius extraSmall = Radius.circular(4);
@@ -100,7 +93,6 @@ class AriThemeDuration {
   final Duration mapDuration = _Duration.long4;
 }
 
-/// 文本样式
 class AriThemeTextStyle {
   /// 对话框标题
   final TextStyle dialogTitle = TextStyle(
@@ -109,7 +101,6 @@ class AriThemeTextStyle {
   );
 }
 
-/// 模糊
 class AriThemeFilter {
   /// 标准模糊效果
   final ImageFilter standard = ImageFilter.blur(sigmaX: 20, sigmaY: 20);

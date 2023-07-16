@@ -3,17 +3,13 @@ import 'index.dart';
 import 'generate.dart';
 
 /// Aries的浅色主题
-final ariThemeDataLight = generateColorTheme(
+final ariThemeDataLight = generateThemeData(
   Brightness.light,
   colorTheme: ariThemeLight,
 );
 
-final AriThemeColor ariThemeLight = AriThemeColor(
-  colorScheme: _colorScheme,
-  shadow: _boxShadow,
-  button: _button,
-  modal: _modal,
-);
+final AriThemeColor ariThemeLight =
+    generateThemeColor(colorScheme: _colorScheme);
 
 /// 配色
 /// primary: #765b00
@@ -52,57 +48,4 @@ const ColorScheme _colorScheme = ColorScheme(
   surfaceTint: Color(0xFF765B00),
   outlineVariant: Color(0xFFCFC5B4),
   scrim: Color(0xFF000000),
-);
-
-AriThemeBoxShadow _boxShadow = AriThemeBoxShadow(
-  standard: BoxShadow(
-    color: _colorScheme.shadow.withOpacity(0.2), // 设置透明度
-    spreadRadius: 0, // 不要扩散阴影
-    blurRadius: 6, // 模仿 FloatingActionButton 的 elevation
-    offset: Offset(0, 3), // 模仿 FloatingActionButton 的阴影偏移
-  ),
-  bottomSheet: BoxShadow(
-    color: _colorScheme.shadow.withOpacity(0.2), // 设置透明度
-    spreadRadius: 0, // 不要扩散阴影
-    blurRadius: 10, // 模仿 FloatingActionButton 的 elevation
-    offset: Offset(0, 0), // 模仿 FloatingActionButton 的阴影偏移
-  ),
-);
-
-AriThemeColorButton _button = AriThemeColorButton(
-  gradientButton: ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(
-      Colors.transparent,
-    ),
-    foregroundColor: MaterialStateProperty.all<Color>(
-      _colorScheme.onPrimary,
-    ),
-  ),
-  segmentedIconButton: ButtonStyle(
-    foregroundColor:
-        MaterialStateProperty.all<Color>(_colorScheme.onSecondaryContainer),
-  ),
-  segmentedIconButtonContainer: BoxDecoration(
-    color: _colorScheme.secondaryContainer,
-    borderRadius: AriTheme.button.segmentedIconButtonContainer.borderRadius,
-    boxShadow: [
-      _boxShadow.standard,
-      BoxShadow(
-        color: _colorScheme.outlineVariant,
-        spreadRadius: 0,
-        blurRadius: 7,
-        offset: Offset(0, 5), // 阴影的偏移，向下偏移3
-      )
-    ],
-  ),
-);
-
-AriThemeColorModal _modal = AriThemeColorModal(
-  bottomSheet: BoxDecoration(
-    color: _colorScheme.surface.withOpacity(0.8),
-    borderRadius: AriTheme.modal.bottomSheet.borderRadius,
-    boxShadow: [
-      _boxShadow.bottomSheet,
-    ],
-  ),
 );

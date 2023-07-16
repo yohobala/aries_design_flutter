@@ -4,21 +4,21 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:app_settings/app_settings.dart';
 
 ///定位按钮
+///
+/// *功能*
+/// 1. 点击按钮后，如果当前地图中心不是GPS位置，则会移动到GPS位置图标变成[LocationButtonEnum.aligned].
+///    如果当前地图中心是GPS位置，则不会移动
+/// 2. 当地图中心不是GPS位置时，图标变成[LocationButtonEnum.offset]
+///
+/// *示例代码*
+/// ```dart
+/// AriSegmentedIconButton(buttons: [
+///   AriMapLocationButton(ariMapController: ariMapController).build(),
+///])
 class AriMapLocationButton extends AriIconButton {
   /// 定位按钮
   ///
   /// - `ariMapController` 地图控制器
-  ///
-  /// *功能*
-  /// 1. 点击按钮后，如果当前地图中心不是GPS位置，则会移动到GPS位置图标变成[LocationButtonEnum.aligned].
-  ///    如果当前地图中心是GPS位置，则不会移动
-  /// 2. 当地图中心不是GPS位置时，图标变成[LocationButtonEnum.offset]
-  ///
-  /// *示例代码*
-  /// ```dart
-  /// AriSegmentedIconButton(buttons: [
-  ///   AriMapLocationButton(ariMapController: ariMapController).build(),
-  ///])
   AriMapLocationButton({required this.ariMapController})
       : super(
           icons: const [
@@ -119,9 +119,8 @@ class AriMapLocationButtonState extends AriIconButtonState {
         );
 
         List<Widget> buttonBuilder(BuildContext innerContext) {
-          return // 按钮[
-              // 打开设置按钮
-              [
+          return [
+            // 打开设置按钮
             FilledButton.tonal(
                 onPressed: () => {
                       //关闭

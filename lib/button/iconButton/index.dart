@@ -8,9 +8,17 @@ import 'package:flutter/material.dart';
 typedef AriIconButtonOnPressed = void Function(
     ValueNotifier<int> selectIndex, AnimationController animationController);
 
+/// 图标按钮
 class AriIconButton extends StatefulWidget {
   //*--- 构造函数 ---*
   /// 图标按钮
+  ///
+  /// - `icons` 图标列表，根据[selectIndex]显示相应的图标
+  /// - `selectIndex` 选择的图标,默认为0
+  /// - `rotateAngle` 旋转角度，默认为0.0
+  /// - `onPressed` 点击事件
+  /// - `borderRadius` 圆角
+  /// - `style` 按钮样式，默认为[ButtonStyle]
   AriIconButton(
       {Key? key,
       required this.icons,

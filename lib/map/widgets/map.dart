@@ -11,39 +11,40 @@ String getTianDiTuLayer(String layerName, String layerType) {
 }
 
 ///地图组件
+///
+/// 通过 [AriMapController] 来控制地图
+///
+/// *示例代码*
+///
+/// ```dart
+/// class MapView extends StatelessWidget {
+///  const MapView({Key? key}) : super(key: key);
+///
+///  @override
+///  Widget build(BuildContext context) {
+///    return AriMap(
+///      ariMapController: ariMapController,
+///      rightBottomChild: FloatingActionButton(
+///        shape: const CircleBorder(),
+///        onPressed: () {
+///        },
+///        child: const Icon(Icons.add, size: 36),
+///      ),
+///      rightTopChild: AriSegmentedIconButton(buttons: [
+///        AriMapLocationButton(ariMapController: ariMapController).build(),
+///      ]),
+///    );
+///  }
+/// }
+/// ```
+///
 class AriMap extends StatefulWidget {
   /// 地图组件
-  ///
-  /// 通过 [AriMapController] 来控制地图
   ///
   /// - `ariMapController` 地图控制器，如果没有传入，则会自动创建一个
   /// - `rightBottomChild` 右下角的子组件
   /// - `rightTopChild` 右上角的子组件
-  ///
-  /// *示例代码*
-  ///
-  /// ```dart
-  /// class MapView extends StatelessWidget {
-  ///  const MapView({Key? key}) : super(key: key);
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return AriMap(
-  ///      ariMapController: ariMapController,
-  ///      rightBottomChild: FloatingActionButton(
-  ///        shape: const CircleBorder(),
-  ///        onPressed: () {
-  ///        },
-  ///        child: const Icon(Icons.add, size: 36),
-  ///      ),
-  ///      rightTopChild: AriSegmentedIconButton(buttons: [
-  ///        AriMapLocationButton(ariMapController: ariMapController).build(),
-  ///      ]),
-  ///    );
-  ///  }
-  /// }
-  /// ```
-  ///
+
   AriMap({
     Key? key,
     this.ariMapController,

@@ -51,8 +51,22 @@ class AriThemeController {
 
 /// Aries的度量或数值方面的主题设置
 ///
-/// 不涉及到颜色的主题，都放在该类中
+/// 不涉及到颜色的主题设置，都放在该类中
+///
+/// 使用的时候直接调用AriTheme即可，不用实例化
+///
+/// 例如：
+/// ```dart
+/// double insets = AriTheme.insets.standard
+/// ````
+///
 /// 颜色主题是AriThemeColor类，通过AriThemeController().getTheme()来获取
+///
+/// 例如：
+/// ```dart
+/// Brightness brightness = MediaQuery.of(context).platformBrightness;
+/// AriThemeColor themeColor = AriThemeController().getTheme(brightness);
+/// ```
 @immutable
 class AriTheme {
   /// 间距
@@ -61,6 +75,8 @@ class AriTheme {
   static final AriThemeInsets insets = AriThemeInsets();
 
   /// widget与屏幕的间距
+  ///
+  /// 一般用于设定与屏幕的间距
   static final AriThemeWindowsInsets windowsInsets = AriThemeWindowsInsets();
 
   /// 圆角
@@ -84,8 +100,11 @@ class AriTheme {
 
 /// Aries的颜色主题
 ///
-/// 应该通过LeapThemeController().getTheme()来对应的主题
-/// 不要直接调用LeapTheme来获取
+/// 应该通过LeapThemeController().getTheme()来对应的主题。例如
+/// ```dart
+/// Brightness brightness = MediaQuery.of(context).platformBrightness;
+/// AriThemeColor themeColor = AriThemeController().getTheme(brightness);
+/// ```
 @immutable
 class AriThemeColor {
   /// 主色调
@@ -108,10 +127,13 @@ class AriThemeColor {
   });
 }
 
+/// Aries的阴影样式
 @immutable
 class AriThemeBoxShadow {
+  /// 标准阴影
   final BoxShadow standard;
 
+  /// 底部弹出框阴影
   final BoxShadow bottomSheet;
   const AriThemeBoxShadow({
     required this.standard,
@@ -119,6 +141,7 @@ class AriThemeBoxShadow {
   });
 }
 
+/// Aries的按钮样式
 @immutable
 class AriThemeColorButton {
   /// 渐变按钮
@@ -137,6 +160,7 @@ class AriThemeColorButton {
   });
 }
 
+/// Aries的弹出框样式
 class AriThemeColorModal {
   /// 底部弹出框
   final BoxDecoration bottomSheet;

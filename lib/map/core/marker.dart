@@ -8,6 +8,10 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 class AriMapMarkerLayer {
   //*--- 构造函数 ---*
   /// 地图标记图层
+  ///
+  /// - `key`: 标记层的key。如果为空，将默认为[defalutMakerLayerKey]。
+  /// - `initMarkers`: 初始化的标记。默认为空。
+  /// - `name`: 标记层的名称。默认为空。
   AriMapMarkerLayer({
     this.key = defalutMakerLayerKey,
     this.initMarkers = const [],
