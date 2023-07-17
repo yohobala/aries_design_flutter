@@ -33,3 +33,4 @@ flutter:
       - family: AriIcons
         fonts:
           - asset: lib/fonts/icon/iconfont.ttf
+pubspec.lock
