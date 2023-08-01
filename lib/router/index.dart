@@ -25,7 +25,7 @@ class AriRouteItem {
       : assert(
             !hasNavigation ||
                 (hasNavigation && navigationConfig != null && icon != null),
-            "当hasNavigation为true时,navigationConfig和icon必须设置");
+            );
 
   /// 路由名称，保证唯一性
   final String name;
