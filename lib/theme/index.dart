@@ -8,6 +8,7 @@ import 'dark.dart';
 import 'metrics.dart';
 
 class AriThemeController {
+  AriThemeController._internal();
   // 单例模式
   static final AriThemeController _instance = AriThemeController._internal();
 
@@ -45,8 +46,6 @@ class AriThemeController {
       return ariThemeDark;
     }
   }
-
-  AriThemeController._internal();
 }
 
 /// Aries的度量或数值方面的主题设置

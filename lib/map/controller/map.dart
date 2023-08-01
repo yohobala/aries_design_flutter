@@ -149,8 +149,6 @@ class AriMapController {
             _center.value = evt.center;
           }
         });
-      } else {
-        throw Exception("mapController已经初始化");
       }
     }
     if (geoLocationController != null) {
@@ -159,16 +157,10 @@ class AriMapController {
         _geoLocationController!.isAvailable.addListener(() {
           _updateGeoLocationAvailable();
         });
-      } else {
-        throw Exception("geoLocationController已经初始化");
       }
     }
     if (markerController != null) {
-      if (_markerController == null) {
-        _markerController = markerController;
-      } else {
-        throw Exception("markerController已经初始化");
-      }
+      _markerController ??= markerController;
     }
   }
 

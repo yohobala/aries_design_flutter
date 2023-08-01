@@ -14,5 +14,19 @@
   "location_server_failed_cancel": "下次再说",
   "@location_server_failed_cancel": {
     "description": "用于定位服务未开启弹窗取消按钮"
+  },
+  "ariRouteItem_hasNavigation_failed": "当hasNavigation为true时,navigationConfig和icon必须设置",
+  "@ariRouteItem_hasNavigation_failed": {
+    "description": "当hasNavigation为true时，navigationConfig和icon必须设置"
+  },
+  "ariRouteItem_name_duplicate": "路由'name'{name}已经存在，请更换'name'，保证唯一",
+  "@ariRouteItem_name_duplicate": {
+    "description": "新增route时，name重复",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "routeName"
+      }
+    }
   }
 }

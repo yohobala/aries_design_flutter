@@ -4,14 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 
-/// 地图标记图层
 class AriMapMarkerLayer {
-  //*--- 构造函数 ---*
-  /// 地图标记图层
-  ///
-  /// - `key`: 标记层的key。如果为空，将默认为[defalutMakerLayerKey]。
-  /// - `initMarkers`: 初始化的标记。默认为空。
-  /// - `name`: 标记层的名称。默认为空。
   AriMapMarkerLayer({
     this.key = defalutMakerLayerKey,
     this.initMarkers = const [],
@@ -20,16 +13,18 @@ class AriMapMarkerLayer {
     _initMarkers(initMarkers);
   }
 
-  //*--- 公有变量 ---*
+  //**************** 公有变量 ****************
   /// 标记层的key
   ///
   /// 用于标记层的唯一性
+  ///
+  /// 如果为空，将默认为[defalutMakerLayerKey]。
   final String key;
 
   /// 标记层的名称
   final String name;
 
-  /// 该标记层的所有的标记
+  /// 该标记层的初始标记，默认为[]
   final List<AriMapMarker> initMarkers;
 
   /// 标记层的所有标记
@@ -38,7 +33,7 @@ class AriMapMarkerLayer {
   /// 是否需要更新，用于外部监听数据变化
   final ValueNotifier<int> changeNotifier = ValueNotifier(0);
 
-  //*--- 私有方法 ---*
+  //**************** 私有方法 ****************
   /// 初始化标记
   ///
   /// - `initMarkers`: 初始化的标记
@@ -59,7 +54,6 @@ class AriMapMarkerLayer {
 ///   - 作用
 ///     - 更新标记的坐标
 class AriMapMarker {
-  //*--- 构造函数 ---*
   /// 地图中的标记
   ///
   /// - `key`: marker的key。如果为空，将默认为`UniqueKey().toString()`。
@@ -81,7 +75,8 @@ class AriMapMarker {
         _width = width,
         _height = height,
         _type = type;
-  //*--- 公有变量 ---*
+  //**************** 公有变量 ****************
+  /// 更新marker的坐标
   String get key => _key;
 
   String get layerkey => _layerkey;
@@ -99,7 +94,7 @@ class AriMapMarker {
 
   Marker get marker => _marker;
 
-  //*--- 私有变量 ---*
+  //**************** 私有变量 ****************
   final String _key;
 
   final String _layerkey;
@@ -120,7 +115,7 @@ class AriMapMarker {
     builder: (context) => AriMapMarkerWidget(type: type),
   );
 
-  //*--- 公有方法 ---*
+  //**************** 公有方法 ****************
   /// 更新marker的坐标
   ///
   /// - `newLatLng`: 新的坐标

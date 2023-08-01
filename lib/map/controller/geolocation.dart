@@ -42,7 +42,7 @@ const geoLocationSettings =
 ///     - 作用
 ///       - 停止监听
 class AriGeoLocationController {
-  //*--- 构造函数 ---*
+  //-------- 构造函数 ---*
   /// 定位控制器的实现
   ///
   /// - `ariMapMarkerController`: 地图标记控制器
@@ -53,14 +53,14 @@ class AriGeoLocationController {
     checkPermission();
   }
 
-  //*--- 公有变量 ---*
+  //*************** 公有变量 ***************
   /// 定位是否可用
   ValueNotifier<bool> get isAvailable => _isAvailableNotifier;
 
   /// 标记控制器
   final AriMapMarkerController? ariMapMarkerController;
 
-  //*--- 私有变量 ---*
+  //*************** 私有变量 ***************
   /// 地图标记控制器
   final AriMapMarkerController _ariMapMarkerController;
 

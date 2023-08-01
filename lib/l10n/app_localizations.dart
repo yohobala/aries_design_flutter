@@ -102,7 +102,7 @@ abstract class AriLocalizations {
   /// 用于定位服务未开启弹窗的内容，主要是讲开启定位后能获得功能
   ///
   /// In zh, this message translates to:
-  /// **'打开定位服务后，您将获得导航服务'**
+  /// **'打开定位服务后，您将获得导航服务。'**
   String get locatio_services_failed_content;
 
   /// 用于定位服务未开启弹窗的打开按钮
@@ -116,6 +116,18 @@ abstract class AriLocalizations {
   /// In zh, this message translates to:
   /// **'下次再说'**
   String get location_server_failed_cancel;
+
+  /// 当hasNavigation为true时，navigationConfig和icon必须设置
+  ///
+  /// In zh, this message translates to:
+  /// **'当hasNavigation为true时,navigationConfig和icon必须设置'**
+  String get ariRouteItem_hasNavigation_failed;
+
+  /// 新增route时，name重复
+  ///
+  /// In zh, this message translates to:
+  /// **'路由\'name\'{name}已经存在，请更换\'name\'，保证唯一'**
+  String ariRouteItem_name_duplicate(String name);
 }
 
 class _AriLocalizationsDelegate extends LocalizationsDelegate<AriLocalizations> {

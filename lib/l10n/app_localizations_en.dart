@@ -15,4 +15,12 @@ class AriLocalizationsEn extends AriLocalizations {
 
   @override
   String get location_server_failed_cancel => 'No Thanks';
+
+  @override
+  String get ariRouteItem_hasNavigation_failed => 'When \'hasNavigation\' is true, \'navigationConfig\' and \'icon\' must be set.';
+
+  @override
+  String ariRouteItem_name_duplicate(String name) {
+    return 'he route \'name\' $name already exists, please replace \'name\' to ensure uniqueness.';
+  }
 }
