@@ -3,15 +3,18 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:path/path.dart';
 
 /// AriRoute单个路由的配置
+///
 /// - [hasNavigation]为false时，用到的是Map<String, Widget Function(BuildContext)>进行配置，
 ///   见https://flutter.cn/docs/cookbook/navigation/named-routes的介绍
-///   [hasNavigation]为true，该[AriRouteItem]的所有路由通过onGenerateRoute生成
+/// - [hasNavigation]为true，该[AriRouteItem]的所有路由通过onGenerateRoute生成，
 ///   见https://flutter.cn/docs/cookbook/effects/nested-nav关于onGenerateRoute的介绍
+///   这个[AriRouteItem]下的所有路由都有底部导航栏。
+///   同时配置的子路由只能在该这个[AriRouteItem]进行跳转，子路由的[hasNavigation]必须为false
 ///
-/// - 当[hasNavigation]为true时，[navigationConfig]和[icon]必须设置,这个[AriRouteItem]下的所有路由都有底部导航栏，
-///   同时配置的子路由只能在该这个[AriRouteItem]进行跳转，
+/// *assert*
+/// - 如果[hasNavigation]为true，[navigationConfig]和[icon]不能为null,
 ///
-/// - 当父路由的[hasNavigation]为true时，子路由的[hasNavigation]必须为false
+///
 class AriRouteItem {
   AriRouteItem(
       {required this.route,
@@ -23,9 +26,9 @@ class AriRouteItem {
       this.navigationConfig,
       this.children = const []})
       : assert(
-            !hasNavigation ||
-                (hasNavigation && navigationConfig != null && icon != null),
-            );
+          !hasNavigation ||
+              (hasNavigation && navigationConfig != null && icon != null),
+        );
 
   /// 路由名称，保证唯一性
   final String name;
@@ -81,8 +84,8 @@ class AriRouter {
   static final AriRouter _instance = AriRouter._internal();
 
   //**************** 私有变量 ****************
-  late final List<AriRouteItem> _routes;
-  final Set<String> _routeNames = {};
+  late List<AriRouteItem> _routes = [];
+  Set<String> _routeNames = {};
 
   //**************** 公有方法 ****************
   // 得到路由表
@@ -128,8 +131,7 @@ class AriRouter {
     } else {
       _routeNames.add(name);
       _routes.add(route);
-
-      if (route.children.isNotEmpty) {
+      if (route.children.length > 1) {
         _insertRoutes(route.children);
       }
     }
