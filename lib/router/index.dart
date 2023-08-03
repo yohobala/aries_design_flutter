@@ -4,7 +4,10 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:path/path.dart';
+
+var logger = Logger();
 
 Set<String> _routeNames = {};
 List<AriRouteItem> _routeItems = [];
@@ -147,7 +150,7 @@ class AriRouter {
 
   // 设置路由表
   void setRoutes(List<AriRouteItem> routeItems,
-      [Widget Function(BuildContext)? bottomNavigationBar]) {
+      [AriNavigationBar Function(BuildContext)? bottomNavigationBar]) {
     _insertRoutes(routeItems, "/", bottomNavigationBar);
   }
 
@@ -211,9 +214,10 @@ class AriRouter {
     AriRouteItem routeItem,
     AriNavigationBar Function(BuildContext)? widget,
   ) {
+    logger.i("生成底部导航栏");
     return (context) => _NavigationContainer(
           routeItem: routeItem,
-          widget: widget,
+          navigationBar: widget,
         );
   }
 }
@@ -237,12 +241,14 @@ class _NavigationContainer extends StatefulWidget {
 class __NavigationContainerState extends State<_NavigationContainer> {
   @override
   void initState() {
+    logger.i("生成底部导航栏1");
     super.initState();
   }
 
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    logger.i("生成底部导航栏2");
     Widget navigationBar;
     if (widget.navigationBar != null) {
       navigationBar = widget.navigationBar!(context);

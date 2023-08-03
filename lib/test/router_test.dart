@@ -134,48 +134,57 @@ class TestRouterRoute extends StatelessWidget {
   }
 }
 
+/// 测试router是否能正确跳
+class TestRouterPush extends StatelessWidget {
+  TestRouterPush({super.key});
+  AriRouter router = AriRouter();
 
-/// 测试router是否能正确跳转
-// class TestRouterPush extends StatelessWidget {
-//   AriRouter router = AriRouter();
-//   @override
-//   Widget build(BuildContext context) {
-//     var home = Text(
-//       "首页",
-//       key: Key('home'),
-//     );
-//     List<AriRouteItem> routes = [
-//       AriRouteItem(
-//         route: "/",
-//         name: "首页",
-//         widget: (context) => TextButton(
-//           child: const Text('登录'),
-//           key: Key('loginButton'), // 给按钮添加一个 key，以便在测试中找到它
-//           onPressed: () {
-//             // 导航到 home 页面
-//             Navigator.pushNamed(context, '/home');
-//           },
-//         ),
-//         index: 0,
-//         icon: const Icon(Icons.abc),
-//       ),
-//       AriRouteItem(
-//           route: "/home",
-//           name: "新页面",
-//           widget: (context) => home,
-//           index: 1,
-//           icon: Icon(Icons.abc),
-//           hasNavigation: true,
-//           navigationConfig: AriRouteItemNavigationConfig(
-//               initialRoute: "/home", navigationItemNames: ["首页", "我的"]),
-//           children: [
-//             AriRouteItem(
-//                 name: "我的", widget: (context) => Text("我的"), route: "/mine"),
-//             AriRouteItem(
-//                 name: "首页", widget: (context) => Text("首页"), route: "/home"),
-//           ]),
-//     ];
-//     router.setRoutes(routes);
-//     return MaterialApp(initialRoute: '/', routes: router.getRoutes());
-//   }
-// }
+  List<AriRouteItem> routes = [
+    AriRouteItem(
+      route: "/",
+      name: "TestRouterRoute-page1",
+      widget: (context) => TextButton(
+        child: const Text('登录'),
+        key: Key('loginButton'), // 给按钮添加一个 key，以便在测试中找到它
+        onPressed: () {
+          // 导航到 home 页面
+          Navigator.pushNamed(context, '/home');
+        },
+      ),
+      index: 0,
+      hasNavigation: false,
+    ),
+    AriRouteItem(
+        route: "/home",
+        name: "TestRouterRoute-page2",
+        widget: (context) => TextButton(
+              child: const Text('home'),
+              key: Key('home'), // 给按钮添加一个 key，以便在测试中找到它
+              onPressed: () {},
+            ),
+        index: 0,
+        hasNavigation: true,
+        icon: Icon(Icons.abc),
+        navigationConfig: AriRouteItemNavigationConfig(
+            initialRoute: "/home",
+            navigationItems: [
+              AriRouteItem(
+                  name: "TestRouterRoute-page2-1",
+                  route: "/page1/test",
+                  widget: (context) => Text(key: Key("page1"), "页面1"),
+                  hasNavigation: false),
+              AriRouteItem(
+                  name: "TestRouterRoute-page2-2",
+                  route: "page2",
+                  widget: (context) => Text(key: Key("page2"), "页面2"),
+                  hasNavigation: false),
+            ]),
+        children: []),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    router.setRoutes(routes);
+    return MaterialApp(initialRoute: '/', routes: router.getRoutes());
+  }
+}

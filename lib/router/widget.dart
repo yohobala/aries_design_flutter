@@ -26,6 +26,7 @@ class _AriRouteNavigationState extends State<AriRouteNavigation>
 
   @override
   Widget build(BuildContext context) {
+    print("DAOZHE");
     List<AriRouteItem> navigationItems =
         widget.routeItem.navigationConfig!.navigationItems;
 
@@ -39,7 +40,7 @@ class _AriRouteNavigationState extends State<AriRouteNavigation>
         children: navigationItems.map((AriRouteItem navigationItem) {
       final int index = navigationItem.index!;
       final Widget view =
-          RouteWidget(selectedIndex: index, routeItem: routeItem);
+          RouteWidget(selectedIndex: index, routeItem: navigationItem);
 
       /// widget是否显示
       bool offstage = false;
@@ -98,16 +99,17 @@ class _RouteWidgetState extends State<RouteWidget> {
         widget.routeItem.navigationConfig!.navigationItems;
 
     return Navigator(
-      initialRoute: 'home',
+      initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
         print(settings.name);
         return MaterialPageRoute(
           builder: (BuildContext context) {
-            if (settings.name == "home") {
-              AriRouteItem item = navigationItems[widget.selectedIndex];
-              return item.widget!(context);
+            if (settings.name == "/") {
+              return widget.routeItem.widget!(context);
             } else {
-              return routeItems(context)[settings.name]!.widget;
+              return navigationItems
+                  .firstWhere((item) => item.name == settings.name)
+                  .widget!(context);
             }
           },
           settings: settings,
