@@ -21,7 +21,7 @@ class AriThemeController {
   /// - `brightness` 亮度模式
   ///
   /// *return*
-  /// - `ThemeData` 对应的themeData
+  /// 对应的themeData
   ///
   /// ThemeData是MaterialApp的theme属性，一般是用在MaterialApp的theme属性中,
   /// 代码中获得样式推荐使用LeapTheme
