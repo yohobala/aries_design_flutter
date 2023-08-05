@@ -494,23 +494,48 @@ class TestRouterRoute extends StatelessWidget {
       hasNavigation: false,
     ),
     AriRouteItem(
-        route: "/home",
-        name: "TestRouterRoute-page2",
-        widget: (context) => Text("首页"),
-        index: 0,
-        hasNavigation: false,
-        children: [
-          AriRouteItem(
-              name: "TestRouterRoute-page2-1",
-              route: "/page1/test",
-              widget: (context) => Text("页面1"),
-              hasNavigation: false),
-          AriRouteItem(
-              name: "TestRouterRoute-page2-2",
-              route: "page2",
-              widget: (context) => Text("页面2"),
-              hasNavigation: false),
-        ]),
+      route: "/home",
+      name: "TestRouterRoute-page2",
+      widget: (context) => Text("首页"),
+      index: 0,
+      hasNavigation: false,
+      children: [
+        AriRouteItem(
+            name: "TestRouterRoute-page2-1",
+            route: "/page1/test",
+            widget: (context) => Text("页面1"),
+            hasNavigation: false),
+        AriRouteItem(
+            name: "TestRouterRoute-page2-2",
+            route: "page2",
+            widget: (context) => Text("页面2"),
+            hasNavigation: false),
+      ],
+    ),
+    AriRouteItem(
+      route: "/home2",
+      name: "TestRouterRoute-page3",
+      widget: (context) => Text("首页"),
+      index: 0,
+      hasNavigation: true,
+      navigationConfig: AriRouteItemNavigationConfig(
+        initialRoute: "/",
+      ),
+      children: [
+        AriRouteItem(
+            name: "TestRouterRoute-page3-1",
+            route: "/page1/test",
+            widget: (context) => Text("页面1"),
+            icon: Icon(Icons.home),
+            hasNavigation: false),
+        AriRouteItem(
+            name: "TestRouterRoute-page3-2",
+            route: "page2",
+            widget: (context) => Text("页面2"),
+            icon: Icon(Icons.home),
+            hasNavigation: false),
+      ],
+    )
   ];
 
   @override
@@ -528,13 +553,13 @@ class TestRouterPush extends StatelessWidget {
   List<AriRouteItem> routes = [
     AriRouteItem(
       route: "/",
-      name: "TestRouterRoute-page1",
+      name: "page1",
       widget: (context) => TextButton(
-        child: const Text('登录'),
-        key: Key('loginButton'), // 给按钮添加一个 key，以便在测试中找到它
+        child: const Text('page1'),
+        key: Key('page1-Button'), // 给按钮添加一个 key，以便在测试中找到它
         onPressed: () {
           // 导航到 home 页面
-          Navigator.pushNamed(context, '/home');
+          AriRouter.pushNamed(context, 'page2');
         },
       ),
       index: 0,
@@ -542,12 +567,8 @@ class TestRouterPush extends StatelessWidget {
     ),
     AriRouteItem(
         route: "/home",
-        name: "TestRouterRoute-page2",
-        widget: (context) => TextButton(
-              child: const Text('home'),
-              key: Key('home'), // 给按钮添加一个 key，以便在测试中找到它
-              onPressed: () {},
-            ),
+        name: "page2",
+        widget: null,
         index: 0,
         hasNavigation: true,
         icon: Icon(Icons.abc),
@@ -556,35 +577,51 @@ class TestRouterPush extends StatelessWidget {
         ),
         children: [
           AriRouteItem(
-              name: "TestRouterRoute-page2-1",
+              name: "page2-1",
               route: "",
               widget: (context) => TextButton(
-                    child: const Text('页面13232'),
-                    key: Key('page1'), // 给按钮添加一个 key，以便在测试中找到它
+                    child: const Text('page2-1'),
+                    key: Key('page2-1-Button'), // 给按钮添加一个 key，以便在测试中找到它
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      AriRouter.pushNamed(context, 'page2-1-1');
                     },
                   ),
               icon: Icon(Icons.abc),
               hasNavigation: false,
               children: [
                 AriRouteItem(
-                    name: "TestRouterRoute-page2-1-1",
+                    name: "page2-1-1",
                     route: "",
-                    widget: (context) => Text(key: Key("page2"), "页面1-1"),
+                    widget: (context) => TextButton(
+                          child: const Text('page2-1-1'),
+                          key: Key('page2-1-1-Button'), // 给按钮添加一个 key，以便在测试中找到它
+                          onPressed: () {
+                            AriRouter.pushNamed(context, 'page2-1-2');
+                          },
+                        ),
                     icon: Icon(Icons.abc),
                     hasNavigation: false),
                 AriRouteItem(
-                    name: "TestRouterRoute-page2-1-2",
+                    name: "page2-1-2",
                     route: "",
-                    widget: (context) => Text(key: Key("page2"), "页面1-2"),
+                    widget: (context) => TextButton(
+                          child: const Text('page2-1-2'),
+                          key: Key('page2-1-2-Button'), // 给按钮添加一个 key，以便在测试中找到它
+                          onPressed: () {
+                            AriRouter.pushNamed(context, 'page1');
+                          },
+                        ),
                     icon: Icon(Icons.abc),
                     hasNavigation: false)
               ]),
           AriRouteItem(
-              name: "TestRouterRoute-page2-2",
+              name: "page2-2",
               route: "",
-              widget: (context) => Text(key: Key("page2"), "页面2"),
+              widget: (context) => TextButton(
+                    child: const Text('page2-2'),
+                    key: Key('page2-2-Button'), // 给按钮添加一个 key，以便在测试中找到它
+                    onPressed: () {},
+                  ),
               icon: Icon(Icons.abc),
               hasNavigation: false),
         ]),

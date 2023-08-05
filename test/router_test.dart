@@ -31,17 +31,6 @@ void main() {
   //   }
   //   AriRouter.clear();
   // });
-  // testWidgets("当[hasNavigation]为true时，需要设置navigationConfig", (tester) async {
-  //   try {
-  //     await tester.pumpWidget(TestRouterHasNavigationTrue_2());
-  //   } catch (e) {
-  //     expect(e, isInstanceOf<AssertionError>());
-  //     if (e is AssertionError) {
-  //       logger.d(e); // 输出异常的消息
-  //     }
-  //   }
-  //   AriRouter.clear();
-  // });
 
   // testWidgets("当[hasNavigation]为true时，children的icon不能为null", (tester) async {
   //   try {
@@ -90,25 +79,25 @@ void main() {
 
 //**************** 测试name唯一性的检测是否生效 ****************
 
-  testWidgets("测试name唯一性的检测是否生效", (tester) async {
-    try {
-      await tester.pumpWidget(TestRouterNameUnique());
-    } catch (e) {
-      expect(e, isInstanceOf<AssertionError>());
-      if (e is AssertionError) {
-        logger.d(e); // 输出异常的消息
-      }
-    }
-    try {
-      await tester.pumpWidget(TestRouterNameUnique2());
-    } catch (e) {
-      expect(e, isInstanceOf<AssertionError>());
-      if (e is AssertionError) {
-        AriRouter router = AriRouter();
-        logger.d(e); // 输出异常的消息
-      }
-    }
-  });
+  // testWidgets("测试name唯一性的检测是否生效", (tester) async {
+  //   try {
+  //     await tester.pumpWidget(TestRouterNameUnique());
+  //   } catch (e) {
+  //     expect(e, isInstanceOf<AssertionError>());
+  //     if (e is AssertionError) {
+  //       logger.d(e); // 输出异常的消息
+  //     }
+  //   }
+  //   try {
+  //     await tester.pumpWidget(TestRouterNameUnique2());
+  //   } catch (e) {
+  //     expect(e, isInstanceOf<AssertionError>());
+  //     if (e is AssertionError) {
+  //       AriRouter router = AriRouter();
+  //       logger.d(e); // 输出异常的消息
+  //     }
+  //   }
+  // });
 
   // testWidgets("测试route是否正确", (tester) async {
   //   await tester.pumpWidget(TestRouterRoute());
@@ -119,21 +108,27 @@ void main() {
   //   logger.i(routes);
   // });
 
-  // testWidgets('测试router', (tester) async {
-  //   await tester.pumpWidget(TestRouterPush());
+  testWidgets('测试router', (tester) async {
+    await tester.pumpWidget(TestRouterPush());
 
-  //   await tester.pumpAndSettle();
-  //   AriRouter router = AriRouter();
-  //   logger.i(router.get());
+    await tester.pumpAndSettle();
+    AriRouter router = AriRouter();
+    logger.i(router.get());
 
-  //   // Tap the add button.
-  //   await tester.tap(find.byKey(Key('loginButton')));
+    await tester.tap(find.byKey(Key('page1-Button')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(Key('page2-1-Button')), findsOneWidget);
 
-  //   // Rebuild the widget after the state has changed.
-  //   await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key('page2-1-Button')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(Key('page2-1-1-Button')), findsOneWidget);
 
-  //   // Expect to find the item on screen.
-  //   expect(find.byKey(Key('page1')), findsOneWidget);
-  //   // expect(find.byKey(Key('loginButton')), findsNothing);
-  // });
+    await tester.tap(find.byKey(Key('page2-1-1-Button')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(Key('page2-1-2-Button')), findsOneWidget);
+
+    await tester.tap(find.byKey(Key('page2-1-2-Button')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(Key('page1-Button')), findsOneWidget);
+  });
 }

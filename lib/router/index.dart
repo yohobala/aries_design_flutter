@@ -17,7 +17,10 @@ Map<String, AriRouteItem> _routeItems = {};
 
 /// 底部导航路由的配置
 class AriRouteItemNavigationConfig {
-  AriRouteItemNavigationConfig({this.initialRoute = "/"});
+  AriRouteItemNavigationConfig({
+    this.initialRoute = "/",
+    this.initialIndex = 0,
+  });
 
   /// 初始路由,默认为/，这个和[AriRouteItem]的[route]不一样，
   /// 即使[AriRouteItem]的[route]设置为/home，这里也可以设置为/user
@@ -25,6 +28,9 @@ class AriRouteItemNavigationConfig {
   ///
   /// 见 https://flutter.cn/docs/cookbook/effects/nested-nav
   final String initialRoute;
+
+  /// 默认打开的底部导航栏的index
+  final int initialIndex;
 }
 
 /// AriRoute单个路由的配置
@@ -38,7 +44,6 @@ class AriRouteItemNavigationConfig {
 ///
 /// *assert*
 /// - 如果[hasNavigation]为true，
-///   - [navigationConfig]不能为null,
 ///   - 当前[AriRouteItem]的children的[icon]和[widget]不能为null
 ///   - 当前[AriRouteItem]的children的数量必须大于等于2
 ///   - 当前[AriRouteItem]下所有层级的children都不能设置hasNavigation为true，
@@ -265,7 +270,6 @@ bool _isNameUnique(String name) {
 /// 判断HasNavigation不同情况下AriRouteItem的正确性
 ///
 /// - 当hasNavigation为true时
-///   - 需要设置navigationConfig
 ///   - children的[icon]和[widget]不能为null
 ///   - children的数量必须大于等于2
 ///   - 所有层级的children都不能设置hasNavigation为true
@@ -277,16 +281,12 @@ bool _checkHasNavigationCondition(
   AriRouteItemNavigationConfig? navigationConfig,
   List<AriRouteItem> children,
 ) {
-  // 当hasNavigation为true时，需要设置navigationConfig，子路由的icon不能为null
   if (hasNavigation &&
-      navigationConfig != null &&
       children.every((child) => child.icon != null && child.widget != null) &&
       _checkChildrenNavigation(children) &&
       children.length >= 2) {
     return true;
-  }
-  // 当hasNavigation为false时，widget不能为null
-  else if (!hasNavigation && widget != null) {
+  } else if (!hasNavigation && widget != null) {
     return true;
   } else {
     return false;
