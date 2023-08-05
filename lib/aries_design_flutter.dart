@@ -12,3 +12,4 @@ export 'keys/index.dart';
 export 'modal/index.dart';
 export 'navigation/index.dart';
 export 'router/index.dart';
+export 'store/index.dart';
