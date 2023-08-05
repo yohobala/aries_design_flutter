@@ -5,8 +5,11 @@ typedef ItemChangeCallback = void Function(int index, String route);
 
 /// 底部导航栏
 class AriNavigationBar extends StatefulWidget {
-  const AriNavigationBar(
-      {Key? key, this.itemChangeCallback, required this.navigationItems})
+  AriNavigationBar(
+      {Key? key,
+      this.itemChangeCallback,
+      required this.navigationItems,
+      this.selectedIndex = 0})
       : super(key: key);
 
   /// 底部导航栏切换回调
@@ -14,6 +17,8 @@ class AriNavigationBar extends StatefulWidget {
 
   /// 导航栏项
   final List<AriRouteItem> navigationItems;
+
+  int selectedIndex;
 
   @override
   State<AriNavigationBar> createState() => _AriNavigationBarState();
@@ -24,14 +29,11 @@ class _AriNavigationBarState extends State<AriNavigationBar> {
 
   /// 底部导航栏的配置
   late List<AriRouteItem> itemRoutes;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (widget.itemChangeCallback != null && itemRoutes.length > index) {
-        final route = itemRoutes[index].route;
-        widget.itemChangeCallback!(index, route);
-      }
-    });
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
   }
 
   @override
@@ -53,5 +55,15 @@ class _AriNavigationBarState extends State<AriNavigationBar> {
       // shadowColor: const Color.fromARGB(255, 4, 4, 4),
       elevation: 20.0,
     );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (widget.itemChangeCallback != null && itemRoutes.length > index) {
+        final route = itemRoutes[index].route;
+        widget.itemChangeCallback!(index, route);
+      }
+    });
   }
 }

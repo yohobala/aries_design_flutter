@@ -23,12 +23,21 @@ class AriBottomNavigationPage extends StatefulWidget {
 }
 
 class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
+  int selectedIndex = 0;
+  String initialRoute = "/";
   @override
   void initState() {
     super.initState();
+    AriRouteItemNavigationConfig? navigationConfig =
+        widget.routeItem.navigationConfig;
+    String initialRoute = navigationConfig != null
+        ? navigationConfig.initialRoute
+        : AriRouteItemNavigationConfig().initialRoute;
+    selectedIndex = navigationConfig != null
+        ? navigationConfig.initialIndex
+        : AriRouteItemNavigationConfig().initialIndex;
   }
 
-  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     /// 导航栏项
@@ -46,8 +55,10 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
           });
         },
         navigationItems: navigationItems,
+        selectedIndex: selectedIndex,
       );
     }
+
     return Scaffold(
       /*
       * 底部导航栏，点击后会改变[selectedIndex]
@@ -57,7 +68,7 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
       body: AriNavigatorGroup(
           selectedIndex: selectedIndex,
           routeItems: navigationItems,
-          initialRoute: widget.routeItem.navigationConfig!.initialRoute),
+          initialRoute: initialRoute),
     );
   }
 
