@@ -264,7 +264,7 @@ class AriMapController {
         zoomTween.evaluate(animation),
       );
     } catch (e) {
-      print(e);
+      logger.w(e);
     }
   }
 

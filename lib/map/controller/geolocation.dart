@@ -129,7 +129,7 @@ class AriGeoLocationController {
     } catch (e) {
       if (e.toString().contains(
           "Permission definitions not found in the app's Info.plist")) {
-        print("请在info.plist中添加权限");
+        logger.w("请在info.plist中添加权限");
       }
       _updateState(false);
     }
