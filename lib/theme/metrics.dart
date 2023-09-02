@@ -78,7 +78,7 @@ class AriThemeDuration {
   final Duration pageDration = _Duration.medium1;
 
   /// 按钮缩放的动画时间
-  final Duration buttonScaleDuration = _Duration.long2;
+  final Duration buttonScaleDuration = _Duration.medium1;
 
   /// 地图动画时间
   final Duration mapDuration = _Duration.long4;

@@ -13,7 +13,6 @@ List<AnimationController> pageFade(TickerProvider vsync, int length) {
   AnimationController buildFaderController() {
     final AnimationController controller = AnimationController(
         vsync: vsync, duration: AriTheme.duration.pageDration, value: 0);
-    controller.addStatusListener((AnimationStatus status) {});
     return controller;
   }
 

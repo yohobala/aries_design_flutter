@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -72,36 +74,23 @@ class AriIconButtonState extends State<AriIconButton>
   /// 效果等同于AriIconButton中的onPressed
   AriIconButtonOnPressed? onPressedCallback;
 
-  //*--- 私有变量 ---*
-  /// 动画控制器
-  late AnimationController _animationController;
-
-  /// 动画
-  late Animation<double> _animation;
-
   /// 亮度
   Brightness? brightness;
+
+  //*--- 私有变量 ---*
+  /// 动画控制器
+  late List<AnimationController> _animationControllers;
+
+  late int preSelectIndex;
 
   //*--- 生命周期 ---*
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: AriTheme.duration.buttonScaleDuration,
-    );
 
-    /// 设置缩放动画
-    _animation = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 0.8),
-        weight: 50.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 0.8, end: 1.0),
-        weight: 50.0,
-      ),
-    ]).animate(_animationController);
+    preSelectIndex = widget.selectIndex.value;
+    _animationControllers =
+        ariIconSwitchAnimationController(this, widget.icons.length);
 
     widget.style.addListener(() {
       setState(() {});
@@ -110,31 +99,10 @@ class AriIconButtonState extends State<AriIconButton>
 
   @override
   Widget build(BuildContext context) {
-    Widget _iconWidget = Transform.rotate(
-      angle: widget.rotateAngle.value,
-      // child: FractionallySizedBox(
-      //   widthFactor: 1,
-      //   heightFactor: 1,
-      child: widget.icons[widget.selectIndex.value],
-      // ),
-    );
-
-    /// 图标
-    /// 如果图标数量大于1，使用动画
-    Widget iconWidget = widget.icons.length > 1
-        ? ariIconSwitchAnimatedBuilder(_iconWidget, _animationController)
-        : _iconWidget;
-    return IconButton(
-      onPressed: _onPressed,
-      icon: iconWidget,
-      style: widget.style.value,
+    return Stack(
+      children: _build(),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
 
   //*--- 公有方法 ---*
   /// 播放动画
@@ -142,26 +110,87 @@ class AriIconButtonState extends State<AriIconButton>
   /// `@return` 动画控制器
   ///
   /// 用于在触发图标切换动画
-  AnimationController animationForward() {
-    AnimationController pressAnimationController = AnimationController(
-      vsync: this,
-    );
-    _animationController.reset();
-    _animationController.forward();
-
-    return pressAnimationController;
+  void animationForward() {
+    if (widget.icons.length > 1) {
+      if (_animationControllers[preSelectIndex].value == 1.0) {
+        _animationControllers[preSelectIndex].reverse().then((value) {
+          if (_animationControllers[widget.selectIndex.value].value == 0.0) {
+            _animationControllers[widget.selectIndex.value].forward();
+          } else {
+            _animationControllers[widget.selectIndex.value].reverse();
+          }
+          preSelectIndex = widget.selectIndex.value;
+        });
+      } else {
+        _animationControllers[preSelectIndex].forward().then((value) {
+          if (_animationControllers[widget.selectIndex.value].value == 0.0) {
+            _animationControllers[widget.selectIndex.value].forward();
+          } else {
+            _animationControllers[widget.selectIndex.value].reverse();
+          }
+          preSelectIndex = widget.selectIndex.value;
+        });
+      }
+    } else if (widget.icons.length == 1) {
+      _animationControllers[0].reset();
+      _animationControllers[0].forward();
+    }
   }
 
   //*--- 私有方法 ---*
   /// 点击事件
   void _onPressed() {
-    setState(() {
-      isFav = !isFav;
-      AnimationController pressAnimationController = animationForward();
-      widget.onPressed?.call(widget.selectIndex, pressAnimationController);
-      if (onPressedCallback != null) {
-        onPressedCallback!.call(widget.selectIndex, pressAnimationController);
+    AnimationController pressAnimationController = AnimationController(
+      vsync: this,
+    );
+
+    widget.onPressed?.call(widget.selectIndex, pressAnimationController);
+    if (onPressedCallback != null) {
+      onPressedCallback!.call(widget.selectIndex, pressAnimationController);
+    }
+    print(widget.selectIndex.value);
+    animationForward();
+  }
+
+  List<Widget> _build() {
+    Widget iconWidget(int index) => Transform.rotate(
+          angle: widget.rotateAngle.value,
+          // child: FractionallySizedBox(
+          //   widthFactor: 1,
+          //   heightFactor: 1,
+          child: widget.icons[index],
+          // ),
+        );
+
+    List<Widget> elements = [];
+    if (widget.icons.length > 1) {
+      for (int i = 0; i < widget.icons.length; i++) {
+        bool isSelected = i == widget.selectIndex.value;
+        var animation = ariIconSwitchAnimatedBuilder(
+          iconWidget(i),
+          _animationControllers[i],
+          reverse: !isSelected,
+        );
+        Widget element = IconButton(
+          onPressed: _onPressed,
+          icon: animation,
+          style: widget.style.value,
+        );
+        elements.add(element);
       }
-    });
+    } else if (widget.icons.length == 1) {
+      var animation = ariIconSwitchAnimatedBuilder(
+        iconWidget(0),
+        _animationControllers[0],
+        signle: true,
+      );
+      Widget element = IconButton(
+        onPressed: _onPressed,
+        icon: animation,
+        style: widget.style.value,
+      );
+      elements.add(element);
+    }
+    return elements;
   }
 }
