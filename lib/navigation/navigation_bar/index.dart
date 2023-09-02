@@ -9,7 +9,7 @@ class AriNavigationBar extends StatefulWidget {
       {Key? key,
       this.itemChangeCallback,
       required this.navigationItems,
-      this.selectedIndex = 0})
+      this.initSelectedIndex = 0})
       : super(key: key);
 
   /// 底部导航栏切换回调
@@ -18,7 +18,7 @@ class AriNavigationBar extends StatefulWidget {
   /// 导航栏项
   final List<AriRouteItem> navigationItems;
 
-  int selectedIndex;
+  final int initSelectedIndex;
 
   @override
   State<AriNavigationBar> createState() => _AriNavigationBarState();
@@ -33,7 +33,7 @@ class _AriNavigationBarState extends State<AriNavigationBar> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.selectedIndex;
+    _selectedIndex = widget.initSelectedIndex;
   }
 
   @override

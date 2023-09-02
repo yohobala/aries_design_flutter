@@ -2,7 +2,6 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 
 class AriMapLayer extends StatelessWidget {
   AriMapLayer({
@@ -12,7 +11,6 @@ class AriMapLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapBloc = context.read<AriMapBloc>();
-    final MapController mapController = MapController();
     return Scaffold(
       body: StreamBuilder<AriMapState>(
         stream: mapBloc.stream,

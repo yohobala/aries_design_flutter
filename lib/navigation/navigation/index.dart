@@ -1,8 +1,4 @@
-import 'dart:math';
-
-import 'package:aries_design_flutter/navigation/navigation_error_page/index.dart';
-import 'package:aries_design_flutter/router/index.dart';
-import 'package:aries_design_flutter/theme/index.dart';
+import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
 /// 多个[AriNavigator]的集合
@@ -41,12 +37,7 @@ class _AriNavigatorGroupState extends State<AriNavigatorGroup>
   Widget build(BuildContext context) {
     List<AriRouteItem> navigationItems = widget.routeItems;
 
-    // //构建所有widget的动画控制器
-    // List<AnimationController> widgetFaders = List<AnimationController>.generate(
-    //   navigationItems.length,
-    //   (int index) => buildFaderController(),
-    // );
-
+    List<AnimationController> faders = pageFade(this, navigationItems.length);
     List<Widget> elements = [];
     for (int i = 0; i < navigationItems.length; i++) {
       final AriRouteItem navigationItem = navigationItems[i];
@@ -62,24 +53,24 @@ class _AriNavigatorGroupState extends State<AriNavigatorGroup>
       // widget是否显示
       bool offstage = false;
       if (i == widget.selectedIndex) {
-        // widgetFaders[i].forward();
+        faders[i].forward();
       } else {
-        // widgetFaders[i].reverse();
+        faders[i].reverse();
         offstage = true;
       }
 
       // 创建widget
       Widget element = Offstage(
         offstage: offstage,
-        // child: FadeTransition(
-        //   opacity: widgetFaders[i].drive(
-        //     CurveTween(
-        //       curve: Curves.easeIn,
-        //     ),
-        //   ),
-        //   child: view,
-        // ),
-        child: view,
+        child: FadeTransition(
+          opacity: faders[i].drive(
+            CurveTween(
+              curve: Curves.easeIn,
+            ),
+          ),
+          child: view,
+        ),
+        // child: view,
       );
 
       elements.add(element);
@@ -88,14 +79,6 @@ class _AriNavigatorGroupState extends State<AriNavigatorGroup>
     return Stack(
       children: elements,
     );
-  }
-
-  /// 页面切换动画
-  AnimationController buildFaderController() {
-    final AnimationController controller = AnimationController(
-        vsync: this, duration: AriTheme.duration.pageDration, value: 0);
-    controller.addStatusListener((AnimationStatus status) {});
-    return controller;
   }
 }
 

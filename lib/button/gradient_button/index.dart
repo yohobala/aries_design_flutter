@@ -36,7 +36,7 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Brightness brightness = MediaQuery.of(context).platformBrightness;
-    AriThemeColor themeColor = AriThemeController().getTheme(brightness);
+    AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
 
     return Container(
       width: width ?? AriTheme.button.buttonSize.resolve({}).width,

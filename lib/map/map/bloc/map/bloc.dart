@@ -48,6 +48,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   final ValueNotifier<bool> isInit = ValueNotifier(false);
 
   /// 定位流
+  // ignore: unused_field
   StreamSubscription<LatLng>? _locationSubscription;
 
   /// 是否支持定位
@@ -66,7 +67,6 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
   /// 初始化事件
   void initAriMapEvent(InitAriMapEvent event, Emitter<AriMapState> emit) async {
-    logger.d(isInit.value);
     if (!isInit.value) {
       /// NOTE:
       /// 检查定位权限

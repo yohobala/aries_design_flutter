@@ -1,6 +1,7 @@
+// ignore_for_file: must_be_immutable, camel_case_types
+
 import 'package:aries_design_flutter/router/index.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 //**************** 测试hasNavigation 的检测是否生效 ****************
 
@@ -52,9 +53,9 @@ List<AriRouteItem> childrenRoutes = [
 /// 当[hasNavigation]为false时，widget不能为null
 class TestRouterHasNavigationFalse extends StatelessWidget {
   TestRouterHasNavigationFalse({super.key});
-  AriRouter router = AriRouter();
+  final AriRouter router = AriRouter();
 
-  List<AriRouteItem> routes = [
+  final List<AriRouteItem> routes = [
     AriRouteItem(
       route: "",
       name: "首页",

@@ -7,11 +7,17 @@ export 'key/index.dart';
 export 'theme/index.dart';
 export 'http/index.dart';
 export 'exception/index.dart';
+export 'animation/index.dart';
+export 'encoding/Index.dart';
 
 // UI界面类的
 export 'map/index.dart';
-// export 'map/index.dart';
 export 'navigation/index.dart';
 export 'modal/index.dart';
 export 'button/index.dart';
 export 'icons/index.dart';
+export 'text_field/index.dart';
+
+import 'package:logger/logger.dart';
+
+var logger = Logger();

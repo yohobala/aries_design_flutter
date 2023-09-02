@@ -1,10 +1,10 @@
 import 'package:aries_design_flutter/aries_design_flutter.dart';
-import 'package:flutter/widgets.dart';
 
 abstract class AriMarkerEvent {}
 
 /***************  初始化、权限有关事件 ***************/
 
+/// 初始化事件
 class InitAriMarkerEvent extends AriMarkerEvent {}
 
 /***************  图层有关事件  ***************/

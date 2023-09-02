@@ -4,7 +4,6 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong2/latlong.dart';
 
 class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   AriMarkerBloc(this.markerRepo, this.geoLocationRepo)
@@ -41,9 +40,11 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
 
   /***************  私有变量  ***************/
 
-  Map<Key, AriMarkerLayerModel> _layers = {};
+  /// 当前地图的全部图层
+  final Map<Key, AriMarkerLayerModel> _layers = {};
 
-  Map<Key, AriMarkerModel> _markers = {};
+  /// 当前地图的全部标记
+  final Map<Key, AriMarkerModel> _markers = {};
 
   /***************  初始化、权限有关事件 ***************/
 
@@ -112,7 +113,7 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
       }
       var layer = _layers[layerKey]!;
       layer.markers[marker.key] = marker;
-    } else if (oldLayerKey == marker.layerkey || marker.layerkey == "") {
+    } else if (oldLayerKey == marker.layerkey) {
       return;
     } else {
       var oldLayer = _layers[oldLayerKey]!;

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -45,7 +44,7 @@ class AriGeoLocationDevice {
 
   /// 开始监听位置变化
   void registerLocationListener() {
-    StreamSubscription<Position> _positionStream = Geolocator.getPositionStream(
+    StreamSubscription<Position> positionStream = Geolocator.getPositionStream(
       locationSettings: geoLocationSettings,
     ).listen(
       (Position position) {
@@ -66,7 +65,7 @@ class AriGeoLocationDevice {
 
     // 当流不再使用时，取消订阅
     _locationStreamController.onCancel = () {
-      _positionStream.cancel();
+      positionStream.cancel();
     };
   }
 

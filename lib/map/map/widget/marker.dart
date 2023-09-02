@@ -82,10 +82,10 @@ class AriMarkerLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var markerBloc = context.read<AriMarkerBloc>();
+    // var markerBloc = context.read<AriMarkerBloc>();
 
     /// 构建该图层的所有marker
-    List<Marker> _buildMarkers() {
+    List<Marker> buildMarkers() {
       List<Marker> markers = [];
 
       // 获得图层的所有marker
@@ -115,7 +115,7 @@ class AriMarkerLayer extends StatelessWidget {
         valueListenable: shouldBuild,
         builder: (context, shouldBuild, child) {
           return MarkerLayer(
-            markers: _buildMarkers(),
+            markers: buildMarkers(),
           );
         },
       ),
@@ -131,11 +131,8 @@ class AriMarkerLayer extends StatelessWidget {
 ///
 class AriMarkerBuider extends StatelessWidget {
   AriMarkerBuider({
-    required this.key,
+    required Key key,
   }) : super(key: key);
-
-  @override
-  final Key key;
 
   final ValueNotifier<int> shouldBuild = ValueNotifier(0);
 
@@ -143,7 +140,7 @@ class AriMarkerBuider extends StatelessWidget {
   Widget build(BuildContext context) {
     final markerBloc = context.read<AriMarkerBloc>();
 
-    AriMarkerModel marker = markerBloc.getMarker(key);
+    AriMarkerModel marker = markerBloc.getMarker(key!);
 
     return BlocListener<AriMarkerBloc, AriMarkerState>(
       listener: (context, state) {},

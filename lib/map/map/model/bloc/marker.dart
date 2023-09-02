@@ -1,4 +1,5 @@
-import 'package:flutter_map/flutter_map.dart';
+// ignore_for_file: prefer_final_fields
+
 import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
 
@@ -94,7 +95,7 @@ class AriMarkerModel {
 
   MarkerType get type => _type;
 
-  //**************** 私有变量 ****************
+  /**************** 私有变量 ***************/
 
   final Key _layerkey;
 
@@ -106,7 +107,8 @@ class AriMarkerModel {
 
   late MarkerType _type;
 
-  // //**************** 公有方法 ****************
+  /**************** 公有方法 ***************/
+
   /// 更新marker的坐标
   ///
   /// - `newLatLng`: 新的坐标

@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 class AriException implements Exception {
   final String message;
   final int code;
@@ -7,6 +9,14 @@ class AriException implements Exception {
   @override
   String toString() {
     return "CustomException: $message (code: $code)";
+  }
+}
+
+AriException handleAPI(http.Response response) {
+  if (response.statusCode == 404) {
+    return AriException(code: 404, message: "Not Found");
+  } else {
+    return AriException(code: 10000001);
   }
 }
 

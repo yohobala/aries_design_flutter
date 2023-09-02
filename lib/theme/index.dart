@@ -18,13 +18,14 @@ class AriThemeController {
 
   /// 获取对于Brightness模式下的themeData
   ///
-  /// - `brightness` 亮度模式
+  ///  ThemeData是MaterialApp的theme属性，一般是用在MaterialApp的theme属性中,
+  /// 代码中获得样式推荐使用AriTheme
+  ///
+  /// *参数*
+  /// - `brightness`: 亮度模式
   ///
   /// *return*
-  /// 对应的themeData
-  ///
-  /// ThemeData是MaterialApp的theme属性，一般是用在MaterialApp的theme属性中,
-  /// 代码中获得样式推荐使用LeapTheme
+  /// - `ThemeData`: 对应的ThemeData
   ThemeData getThemeData(Brightness? brightness) {
     if (brightness == Brightness.light || brightness == null) {
       return ariThemeDataLight;
@@ -35,11 +36,21 @@ class AriThemeController {
 
   /// 获取对于Brightness模式下的AriThemeColor
   ///
-  /// - `brightness` 亮度模式
+  /// AriThemeColor是当前灯光模式下的颜色样式，如果是需要数值方面的样式，调用[AriTheme]即可
+  ///
+  /// AriThemeColor通过AriThemeController().getTheme()来获取，
+  /// 例如：
+  /// ```dart
+  /// Brightness brightness = MediaQuery.of(context).platformBrightness;
+  /// AriThemeColor themeColor = AriThemeController().getTheme(brightness);
+  /// ```
+  ///
+  /// *参数*
+  /// - `brightness`: 亮度模式
   ///
   /// *return*
-  /// - `AriThemeColor` 对应的AriThemeColor
-  AriThemeColor getTheme(Brightness? brightness) {
+  /// - `AriThemeColor`: 对应的AriThemeColor
+  AriThemeColor getThemeColor(Brightness? brightness) {
     if (brightness == Brightness.light || brightness == null) {
       return ariThemeLight;
     } else {
@@ -50,22 +61,13 @@ class AriThemeController {
 
 /// Aries的度量或数值方面的主题设置
 ///
-/// 不涉及到颜色的主题设置，都放在该类中
-///
-/// 使用的时候直接调用AriTheme即可，不用实例化
+/// 不涉及到颜色的主题设置，都放在该类中,
+/// 使用的时候直接调用[AriTheme]即可，不用实例化
 ///
 /// 例如：
 /// ```dart
 /// double insets = AriTheme.insets.standard
 /// ````
-///
-/// 颜色主题是AriThemeColor类，通过AriThemeController().getTheme()来获取
-///
-/// 例如：
-/// ```dart
-/// Brightness brightness = MediaQuery.of(context).platformBrightness;
-/// AriThemeColor themeColor = AriThemeController().getTheme(brightness);
-/// ```
 @immutable
 class AriTheme {
   /// 间距
@@ -95,22 +97,37 @@ class AriTheme {
 
   /// 弹出框
   static final AriThemeModal modal = AriThemeModal();
+
+  /// 输入框
+  static final AriThemeTextField textField = AriThemeTextField();
 }
 
+/***************  以下是AriThemeColor颜色主题的类 ***************/
+
+/// {@template ari_theme_color}
 /// Aries的颜色主题
 ///
 /// 应该通过LeapThemeController().getTheme()来对应的主题。例如
 /// ```dart
 /// Brightness brightness = MediaQuery.of(context).platformBrightness;
-/// AriThemeColor themeColor = AriThemeController().getTheme(brightness);
+/// AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
 /// ```
+/// {@endtemplate}
 @immutable
 class AriThemeColor {
+  /// {@macro ari_theme_color}
+  AriThemeColor(
+      {required this.colorScheme,
+      required this.shadow,
+      required this.button,
+      required this.modal,
+      required this.gradient});
+
   /// 主色调
   final ColorScheme colorScheme;
 
   /// 阴影
-  final AriThemeBoxShadow shadow;
+  final AriThemeColorBoxShadow shadow;
 
   /// 按钮
   final AriThemeColorButton button;
@@ -118,31 +135,34 @@ class AriThemeColor {
   /// 弹出框
   final AriThemeColorModal modal;
 
-  AriThemeColor({
-    required this.colorScheme,
-    required this.shadow,
-    required this.button,
-    required this.modal,
-  });
+  /// 渐变
+  final AriThemeColorGradient gradient;
 }
 
 /// Aries的阴影样式
 @immutable
-class AriThemeBoxShadow {
+class AriThemeColorBoxShadow {
+  const AriThemeColorBoxShadow({
+    required this.standard,
+    required this.bottomSheet,
+  });
+
   /// 标准阴影
   final BoxShadow standard;
 
   /// 底部弹出框阴影
   final BoxShadow bottomSheet;
-  const AriThemeBoxShadow({
-    required this.standard,
-    required this.bottomSheet,
-  });
 }
 
 /// Aries的按钮样式
 @immutable
 class AriThemeColorButton {
+  const AriThemeColorButton({
+    required this.gradientButton,
+    required this.segmentedIconButton,
+    required this.segmentedIconButtonContainer,
+  });
+
   /// 渐变按钮
   final ButtonStyle gradientButton;
 
@@ -151,20 +171,25 @@ class AriThemeColorButton {
 
   /// segmentedIconButton容器的样式
   final BoxDecoration segmentedIconButtonContainer;
-
-  const AriThemeColorButton({
-    required this.gradientButton,
-    required this.segmentedIconButton,
-    required this.segmentedIconButtonContainer,
-  });
 }
 
 /// Aries的弹出框样式
+@immutable
 class AriThemeColorModal {
-  /// 底部弹出框
-  final BoxDecoration bottomSheet;
-
   const AriThemeColorModal({
     required this.bottomSheet,
   });
+
+  /// 底部弹出框
+  final BoxDecoration bottomSheet;
+}
+
+/// Aries的渐变样式
+@immutable
+class AriThemeColorGradient {
+  const AriThemeColorGradient({
+    required this.loginBackgroundGradient,
+  });
+
+  final Gradient loginBackgroundGradient;
 }

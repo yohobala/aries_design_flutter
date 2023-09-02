@@ -1,5 +1,4 @@
-import 'package:aries_design_flutter/navigation/navigation_bar/index.dart';
-import 'package:aries_design_flutter/router/index.dart';
+import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
 /// 包含了底部导航栏的页面
@@ -30,7 +29,7 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
     super.initState();
     AriRouteItemNavigationConfig? navigationConfig =
         widget.routeItem.navigationConfig;
-    String initialRoute = navigationConfig != null
+    initialRoute = navigationConfig != null
         ? navigationConfig.initialRoute
         : AriRouteItemNavigationConfig().initialRoute;
     selectedIndex = navigationConfig != null
@@ -55,7 +54,7 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
           });
         },
         navigationItems: navigationItems,
-        selectedIndex: selectedIndex,
+        initSelectedIndex: selectedIndex,
       );
     }
 

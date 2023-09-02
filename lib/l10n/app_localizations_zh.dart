@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'app_localizations.dart';
 
 /// The translations for Chinese (`zh`).
@@ -17,7 +19,8 @@ class AriLocalizationsZh extends AriLocalizations {
   String get location_server_failed_cancel => '下次再说';
 
   @override
-  String get ariRouteItem_hasNavigation_failed => '当hasNavigation为true时,navigationConfig和icon必须设置';
+  String get ariRouteItem_hasNavigation_failed =>
+      '当hasNavigation为true时,navigationConfig和icon必须设置';
 
   @override
   String ariRouteItem_name_duplicate(String name) {

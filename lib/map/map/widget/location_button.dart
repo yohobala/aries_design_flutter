@@ -53,6 +53,7 @@ class AriLocationButton extends AriIconButton {
 class AriLocationButtonState extends AriIconButtonState {
   /***************  私有变量  ***************/
 
+  /// 监听mapBloc的流
   StreamSubscription? _streamSubscription;
 
   /// 地图中心是否位于GPS位置的上一个状态
@@ -106,7 +107,6 @@ class AriLocationButtonState extends AriIconButtonState {
         selectIndex.value = LocationButtonEnum.unauthorized.index;
 
         // 标题
-
         Widget title = Text(
           AriLocalizations.of(context)!.locatio_services_failed_title,
           textAlign: TextAlign.center,

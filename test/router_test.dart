@@ -93,7 +93,6 @@ void main() {
     } catch (e) {
       expect(e, isInstanceOf<AssertionError>());
       if (e is AssertionError) {
-        AriRouter router = AriRouter();
         logger.d(e); // 输出异常的消息
       }
     }

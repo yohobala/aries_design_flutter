@@ -70,7 +70,7 @@ class AriIconButtonState extends State<AriIconButton>
   /// 如果是直接使用AriIconButton创建widget用不到
   ///
   /// 效果等同于AriIconButton中的onPressed
-  late final AriIconButtonOnPressed? onPressedCallback;
+  AriIconButtonOnPressed? onPressedCallback;
 
   //*--- 私有变量 ---*
   /// 动画控制器
@@ -110,26 +110,20 @@ class AriIconButtonState extends State<AriIconButton>
 
   @override
   Widget build(BuildContext context) {
+    Widget _iconWidget = Transform.rotate(
+      angle: widget.rotateAngle.value,
+      // child: FractionallySizedBox(
+      //   widthFactor: 1,
+      //   heightFactor: 1,
+      child: widget.icons[widget.selectIndex.value],
+      // ),
+    );
+
     /// 图标
     /// 如果图标数量大于1，使用动画
     Widget iconWidget = widget.icons.length > 1
-        ? AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return Transform.scale(
-                  scale: _animation.value,
-                  child: Transform.rotate(
-                      angle: widget.rotateAngle.value,
-                      child: FractionallySizedBox(
-                        widthFactor: 1,
-                        heightFactor: 1,
-                        child: widget.icons[widget.selectIndex.value],
-                      )));
-            })
-        : Transform.rotate(
-            angle: widget.rotateAngle.value,
-            child: widget.icons[widget.selectIndex.value],
-          );
+        ? ariIconSwitchAnimatedBuilder(_iconWidget, _animationController)
+        : _iconWidget;
     return IconButton(
       onPressed: _onPressed,
       icon: iconWidget,
@@ -137,10 +131,10 @@ class AriIconButtonState extends State<AriIconButton>
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
 
   //*--- 公有方法 ---*
   /// 播放动画

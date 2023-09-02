@@ -110,7 +110,7 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
      * 当你把一个 WidgetsBindingObserver 添加为观察者之后，这个观察者的 didChangePlatformBrightness 方法就会在平台亮度发生变化时被调用
      * 一旦你不再需要监听平台亮度的变化，你应该使用 WidgetsBinding.instance?.removeObserver(this); 来移除观察者，避免内存泄漏。
      */
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -126,7 +126,7 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final mapBloc = context.read<AriMapBloc>();
-    final markerBloc = context.read<AriMarkerBloc>();
+    // final markerBloc = context.read<AriMarkerBloc>();
     final MapController mapController = MapController();
     _addMapControllerListener(mapController, mapBloc);
     // NOTE:
@@ -242,14 +242,14 @@ void _goToPosition({
   if (animationController != null) {
     /// 纬度跳转区间
     final latTween = Tween<double>(
-        begin: mapController!.center.latitude, end: latLng.latitude);
+        begin: mapController.center.latitude, end: latLng.latitude);
 
     /// 经度跳转区间
     final lngTween = Tween<double>(
-        begin: mapController!.center.longitude, end: latLng.longitude);
+        begin: mapController.center.longitude, end: latLng.longitude);
 
     /// 缩放跳转区间
-    final zoomTween = Tween<double>(begin: mapController!.zoom, end: zoom);
+    final zoomTween = Tween<double>(begin: mapController.zoom, end: zoom);
 
     /// 动画设置
     final Animation<double> animation = CurvedAnimation(
@@ -267,7 +267,7 @@ void _goToPosition({
     });
     animationController.forward();
   } else {
-    mapController!.move(latLng, zoom);
+    mapController.move(latLng, zoom);
   }
 }
 
@@ -294,7 +294,7 @@ void _goToPosition({
 void _mapFlyToPostion(MapController mapController, Animation<double> animation,
     Tween<double> latTween, Tween<double> lngTween, Tween<double> zoomTween) {
   try {
-    mapController!.move(
+    mapController.move(
       LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
       zoomTween.evaluate(animation),
     );

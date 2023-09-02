@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:aries_design_flutter/aries_design_flutter.dart';
-
-class FetchResponse<T> {
-  FetchResponse({
+class FetchRes<T> {
+  FetchRes({
     required this.code,
     required this.message,
     required this.data,
@@ -12,16 +10,8 @@ class FetchResponse<T> {
   final int code;
   final String message;
 
-  // factory FetchResponse.fromJson(
-  //     Map<String, dynamic> json, T Function(dynamic) fromJsonT) {
-  //   return FetchResponse(
-  //     data: fromJsonT(json['data']),
-  //     code: json['code'] as int,
-  //     message: json['message'] as String,
-  //   );
-  // }
-  factory FetchResponse.fromJson(Map<String, dynamic> json) {
-    return FetchResponse(
+  factory FetchRes.fromJson(Map<String, dynamic> json) {
+    return FetchRes(
       data: json['data'] as T,
       code: json['code'] as int,
       message: json['message'] as String,
@@ -29,13 +19,7 @@ class FetchResponse<T> {
   }
 }
 
-// FetchResponse<T> parseFetchResponse<T>(
-//     String data, T Function(dynamic) fromJsonT) {
-//   final Map<String, dynamic> jsonData = json.decode(data);
-//   return FetchResponse<T>.fromJson(jsonData, fromJsonT);
-// }
-
-FetchResponse<dynamic> parseFetchResponse(String data) {
+FetchRes<dynamic> parseFetchRes(String data) {
   final Map<String, dynamic> jsonData = json.decode(data);
-  return FetchResponse<dynamic>.fromJson(jsonData);
+  return FetchRes<dynamic>.fromJson(jsonData);
 }

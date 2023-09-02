@@ -69,7 +69,7 @@ class _AriSegmentedIconButton extends State<AriSegmentedIconButton> {
     // ```
     // 之后就可以在子节点获取Provider.of<Brightness>(context);
     Brightness brightness = MediaQuery.of(context).platformBrightness;
-    AriThemeColor themeColor = AriThemeController().getTheme(brightness);
+    AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
 
     // 建立按钮列表
     var buttonList = _BuildButtonList(
@@ -114,7 +114,6 @@ class _AriSegmentedIconButton extends State<AriSegmentedIconButton> {
 }
 
 class _BuildButtonList {
-  //*--- 构造函数 ---*
   _BuildButtonList(
       {
       /// 按钮列表
@@ -127,7 +126,7 @@ class _BuildButtonList {
       required this.direction,
       required this.style});
 
-  //*--- 公有变量 ---*
+  /**************** 公有变量 ***************/
   /// 按钮列表
   final List<AriIconButton> buttons;
 
@@ -144,18 +143,16 @@ class _BuildButtonList {
   List<Widget> build() {
     Widget dividerWdiget = _buildDivider(direction, width);
 
-    List<Widget> _buttons = [];
+    List<Widget> rebuttons = [];
     for (int i = 0; i < buttons.length; i++) {
-      BorderRadiusGeometry? borderRadius = null;
+      BorderRadiusGeometry? borderRadius;
       Radius radius = AriTheme.borderRadius.standard;
       bool isCircle = false;
 
-      /*
-       * 添加按钮
-       * 如果只有一个按钮: 那么就是圆形按钮
-       * 如果是第一个按钮: 那么就是左上角和右上角是圆角
-       * 如果是最后一个按钮: 那么就是左下角和右下角是圆角
-       */
+      // NOTE:
+      // 如果只有一个按钮: 那么就是圆形按钮
+      // 如果是第一个按钮: 那么就是左上角和右上角是圆角
+      // 如果是最后一个按钮: 那么就是左下角和右下角是圆角
       if (buttons.length == 1) {
         borderRadius = BorderRadius.all(AriTheme.borderRadius.circle);
         isCircle = true;
@@ -171,13 +168,13 @@ class _BuildButtonList {
         minimumSize: MaterialStateProperty.all<Size>(Size(width, width)),
         maximumSize: MaterialStateProperty.all<Size>(Size(width, width)),
       );
-      _buttons.add(_buildButton(buttons[i], width, isCircle: isCircle));
+      rebuttons.add(_buildButton(buttons[i], width, isCircle: isCircle));
       // 添加分割线
       if (i < buttons.length - 1) {
-        _buttons.add(dividerWdiget);
+        rebuttons.add(dividerWdiget);
       }
     }
-    return _buttons;
+    return rebuttons;
   }
 
   //*--- 私有方法 ---*

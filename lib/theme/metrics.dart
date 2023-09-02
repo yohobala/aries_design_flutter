@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class AriThemeInsets {
   final double extraSmall = 3;
@@ -30,14 +29,6 @@ class AriThemeBorderRadius {
 
   /// 圆形
   final Radius circle = Radius.circular(99999);
-}
-
-class AriThemeFontSize {
-  final TextStyle display = TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.5,
-  );
 }
 
 class _Duration {
@@ -84,7 +75,7 @@ class AriThemeDuration {
   final Duration standard = _Duration.medium1;
 
   /// 页面切换的动画时间
-  final Duration pageDration = _Duration.fast4;
+  final Duration pageDration = _Duration.medium1;
 
   /// 按钮缩放的动画时间
   final Duration buttonScaleDuration = _Duration.long2;
@@ -93,17 +84,50 @@ class AriThemeDuration {
   final Duration mapDuration = _Duration.long4;
 }
 
+class AriThemeFontSize {
+  static double displayLarge = 64;
+  static double displayMedium = 45;
+  static double displaySmall = 36;
+  static double headlineLarge = 32;
+  static double headlineMedium = 28;
+  static double headlineSmall = 24;
+  static double titleLarge = 22;
+  static double titleMedium = 16;
+  static double titleSmall = 14;
+  static double labelLarge = 14;
+  static double labelMedium = 12;
+  static double labelSmall = 11;
+  static double bodyLarge = 16;
+  static double bodyMedium = 14;
+  static double bodySmall = 12;
+}
+
 class AriThemeTextStyle {
   /// 对话框标题
   final TextStyle dialogTitle = TextStyle(
-    fontSize: 18,
+    fontSize: AriThemeFontSize.titleLarge,
     fontWeight: FontWeight.w700,
+  );
+
+  /// 页面标题
+  final TextStyle pageTitle = TextStyle(
+    fontSize: AriThemeFontSize.displayMedium,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  );
+
+  /// 页面渐变标题
+  final TextStyle pageTitleGradient = TextStyle(
+    fontSize: AriThemeFontSize.displaySmall,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+    color: Colors.white,
   );
 }
 
 class AriThemeFilter {
   /// 标准模糊效果
-  final ImageFilter standard = ImageFilter.blur(sigmaX: 20, sigmaY: 20);
+  final ImageFilter standard = ImageFilter.blur(sigmaX: 200, sigmaY: 200);
 }
 
 /// 按钮的数值方面的样式
@@ -154,10 +178,32 @@ class AriThemeButton {
 }
 
 class AriThemeModal {
+  /// 底部弹出框的样式
   final BoxDecoration bottomSheet = BoxDecoration(
     borderRadius: BorderRadius.only(
       topLeft: AriTheme.borderRadius.standard,
       topRight: AriTheme.borderRadius.standard,
     ),
   );
+
+  /// 底部弹出框的容器样式
+  final Container bottomSheetContainer = Container(
+    padding: EdgeInsets.only(
+      top: AriTheme.insets.large,
+      bottom: AriTheme.insets.large,
+    ),
+  );
+}
+
+class AriThemeTextField {
+  // MODULE:
+  //  borderTextfield 样式
+  final InputDecoration borderTextfieldInputDecoration = InputDecoration(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
+      borderSide: BorderSide.none,
+    ),
+  );
+  final EdgeInsetsGeometry borderTextfieldInputDecorationIconPadding =
+      EdgeInsets.symmetric(horizontal: AriTheme.insets.large);
 }
