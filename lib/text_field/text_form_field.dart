@@ -104,7 +104,7 @@ class AriTextFormField extends StatefulWidget {
   final Color? prefixIconColor;
 
   /// 后缀图标
-  final List<Widget>? suffixIcon;
+  final List<Widget?>? suffixIcon;
 
   /// 后缀图标颜色
   final Color? suffixIconColor;

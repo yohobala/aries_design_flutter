@@ -37,7 +37,7 @@ class AriIconButton extends StatefulWidget {
 
   //*--- 公有变量 ---*
   /// 图标列表，根据[selectIndex]显示相应的图标
-  final List<Widget> icons;
+  final List<Widget?> icons;
 
   /// 选择的图标
   final ValueNotifier<int> selectIndex;
@@ -112,7 +112,19 @@ class AriIconButtonState extends State<AriIconButton>
   /// 用于在触发图标切换动画
   void animationForward() {
     if (widget.icons.length > 1) {
-      if (_animationControllers[preSelectIndex].value == 1.0) {
+      // NOTE:
+      // 如果当前图标为null，则不进行动画
+      if (widget.icons[preSelectIndex] == null) {
+        if (_animationControllers[widget.selectIndex.value].value == 0.0) {
+          _animationControllers[widget.selectIndex.value].forward();
+        } else {
+          _animationControllers[widget.selectIndex.value].reverse();
+        }
+        preSelectIndex = widget.selectIndex.value;
+      }
+      // NOTE:
+      // 当前动画为正向动画时，点击后反向动画
+      else if (_animationControllers[preSelectIndex].value == 1.0) {
         _animationControllers[preSelectIndex].reverse().then((value) {
           if (_animationControllers[widget.selectIndex.value].value == 0.0) {
             _animationControllers[widget.selectIndex.value].forward();
@@ -121,7 +133,10 @@ class AriIconButtonState extends State<AriIconButton>
           }
           preSelectIndex = widget.selectIndex.value;
         });
-      } else {
+      }
+      // NOTE:
+      // 当前动画为反向动画时，点击后正向动画
+      else {
         _animationControllers[preSelectIndex].forward().then((value) {
           if (_animationControllers[widget.selectIndex.value].value == 0.0) {
             _animationControllers[widget.selectIndex.value].forward();
