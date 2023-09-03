@@ -21,6 +21,7 @@ dependencies:
   provider: ^6.0.1 #状态管理
   logger: ^2.0.1 #日志
   flutter_bloc: ^8.1.3 # 用于使用bloc
+  vector_math: ^2.1.0
 
 dev_dependencies:
   lints: ^2.0.0
