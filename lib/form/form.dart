@@ -24,8 +24,10 @@ class AriFormState extends State<AriForm> {
     }
 
     return Form(
-      child: Column(
-        children: elements,
+      child: AutofillGroup(
+        child: Column(
+          children: elements,
+        ),
       ),
     );
   }
