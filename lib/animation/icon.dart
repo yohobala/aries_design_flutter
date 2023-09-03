@@ -30,9 +30,6 @@ Widget Function(Widget child, AnimationController animationController,
   if (!signle) {
     var begin = !reverse ? 1.0 : scale;
     var end = !reverse ? scale : 1.0;
-    print(reverse);
-    print(begin);
-    print(end);
     var animation = Tween<double>(
       begin: begin,
       end: end,
@@ -77,8 +74,8 @@ List<AnimationController> ariIconSwitchAnimationController(
     TickerProvider vsync, int length) {
   /// 页面切换动画
   AnimationController buildController() {
-    final AnimationController controller = AnimationController(
-        vsync: vsync, duration: AriTheme.duration.buttonScaleDuration);
+    final AnimationController controller =
+        AnimationController(vsync: vsync, duration: AriTheme.duration.fast3);
     return controller;
   }
 

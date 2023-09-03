@@ -1,6 +1,7 @@
 export 'widget_fader.dart';
 export 'interval.dart';
 export 'icon.dart';
+export 'button.dart';
 
 import 'package:flutter/material.dart';
 
