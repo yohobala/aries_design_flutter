@@ -13,7 +13,9 @@ class AriGeoLocationDevice {
 
   /// 使用 _locationStreamController 来创建自己的流
   final StreamController<LatLng> _locationStreamController =
-      StreamController<LatLng>();
+      StreamController<LatLng>.broadcast();
+
+  StreamSubscription<Position>? positionStream;
 
   bool _isOpenStream = false;
 
@@ -44,28 +46,30 @@ class AriGeoLocationDevice {
 
   /// 开始监听位置变化
   void registerLocationListener() {
-    StreamSubscription<Position> positionStream = Geolocator.getPositionStream(
-      locationSettings: geoLocationSettings,
-    ).listen(
-      (Position position) {
-        _isOpenStream = true;
-        LatLng location = _posToLatLng(position);
-        if (location != _currentLocation) {
-          _currentLocation = location;
-          _locationStreamController.add(location); // 向流中添加新的位置数据
-        }
+    if (!_isOpenStream) {
+      Geolocator.getPositionStream(
+        locationSettings: geoLocationSettings,
+      ).listen(
+        (Position position) {
+          _isOpenStream = true;
+          LatLng location = _posToLatLng(position);
+          if (location != _currentLocation) {
+            _currentLocation = location;
+            _locationStreamController.add(location); // 向流中添加新的位置数据
+          }
 
-        // 其他逻辑...
-      },
-      onError: (error) {
-        // 处理错误...
-        _locationStreamController.addError(error);
-      },
-    );
+          // 其他逻辑...
+        },
+        onError: (error) {
+          // 处理错误...
+          _locationStreamController.addError(error);
+        },
+      );
+    }
 
     // 当流不再使用时，取消订阅
     _locationStreamController.onCancel = () {
-      positionStream.cancel();
+      positionStream?.cancel();
     };
   }
 

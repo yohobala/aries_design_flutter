@@ -63,6 +63,13 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       layerkey: defalutPositionMakerLayerKey,
       type: MarkerType.position);
 
+  @override
+  Future<void> close() {
+    // 取消订阅
+    cancelGeoLocationSubscription();
+    return super.close();
+  }
+
   /***************  初始化、权限有关事件 ***************/
 
   /// 初始化事件
@@ -157,7 +164,9 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
   /// 监听定位流
   Future<void> listenLocationStream() async {
-    if (_geoLocationAvailable) {
+    logger.d("监听定位流");
+    logger.d(_locationSubscription);
+    if (_geoLocationAvailable && _locationSubscription == null) {
       _locationSubscription = geoLocationRepo.locationStream.listen(
         (location) {
           if (!isInit.value) {
@@ -180,6 +189,10 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
         },
       );
     }
+  }
+
+  void cancelGeoLocationSubscription() {
+    _locationSubscription?.cancel();
   }
 
   /***************  私有方法  ***************/
