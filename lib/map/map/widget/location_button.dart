@@ -42,7 +42,7 @@ class AriLocationButton extends AriIconButton {
             Icon(Icons.near_me),
             Icon(Icons.near_me_disabled_outlined)
           ],
-          selectIndex: LocationButtonEnum.offset.index,
+          selectIndex: ValueNotifier(LocationButtonEnum.offset.index),
           rotateAngle: 0,
         );
 

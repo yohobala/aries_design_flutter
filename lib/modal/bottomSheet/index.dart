@@ -54,7 +54,7 @@ class AriBottomSheetState extends State<AriBottomSheet> {
                 filter: AriTheme.filter.standard,
                 child: Container(
                   color: widget.backgroundColor ??
-                      theme.colorScheme.surface.withOpacity(0.6),
+                      theme.colorScheme.background.withOpacity(0.8),
                   padding: AriTheme.modal.bottomSheetContainer.padding,
                   child: _build(),
                 ),

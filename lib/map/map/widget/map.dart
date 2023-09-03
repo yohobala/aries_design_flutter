@@ -97,6 +97,9 @@ class AriMap extends StatefulWidget {
 }
 
 class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
+  late final AriMapBloc mapBloc;
+  late final MapController mapController;
+
   @override
   void initState() {
     super.initState();
@@ -111,6 +114,10 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
      * 一旦你不再需要监听平台亮度的变化，你应该使用 WidgetsBinding.instance?.removeObserver(this); 来移除观察者，避免内存泄漏。
      */
     WidgetsBinding.instance.addObserver(this);
+
+    mapBloc = context.read<AriMapBloc>();
+    // final markerBloc = context.read<AriMarkerBloc>();
+    mapController = MapController();
   }
 
   @override
@@ -125,9 +132,6 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final mapBloc = context.read<AriMapBloc>();
-    // final markerBloc = context.read<AriMarkerBloc>();
-    final MapController mapController = MapController();
     _addMapControllerListener(mapController, mapBloc);
     // NOTE:
     // 获取安全区域
@@ -210,6 +214,7 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    mapBloc.cancelGeoLocationSubscription();
     super.dispose();
   }
 }
