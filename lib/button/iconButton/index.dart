@@ -24,12 +24,12 @@ class AriIconButton extends StatefulWidget {
   AriIconButton(
       {Key? key,
       required this.icons,
-      int selectIndex = 0,
+      ValueNotifier<int>? selectIndex,
       double rotateAngle = 0.0,
       this.onPressed,
       BorderRadiusGeometry? borderRadius,
       ButtonStyle? style})
-      : selectIndex = ValueNotifier<int>(selectIndex),
+      : selectIndex = selectIndex ?? ValueNotifier<int>(0),
         rotateAngle = ValueNotifier<double>(rotateAngle),
         borderRadius = ValueNotifier<BorderRadiusGeometry?>(borderRadius),
         style = ValueNotifier<ButtonStyle>(style ?? ButtonStyle()),
@@ -83,6 +83,8 @@ class AriIconButtonState extends State<AriIconButton>
 
   late int preSelectIndex;
 
+  late List<Widget> _elements;
+
   //*--- 生命周期 ---*
   @override
   void initState() {
@@ -91,16 +93,21 @@ class AriIconButtonState extends State<AriIconButton>
     preSelectIndex = widget.selectIndex.value;
     _animationControllers =
         ariIconSwitchAnimationController(this, widget.icons.length);
+    _elements = _build();
 
     widget.style.addListener(() {
       setState(() {});
+    });
+
+    widget.selectIndex.addListener(() {
+      animationForward();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: _build(),
+      children: _elements,
     );
   }
 
@@ -115,10 +122,12 @@ class AriIconButtonState extends State<AriIconButton>
       // NOTE:
       // 如果当前图标为null，则不进行动画
       if (widget.icons[preSelectIndex] == null) {
-        if (_animationControllers[widget.selectIndex.value].value == 0.0) {
-          _animationControllers[widget.selectIndex.value].forward();
-        } else {
-          _animationControllers[widget.selectIndex.value].reverse();
+        if (widget.icons[widget.selectIndex.value] != null) {
+          if (_animationControllers[widget.selectIndex.value].value == 0.0) {
+            _animationControllers[widget.selectIndex.value].forward();
+          } else {
+            _animationControllers[widget.selectIndex.value].reverse();
+          }
         }
         preSelectIndex = widget.selectIndex.value;
       }
@@ -126,10 +135,13 @@ class AriIconButtonState extends State<AriIconButton>
       // 当前动画为正向动画时，点击后反向动画
       else if (_animationControllers[preSelectIndex].value == 1.0) {
         _animationControllers[preSelectIndex].reverse().then((value) {
-          if (_animationControllers[widget.selectIndex.value].value == 0.0) {
-            _animationControllers[widget.selectIndex.value].forward();
-          } else {
-            _animationControllers[widget.selectIndex.value].reverse();
+          if (widget.icons[widget.selectIndex.value] != null) {
+            if (_animationControllers[widget.selectIndex.value].value == 0.0) {
+              _animationControllers[widget.selectIndex.value].reset();
+              _animationControllers[widget.selectIndex.value].forward();
+            } else {
+              _animationControllers[widget.selectIndex.value].reverse();
+            }
           }
           preSelectIndex = widget.selectIndex.value;
         });
@@ -138,11 +150,15 @@ class AriIconButtonState extends State<AriIconButton>
       // 当前动画为反向动画时，点击后正向动画
       else {
         _animationControllers[preSelectIndex].forward().then((value) {
-          if (_animationControllers[widget.selectIndex.value].value == 0.0) {
-            _animationControllers[widget.selectIndex.value].forward();
-          } else {
-            _animationControllers[widget.selectIndex.value].reverse();
+          if (widget.icons[widget.selectIndex.value] != null) {
+            if (_animationControllers[widget.selectIndex.value].value == 0.0) {
+              _animationControllers[widget.selectIndex.value].reset();
+              _animationControllers[widget.selectIndex.value].forward();
+            } else {
+              _animationControllers[widget.selectIndex.value].reverse();
+            }
           }
+
           preSelectIndex = widget.selectIndex.value;
         });
       }
@@ -163,8 +179,6 @@ class AriIconButtonState extends State<AriIconButton>
     if (onPressedCallback != null) {
       onPressedCallback!.call(widget.selectIndex, pressAnimationController);
     }
-    print(widget.selectIndex.value);
-    animationForward();
   }
 
   List<Widget> _build() {
