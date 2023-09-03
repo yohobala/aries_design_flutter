@@ -1,8 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-import 'index.dart';
-
 Widget Function(
   Widget child,
   AnimationController animationController, {

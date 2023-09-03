@@ -1,8 +1,6 @@
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/widgets.dart';
 
-import 'index.dart';
-
 /// 用于切换图标的动画
 ///
 /// 比如可以用在button点击后图标切换上,例如[AriIconButton]中就使用

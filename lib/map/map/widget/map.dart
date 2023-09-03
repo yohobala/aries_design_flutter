@@ -65,7 +65,7 @@ class AriMap extends StatefulWidget {
     Key? key,
     this.rightBottomChild,
     this.rightTopChild,
-    this.zoom = 13.0,
+    this.zoom = 1.0,
     this.maxZoom = 18,
     this.minZoom = 1,
     this.center,
