@@ -5,6 +5,7 @@ import 'index.dart';
 /// 生成不同Brightness模式下的AriThemeColor
 AriThemeColor generateThemeColor({
   required ColorScheme colorScheme,
+  required AriThemeColorPrime prime,
 }) {
   // MODULE:
   // 阴影样式
@@ -78,6 +79,7 @@ AriThemeColor generateThemeColor({
 
   final AriThemeColor ariThemeColor = AriThemeColor(
     colorScheme: colorScheme,
+    prime: prime,
     shadow: boxShadow,
     button: button,
     modal: modal,

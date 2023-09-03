@@ -8,8 +8,10 @@ final ariThemeDataDark = generateThemeData(
   colorTheme: ariThemeDark,
 );
 
-final AriThemeColor ariThemeDark =
-    generateThemeColor(colorScheme: _colorScheme);
+final AriThemeColor ariThemeDark = generateThemeColor(
+  colorScheme: _colorScheme,
+  prime: _prime,
+);
 
 /// 配色
 /// primary: #765b00
@@ -48,4 +50,12 @@ final ColorScheme _colorScheme = ColorScheme(
   surfaceTint: Color(0xFFEDC148),
   outlineVariant: Color(0xFF4C4639),
   scrim: Color(0xFF000000),
+);
+
+AriThemeColorPrime _prime = AriThemeColorPrime(
+  blue: Colors.blue[200]!,
+  green: Colors.green[200]!,
+  red: Colors.red[200]!,
+  yellow: _colorScheme.primaryContainer,
+  orange: Colors.orange[200]!,
 );

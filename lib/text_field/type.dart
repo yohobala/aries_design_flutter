@@ -1,4 +1,0 @@
-enum TextFieldType {
-  email,
-  password,
-}

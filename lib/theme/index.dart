@@ -118,6 +118,7 @@ class AriThemeColor {
   /// {@macro ari_theme_color}
   AriThemeColor(
       {required this.colorScheme,
+      required this.prime,
       required this.shadow,
       required this.button,
       required this.modal,
@@ -125,6 +126,8 @@ class AriThemeColor {
 
   /// 主色调
   final ColorScheme colorScheme;
+
+  final AriThemeColorPrime prime;
 
   /// 阴影
   final AriThemeColorBoxShadow shadow;
@@ -137,6 +140,26 @@ class AriThemeColor {
 
   /// 渐变
   final AriThemeColorGradient gradient;
+}
+
+/// {@template ari_theme_color_scheme}
+/// Aries的不同颜色的主要颜色
+/// {@endtemplate}
+@immutable
+class AriThemeColorPrime {
+  AriThemeColorPrime({
+    required this.red,
+    required this.green,
+    required this.blue,
+    required this.yellow,
+    required this.orange,
+  });
+
+  final Color red;
+  final Color green;
+  final Color blue;
+  final Color yellow;
+  final Color orange;
 }
 
 /// Aries的阴影样式
