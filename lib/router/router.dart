@@ -23,6 +23,7 @@ class AriRouter {
   static final AriRouter _instance = AriRouter._internal();
 
   //**************** 公有方法 ****************
+
   /// 得到路由表,返回MaterialApp中routes属性支持的格式
   ///
   /// 例如：

@@ -122,13 +122,10 @@ class _AriNavigatorState extends State<AriNavigator> {
         Widget Function(BuildContext) page;
         if (settings.name == widget.initialRoute) {
           page = widget.routeItem.widget!;
-        } else if (settings.name == "/") {
-          // 根据index返回对应的页面
-          page = widget.routeItem.widget!;
         } else if (children.containsKey(settings.name)) {
           page = children[settings.name]!.widget!;
         } else {
-          logger.w(settings.name);
+          // logger.w(settings.name);
           return null;
         }
         return MaterialPageRoute(
