@@ -8,7 +8,7 @@ export 'theme/index.dart';
 export 'http/index.dart';
 export 'exception/index.dart';
 export 'animation/index.dart';
-export 'encoding/Index.dart';
+export 'encoding/index.dart';
 
 // UI界面类的
 export 'map/index.dart';

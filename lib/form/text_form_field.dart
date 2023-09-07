@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -127,9 +125,13 @@ class _AriTextFormFieldState extends State<AriTextFormField>
   /// 容器尺寸变化动画
   late Animation<double> sizeAnimation;
 
+  /// 自动填充
   late Iterable<String>? autofillHints;
+
+  /// 键盘类型
   late TextInputType? keyboardType;
 
+  // ignore: unused_field
   late AnimationController _animationController;
   @override
   void initState() {
@@ -182,6 +184,8 @@ class _AriTextFormFieldState extends State<AriTextFormField>
       });
     }
 
+    // NOTE:
+    // 设置自动填充和键盘类型
     if (widget.textFieldType != null) {
       if (widget.textFieldType == TextFieldType.email) {
         autofillHints = widget.autofillHints ?? [AutofillHints.email];

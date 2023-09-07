@@ -1,27 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'router.dart';
 
-/// {@template ari_route_item_navigation_config}
-/// 底部导航路由的配置
-/// {@endtemplate}
-class AriRouteItemNavigationConfig {
-  /// {@macro ari_route_item_navigation_config}
-  AriRouteItemNavigationConfig({
-    this.initialRoute = "/",
-    this.initialIndex = 0,
-  });
-
-  /// 初始路由,默认为/，这个和[AriRouteItem]的[route]不一样，
-  /// 即使[AriRouteItem]的[route]设置为/home，这里也可以设置为/user
-  /// 之后该底部导航栏的子路由都是/user/xxx
-  ///
-  /// 见 https://flutter.cn/docs/cookbook/effects/nested-nav
-  final String initialRoute;
-
-  /// 默认打开的底部导航栏的index
-  final int initialIndex;
-}
-
 /// {@template AriRouteItem}
 /// AriRoute单个路由的配置
 ///
@@ -54,6 +33,7 @@ class AriRouteItem {
       this.hasNavigation = false,
       this.navigationConfig,
       this.children = const [],
+      this.label,
       this.isCover = false})
       : assert(_checkHasNavigationCondition(
           hasNavigation,
@@ -95,7 +75,9 @@ class AriRouteItem {
   final List<AriRouteItem> children;
 
   /// 路由的标签, 用于底部导航栏
-  String? label;
+  ///
+  /// 如果[hasNavigation]为true，但是该值为null，会使用[name]作为标签
+  String Function(BuildContext)? label;
 
   /// 当这个值为true时，如果[name]相同，会覆盖原来的路由
   /// 默认为false
@@ -124,6 +106,27 @@ class AriRouteItem {
       isCover: isCover,
     );
   }
+}
+
+/// {@template ari_route_item_navigation_config}
+/// 底部导航路由的配置
+/// {@endtemplate}
+class AriRouteItemNavigationConfig {
+  /// {@macro ari_route_item_navigation_config}
+  AriRouteItemNavigationConfig({
+    this.initialRoute = "/",
+    this.initialIndex = 0,
+  });
+
+  /// 初始路由,默认为/，这个和[AriRouteItem]的[route]不一样，
+  /// 即使[AriRouteItem]的[route]设置为/home，这里也可以设置为/user
+  /// 之后该底部导航栏的子路由都是/user/xxx
+  ///
+  /// 见 https://flutter.cn/docs/cookbook/effects/nested-nav
+  final String initialRoute;
+
+  /// 默认打开的底部导航栏的index
+  final int initialIndex;
 }
 
 /// 判断HasNavigation不同情况下AriRouteItem的正确性
