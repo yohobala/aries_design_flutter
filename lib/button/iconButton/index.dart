@@ -8,6 +8,39 @@ import 'package:flutter/material.dart';
 typedef AriIconButtonOnPressed = void Function(
     ValueNotifier<int> selectIndex, AnimationController animationController);
 
+class AriFilledIconButton extends StatelessWidget {
+  AriFilledIconButton({
+    required this.icons,
+    this.backgroundColor,
+    this.onPressed,
+  });
+
+  final List<Widget?> icons;
+
+  /// 背景颜色
+  final Color? backgroundColor;
+
+  /// 点击事件
+  final AriIconButtonOnPressed? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+    AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
+    return AriIconButton(
+      icons: icons,
+      style: ButtonStyle(
+        backgroundColor: backgroundColor != null
+            ? MaterialStateProperty.all<Color>(
+                backgroundColor!,
+              )
+            : themeColor.button.filledIconButton.backgroundColor,
+      ),
+      onPressed: onPressed,
+    );
+  }
+}
+
 /// 图标按钮
 class AriIconButton extends StatefulWidget {
   //*--- 构造函数 ---*

@@ -13,11 +13,7 @@ class AriException implements Exception {
 }
 
 AriException handleAPI(http.Response response) {
-  if (response.statusCode == 404) {
-    return AriException(code: 404, message: "Not Found");
-  } else {
-    return AriException(code: 10000001);
-  }
+  return AriException(code: response.statusCode);
 }
 
 AriException handleException(Object e) {

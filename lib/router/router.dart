@@ -56,9 +56,9 @@ class AriRouter {
     try {
       if (routeItemMap.containsKey(routeName)) {
         String route = routeItemMap[routeName]!.route;
-        Navigator.of(context, rootNavigator: true).pushNamed(route);
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(route);
       } else {
-        Navigator.of(context).pushNamed(routeName);
+        Navigator.of(context).pushReplacementNamed(routeName);
       }
     } catch (e) {
       assert(false, "pushNamed error: $e");

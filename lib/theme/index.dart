@@ -184,6 +184,7 @@ class AriThemeColorButton {
     required this.gradientButton,
     required this.segmentedIconButton,
     required this.segmentedIconButtonContainer,
+    required this.filledIconButton,
   });
 
   /// 渐变按钮
@@ -194,6 +195,8 @@ class AriThemeColorButton {
 
   /// segmentedIconButton容器的样式
   final BoxDecoration segmentedIconButtonContainer;
+
+  final ButtonStyle filledIconButton;
 }
 
 /// Aries的弹出框样式

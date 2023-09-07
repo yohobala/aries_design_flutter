@@ -27,27 +27,31 @@ AriThemeColor generateThemeColor({
   // MODULE:
   // 按钮样式
   AriThemeColorButton button = AriThemeColorButton(
-    gradientButton: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(
-        Colors.transparent,
+      gradientButton: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          Colors.transparent,
+        ),
+        foregroundColor: MaterialStateProperty.all<Color>(
+          colorScheme.onPrimary,
+        ),
       ),
-      foregroundColor: MaterialStateProperty.all<Color>(
-        colorScheme.onPrimary,
+      segmentedIconButton: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(
+          colorScheme.onSecondaryContainer,
+        ),
       ),
-    ),
-    segmentedIconButton: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all<Color>(
-        colorScheme.onSecondaryContainer,
+      segmentedIconButtonContainer: BoxDecoration(
+        color: colorScheme.secondaryContainer,
+        borderRadius: AriTheme.button.segmentedIconButtonContainer.borderRadius,
+        boxShadow: [
+          boxShadow.standard,
+        ],
       ),
-    ),
-    segmentedIconButtonContainer: BoxDecoration(
-      color: colorScheme.secondaryContainer,
-      borderRadius: AriTheme.button.segmentedIconButtonContainer.borderRadius,
-      boxShadow: [
-        boxShadow.standard,
-      ],
-    ),
-  );
+      filledIconButton: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          colorScheme.surfaceVariant,
+        ),
+      ));
 
   // MODULE:
   // 弹出框样式

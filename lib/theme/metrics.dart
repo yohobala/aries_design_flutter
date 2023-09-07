@@ -103,10 +103,10 @@ class AriThemeFontSize {
 }
 
 class AriThemeTextStyle {
-  /// 对话框标题
+  /// 对话框,弹出框标题
   final TextStyle dialogTitle = TextStyle(
-    fontSize: AriThemeFontSize.titleLarge,
-    fontWeight: FontWeight.w700,
+    fontSize: AriThemeFontSize.headlineMedium,
+    fontWeight: FontWeight.w600,
   );
 
   /// 页面标题
@@ -197,7 +197,7 @@ class AriThemeModal {
 
 class AriThemeTextField {
   // MODULE:
-  //  borderTextfield 样式
+  //  带边框的输入框 样式
   final InputDecoration borderTextfieldInputDecoration = InputDecoration(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
