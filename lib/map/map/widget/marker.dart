@@ -28,6 +28,7 @@ class AriMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapBloc = context.read<AriMarkerBloc>();
+    final markerBloc = context.read<AriMarkerBloc>();
 
     /// 构建标记图层
     List<Widget> buildLayers() {
@@ -44,6 +45,7 @@ class AriMarker extends StatelessWidget {
     return Stack(
       children: [
         BlocListener<AriMarkerBloc, AriMarkerState>(
+          bloc: markerBloc,
           listener: (context, state) {
             if (state is InitAriMarkerState) {
               shouldBuild.value += 1; // 修改 ValueNotifier 的值
@@ -82,7 +84,7 @@ class AriMarkerLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var markerBloc = context.read<AriMarkerBloc>();
+    var markerBloc = context.read<AriMarkerBloc>();
 
     /// 构建该图层的所有marker
     List<Marker> buildMarkers() {
@@ -103,7 +105,9 @@ class AriMarkerLayer extends StatelessWidget {
     }
 
     return BlocListener<AriMarkerBloc, AriMarkerState>(
+      bloc: markerBloc,
       listener: (context, state) {
+        logger.d(state);
         if (state is CreateMarkerState && state.layerKey == layerKey) {
           shouldBuild.value += 1; // 修改 ValueNotifier 的值
         }
@@ -143,6 +147,7 @@ class AriMarkerBuider extends StatelessWidget {
     AriMarkerModel marker = markerBloc.getMarker(key!);
 
     return BlocListener<AriMarkerBloc, AriMarkerState>(
+      bloc: markerBloc,
       listener: (context, state) {},
       child: ValueListenableBuilder<int>(
         valueListenable: shouldBuild,

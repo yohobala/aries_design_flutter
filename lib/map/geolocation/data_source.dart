@@ -12,8 +12,7 @@ class AriGeoLocationDevice {
   /***************  私有变量  ***************/
 
   /// 使用 _locationStreamController 来创建自己的流
-  final StreamController<LatLng> _locationStreamController =
-      StreamController<LatLng>.broadcast();
+  late StreamController<LatLng> _locationStreamController;
 
   StreamSubscription<Position>? positionStream;
 
@@ -46,26 +45,41 @@ class AriGeoLocationDevice {
 
   /// 开始监听位置变化
   void registerLocationListener() {
-    if (!_isOpenStream) {
-      Geolocator.getPositionStream(
-        locationSettings: geoLocationSettings,
-      ).listen(
-        (Position position) {
-          _isOpenStream = true;
-          LatLng location = _posToLatLng(position);
-          if (location != _currentLocation) {
-            _currentLocation = location;
-            _locationStreamController.add(location); // 向流中添加新的位置数据
-          }
-
-          // 其他逻辑...
-        },
-        onError: (error) {
-          // 处理错误...
-          _locationStreamController.addError(error);
-        },
-      );
+    // NOTE:
+    // 如果开启了监听，则先取消监听,再注册监听
+    if (_isOpenStream) {
+      unregisterLocationListener();
     }
+    _createLocationStreamController();
+
+    // NOTE:
+    // 如果开启了流，则会返回流中的位置
+    // 如果没有开启流，则会返回当前位置
+    if (_isOpenStream) {
+      _locationStreamController.add(_currentLocation);
+    } else {
+      Geolocator.getCurrentPosition().then((value) {
+        _locationStreamController.add(_posToLatLng(value));
+      });
+    }
+    Geolocator.getPositionStream(
+      locationSettings: geoLocationSettings,
+    ).listen(
+      (Position position) {
+        _isOpenStream = true;
+        LatLng location = _posToLatLng(position);
+        if (location != _currentLocation) {
+          _currentLocation = location;
+          _locationStreamController.add(location); // 向流中添加新的位置数据
+        }
+
+        // 其他逻辑...
+      },
+      onError: (error) {
+        // 处理错误...
+        _locationStreamController.addError(error);
+      },
+    );
 
     // 当流不再使用时，取消订阅
     _locationStreamController.onCancel = () {
@@ -75,6 +89,7 @@ class AriGeoLocationDevice {
 
   /// 停止监听位置变化
   void unregisterLocationListener() {
+    _isOpenStream = false;
     _locationStreamController.close();
   }
 
@@ -89,5 +104,9 @@ class AriGeoLocationDevice {
   LatLng _posToLatLng(Position position) {
     LatLng latLng = LatLng(position.latitude, position.longitude);
     return latLng;
+  }
+
+  void _createLocationStreamController() {
+    _locationStreamController = StreamController<LatLng>();
   }
 }

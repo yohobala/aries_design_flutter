@@ -45,7 +45,9 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /***************  私有变量  ***************/
 
   /// 是否已经初始化
-  final ValueNotifier<bool> isInit = ValueNotifier(false);
+  bool isInit = false;
+
+  LatLng _currentLocation = LatLng(0, 0);
 
   /// 定位流
   // ignore: unused_field
@@ -74,7 +76,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
   /// 初始化事件
   void initAriMapEvent(InitAriMapEvent event, Emitter<AriMapState> emit) async {
-    if (!isInit.value) {
+    if (!isInit) {
       /// NOTE:
       /// 检查定位权限
       _geoLocationAvailable = await geoLocationRepo.checkPermission();
@@ -169,21 +171,20 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     if (_geoLocationAvailable && _locationSubscription == null) {
       _locationSubscription = geoLocationRepo.locationStream.listen(
         (location) {
-          if (!isInit.value) {
-            isInit.value = true;
+          if (!isInit) {
+            isInit = true;
             add(InitAriMapCompleteEvent());
           }
-
           // 处理新的位置信息
           add(ChangeLocationEvent(latLng: location));
         },
         onError: (error) {
-          isInit.value = true;
+          isInit = true;
           // 在这里处理错误
           logger.d("出现错误");
         },
         onDone: () {
-          isInit.value = true;
+          isInit = true;
           // 处理流关闭的情况
           logger.d("处理流关闭的情况");
         },

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 地图无返回值的回调函数
 typedef MapVoidCallback = void Function(LatLng latLng);
@@ -132,6 +133,8 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var mapBloc = context.read<AriMapBloc>();
+
     _addMapControllerListener(mapController, mapBloc);
     // NOTE:
     // 获取安全区域
@@ -156,10 +159,12 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
       body: Stack(
         children: [
           BlocListener<AriMapBloc, AriMapState>(
+              bloc: mapBloc,
 
               /// MODULE:
               /// 监听BLoC的状态
               listener: (context, state) => {
+                    logger.d(state),
                     if (state is InitAriMapState)
                       {
                         mapBloc.add(GoToPositionEvent()),
@@ -188,6 +193,18 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
                   minZoom: widget.minZoom,
                   onLongPress: onLongPress,
                 ),
+                nonRotatedChildren: [
+                  RichAttributionWidget(
+                    alignment: AttributionAlignment.bottomLeft,
+                    attributions: [
+                      TextSourceAttribution(
+                        'OpenStreetMap contributors',
+                        onTap: () => launchUrl(
+                            Uri.parse('https://openstreetmap.org/copyright')),
+                      ),
+                    ],
+                  ),
+                ],
                 children: [
                   AriMapLayer(),
                   AriMarker(),

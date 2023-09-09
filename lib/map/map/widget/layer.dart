@@ -2,6 +2,8 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AriMapLayer extends StatelessWidget {
   AriMapLayer({
@@ -41,8 +43,20 @@ List<TileLayer> buildLayers(List<AriLayerModel> layers) {
       TileLayer(
         urlTemplate: layer.url,
         backgroundColor: layer.backgroundColor,
+        tileProvider: CachedNetworkTileProvider(),
       ),
     );
   }
   return tileLayers;
+}
+
+/// 缓存网络图层
+class CachedNetworkTileProvider extends TileProvider {
+  CachedNetworkTileProvider();
+
+  @override
+  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) {
+    final url = getTileUrl(coordinates, options);
+    return CachedNetworkImageProvider(url, cacheManager: DefaultCacheManager());
+  }
 }
