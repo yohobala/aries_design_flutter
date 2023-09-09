@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
+/// 间距
+///
+/// 一般是用于widget之间的间距
 class AriThemeInsets {
   final double extraSmall = 3;
   final double small = 5;
@@ -12,6 +15,9 @@ class AriThemeInsets {
   final double extraLarge = 30;
 }
 
+/// widget与屏幕的间距
+///
+/// 一般用于设定与屏幕的间距
 class AriThemeWindowsInsets {
   final double top = AriTheme.insets.medium;
   final double bottom = AriTheme.insets.medium;
@@ -19,6 +25,7 @@ class AriThemeWindowsInsets {
   final double right = AriTheme.insets.medium;
 }
 
+/// 圆角
 class AriThemeBorderRadius {
   final Radius zero = Radius.zero;
   final Radius extraSmall = Radius.circular(4);
@@ -84,8 +91,9 @@ class AriThemeDuration {
   final Duration mapDuration = _Duration.long4;
 }
 
+/// 字体大小
 class AriThemeFontSize {
-  static double displayLarge = 64;
+  static double displayLarge = 57;
   static double displayMedium = 45;
   static double displaySmall = 36;
   static double headlineLarge = 32;
@@ -94,6 +102,7 @@ class AriThemeFontSize {
   static double titleLarge = 22;
   static double titleMedium = 16;
   static double titleSmall = 14;
+  // 按钮等默认这个大小
   static double labelLarge = 14;
   static double labelMedium = 12;
   static double labelSmall = 11;
@@ -102,6 +111,7 @@ class AriThemeFontSize {
   static double bodySmall = 12;
 }
 
+/// 文本样式
 class AriThemeTextStyle {
   /// 对话框,弹出框标题
   final TextStyle dialogTitle = TextStyle(
@@ -109,10 +119,15 @@ class AriThemeTextStyle {
     fontWeight: FontWeight.w600,
   );
 
+  final TextStyle dialogContainerTitle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
+
   /// 页面标题
   final TextStyle pageTitle = TextStyle(
     fontSize: AriThemeFontSize.displayMedium,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
     letterSpacing: 0.5,
   );
 
@@ -125,12 +140,13 @@ class AriThemeTextStyle {
   );
 }
 
+/// 模糊效果
 class AriThemeFilter {
   /// 标准模糊效果
   final ImageFilter standard = ImageFilter.blur(sigmaX: 200, sigmaY: 200);
 }
 
-/// 按钮的数值方面的样式
+/// 按钮
 ///
 /// 如果要获得MaterialStateProperty<T>中的T，请使用如下代码，其中
 /// - resolve() 方法时传入一个空的状态集合，表示获得默认的值
@@ -139,21 +155,19 @@ class AriThemeFilter {
 ///   Size? size = AriTheme.button.buttonSize.resolve({});
 /// ```
 class AriThemeButton {
-  //*--- 形状 ---*
-  /// 按钮的形状, 目前定义的是圆角按钮
+  /// 形状,
+  /// 目前定义的是圆角按钮
   final MaterialStateProperty<OutlinedBorder?> standardShape =
       MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
     borderRadius: BorderRadius.all(AriTheme.borderRadius.circle),
     side: BorderSide.none,
   ));
 
-  //*--- 间距 ---*
   /// 间距
   final MaterialStateProperty<EdgeInsetsGeometry?> padding =
       MaterialStateProperty.all<EdgeInsetsGeometry>(
           EdgeInsets.all(AriTheme.insets.standard));
 
-  //*--- 尺寸 ---*
   /// 用于定义按钮或其他可点击组件的触摸区域的大小
   MaterialTapTargetSize get tapTargetSize => MaterialTapTargetSize.shrinkWrap;
 
@@ -165,7 +179,7 @@ class AriThemeButton {
   final MaterialStateProperty<Size> iconButtonSize =
       MaterialStateProperty.all<Size>(Size(40, 40));
 
-  //*--- segmentedIconButton ---*
+  // MODULE:
   /// segmentedIconButton容器的样式
   final BoxDecoration segmentedIconButtonContainer = BoxDecoration(
     borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
@@ -177,6 +191,7 @@ class AriThemeButton {
   final double segmentedIconButtonSize = 40;
 }
 
+/// 弹出框
 class AriThemeModal {
   /// 底部弹出框的样式
   final BoxDecoration bottomSheet = BoxDecoration(
@@ -195,6 +210,7 @@ class AriThemeModal {
   );
 }
 
+/// 输入框
 class AriThemeTextField {
   // MODULE:
   //  带边框的输入框 样式

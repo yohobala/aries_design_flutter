@@ -12,15 +12,18 @@ AriThemeColor generateThemeColor({
   AriThemeColorBoxShadow boxShadow = AriThemeColorBoxShadow(
     standard: BoxShadow(
       color: colorScheme.shadow.withOpacity(0.2), // 设置透明度
-      spreadRadius: 0, // 不要扩散阴影
-      blurRadius: 6, // 模仿 FloatingActionButton 的 elevation
-      offset: Offset(0, 3), // 模仿 FloatingActionButton 的阴影偏移
+      // 扩散阴影,当为0时不扩散
+      spreadRadius: 0,
+      // 模仿 FloatingActionButton 的 elevation
+      // 但是在滑动的时候会造成阴影和背景分离
+      blurRadius: 6,
+      // 模仿 FloatingActionButton 的阴影偏移
+      offset: Offset(0, 3),
     ),
     bottomSheet: BoxShadow(
-      color: colorScheme.shadow.withOpacity(0.2), // 设置透明度
-      spreadRadius: 0, // 不要扩散阴影
-      blurRadius: 10, // 模仿 FloatingActionButton 的 elevation
-      offset: Offset(0, 0), // 模仿 FloatingActionButton 的阴影偏移
+      color: colorScheme.shadow.withOpacity(0.2),
+      blurRadius: 5,
+      offset: Offset(0, -3),
     ),
   );
 
@@ -57,6 +60,7 @@ AriThemeColor generateThemeColor({
   // 弹出框样式
   AriThemeColorModal modal = AriThemeColorModal(
     bottomSheet: BoxDecoration(
+      color: colorScheme.background,
       borderRadius: AriTheme.modal.bottomSheet.borderRadius,
       boxShadow: [
         boxShadow.bottomSheet,
@@ -75,7 +79,7 @@ AriThemeColor generateThemeColor({
 
       /// 渐变的开始位置
       begin: Alignment.topLeft,
-      end: FractionalOffset(1.0, 1.0),
+      end: Alignment.bottomRight,
       stops: <double>[0.2, 1.0],
       tileMode: TileMode.clamp,
     ),
