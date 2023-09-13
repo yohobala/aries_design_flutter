@@ -8,17 +8,26 @@ import 'package:flutter/material.dart';
 typedef AriIconButtonOnPressed = void Function(
     ValueNotifier<int> selectIndex, AnimationController animationController);
 
+/// 背景填充的图标按钮
 class AriFilledIconButton extends StatelessWidget {
   AriFilledIconButton({
     required this.icons,
-    this.backgroundColor,
+    this.width = 40,
+    this.height = 40,
+    this.iconSize = 24,
+    this.style,
     this.onPressed,
   });
 
   final List<Widget?> icons;
 
-  /// 背景颜色
-  final Color? backgroundColor;
+  final double width;
+
+  final double height;
+
+  final double iconSize;
+
+  final ButtonStyle? style;
 
   /// 点击事件
   final AriIconButtonOnPressed? onPressed;
@@ -27,17 +36,17 @@ class AriFilledIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Brightness brightness = MediaQuery.of(context).platformBrightness;
     AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
+    ButtonStyle? buttonStyle = style ??
+        ButtonStyle(
+            backgroundColor:
+                themeColor.button.filledIconButton.backgroundColor);
     return AriIconButton(
-      icons: icons,
-      style: ButtonStyle(
-        backgroundColor: backgroundColor != null
-            ? MaterialStateProperty.all<Color>(
-                backgroundColor!,
-              )
-            : themeColor.button.filledIconButton.backgroundColor,
-      ),
-      onPressed: onPressed,
-    );
+        icons: icons,
+        style: buttonStyle,
+        onPressed: onPressed,
+        width: width,
+        height: height,
+        iconSize: iconSize);
   }
 }
 
@@ -52,15 +61,18 @@ class AriIconButton extends StatefulWidget {
   /// - `onPressed` 点击事件
   /// - `borderRadius` 圆角
   /// - `style` 按钮样式，默认为[ButtonStyle]
-  AriIconButton(
-      {Key? key,
-      required this.icons,
-      ValueNotifier<int>? selectIndex,
-      double rotateAngle = 0.0,
-      this.onPressed,
-      BorderRadiusGeometry? borderRadius,
-      ButtonStyle? style})
-      : selectIndex = selectIndex ?? ValueNotifier<int>(0),
+  AriIconButton({
+    Key? key,
+    required this.icons,
+    ValueNotifier<int>? selectIndex,
+    double rotateAngle = 0.0,
+    this.onPressed,
+    BorderRadiusGeometry? borderRadius,
+    ButtonStyle? style,
+    this.width = 40,
+    this.height = 40,
+    this.iconSize = 24,
+  })  : selectIndex = selectIndex ?? ValueNotifier<int>(0),
         rotateAngle = ValueNotifier<double>(rotateAngle),
         borderRadius = ValueNotifier<BorderRadiusGeometry?>(borderRadius),
         style = ValueNotifier<ButtonStyle>(style ?? ButtonStyle()),
@@ -84,6 +96,12 @@ class AriIconButton extends StatefulWidget {
 
   /// 按钮样式
   final ValueNotifier<ButtonStyle> style;
+
+  final double width;
+
+  final double height;
+
+  final double iconSize;
 
   @override
   State<StatefulWidget> createState() => AriIconButtonState();
@@ -112,8 +130,10 @@ class AriIconButtonState extends State<AriIconButton>
   /// 动画控制器
   late List<AnimationController> _animationControllers;
 
+  /// 上一个选择的图标索引
   late int preSelectIndex;
 
+  /// 图标列表
   late List<Widget> _elements;
 
   //*--- 生命周期 ---*
@@ -124,7 +144,6 @@ class AriIconButtonState extends State<AriIconButton>
     preSelectIndex = widget.selectIndex.value;
     _animationControllers =
         ariIconSwitchAnimationController(this, widget.icons.length);
-    _elements = _build();
 
     widget.style.addListener(() {
       setState(() {});
@@ -137,6 +156,8 @@ class AriIconButtonState extends State<AriIconButton>
 
   @override
   Widget build(BuildContext context) {
+    _elements = _build(widget.width, widget.height);
+
     return Stack(
       children: _elements,
     );
@@ -145,9 +166,8 @@ class AriIconButtonState extends State<AriIconButton>
   //*--- 公有方法 ---*
   /// 播放动画
   ///
-  /// `@return` 动画控制器
-  ///
   /// 用于在触发图标切换动画
+  /// 动画呈现先缩小再放大的效果
   void animationForward() {
     if (widget.icons.length > 1) {
       // NOTE:
@@ -212,7 +232,8 @@ class AriIconButtonState extends State<AriIconButton>
     }
   }
 
-  List<Widget> _build() {
+  List<Widget> _build(double width, double height) {
+    // 旋转图标
     Widget iconWidget(int index) => Transform.rotate(
           angle: widget.rotateAngle.value,
           // child: FractionallySizedBox(
@@ -231,10 +252,15 @@ class AriIconButtonState extends State<AriIconButton>
           _animationControllers[i],
           reverse: !isSelected,
         );
-        Widget element = IconButton(
-          onPressed: _onPressed,
-          icon: animation,
-          style: widget.style.value,
+        Widget element = SizedBox(
+          width: width,
+          height: height,
+          child: IconButton(
+            onPressed: _onPressed,
+            icon: animation,
+            style: widget.style.value,
+            iconSize: widget.iconSize,
+          ),
         );
         elements.add(element);
       }
@@ -244,10 +270,15 @@ class AriIconButtonState extends State<AriIconButton>
         _animationControllers[0],
         signle: true,
       );
-      Widget element = IconButton(
-        onPressed: _onPressed,
-        icon: animation,
-        style: widget.style.value,
+      Widget element = SizedBox(
+        width: width,
+        height: height,
+        child: IconButton(
+          onPressed: _onPressed,
+          icon: animation,
+          style: widget.style.value,
+          iconSize: widget.iconSize,
+        ),
       );
       elements.add(element);
     }
