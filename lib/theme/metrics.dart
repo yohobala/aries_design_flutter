@@ -113,12 +113,13 @@ class AriThemeFontSize {
 
 /// 文本样式
 class AriThemeTextStyle {
-  /// 对话框,弹出框标题
+  /// 对话框\弹出框标题
   final TextStyle dialogTitle = TextStyle(
     fontSize: AriThemeFontSize.headlineMedium,
     fontWeight: FontWeight.w600,
   );
 
+  /// 对话框\弹出框容器标题
   final TextStyle dialogContainerTitle = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w600,
@@ -155,13 +156,18 @@ class AriThemeFilter {
 ///   Size? size = AriTheme.button.buttonSize.resolve({});
 /// ```
 class AriThemeButton {
+  // MODULE:
+  // 按钮的通用样式
+
   /// 形状,
   /// 目前定义的是圆角按钮
   final MaterialStateProperty<OutlinedBorder?> standardShape =
-      MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(AriTheme.borderRadius.circle),
-    side: BorderSide.none,
-  ));
+      MaterialStateProperty.all<RoundedRectangleBorder>(
+    RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(AriTheme.borderRadius.circle),
+      side: BorderSide.none,
+    ),
+  );
 
   /// 间距
   final MaterialStateProperty<EdgeInsetsGeometry?> padding =
@@ -180,6 +186,8 @@ class AriThemeButton {
       MaterialStateProperty.all<Size>(Size(40, 40));
 
   // MODULE:
+  // 分段按钮
+
   /// segmentedIconButton容器的样式
   final BoxDecoration segmentedIconButtonContainer = BoxDecoration(
     borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
@@ -193,6 +201,9 @@ class AriThemeButton {
 
 /// 弹出框
 class AriThemeModal {
+  // MODULE:
+  // 底部弹出框
+
   /// 底部弹出框的样式
   final BoxDecoration bottomSheet = BoxDecoration(
     borderRadius: BorderRadius.only(
@@ -213,7 +224,7 @@ class AriThemeModal {
 /// 输入框
 class AriThemeTextField {
   // MODULE:
-  //  带边框的输入框 样式
+  // 带边框的输入框 样式
   final InputDecoration borderTextfieldInputDecoration = InputDecoration(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
