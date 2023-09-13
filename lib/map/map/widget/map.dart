@@ -164,14 +164,12 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
               /// MODULE:
               /// 监听BLoC的状态
               listener: (context, state) => {
-                    logger.d(state),
                     if (state is InitAriMapState)
                       {
                         mapBloc.add(GoToPositionEvent()),
                       },
                     if (state is MapLocationState)
                       {
-                        logger.d('MapLocationState'),
                         _goToPosition(
                           mapController: mapController,
                           latLng: state.center,

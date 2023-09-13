@@ -82,7 +82,7 @@ class AriMarkerModel {
         _height = height,
         _type = type;
   //**************** 公有变量 ****************
-  /// 更新marker的坐标
+  /// marker的key。如果为空，将默认为`UniqueKey().toString()`
   final Key key;
 
   Key get layerkey => _layerkey;

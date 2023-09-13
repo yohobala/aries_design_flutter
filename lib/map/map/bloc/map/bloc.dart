@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,8 +45,6 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
   /// 是否已经初始化
   bool isInit = false;
-
-  LatLng _currentLocation = LatLng(0, 0);
 
   /// 定位流
   // ignore: unused_field
@@ -166,8 +163,6 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
   /// 监听定位流
   Future<void> listenLocationStream() async {
-    logger.d("监听定位流");
-    logger.d(_locationSubscription);
     if (_geoLocationAvailable && _locationSubscription == null) {
       _locationSubscription = geoLocationRepo.locationStream.listen(
         (location) {

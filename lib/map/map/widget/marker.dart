@@ -107,7 +107,6 @@ class AriMarkerLayer extends StatelessWidget {
     return BlocListener<AriMarkerBloc, AriMarkerState>(
       bloc: markerBloc,
       listener: (context, state) {
-        logger.d(state);
         if (state is CreateMarkerState && state.layerKey == layerKey) {
           shouldBuild.value += 1; // 修改 ValueNotifier 的值
         }
