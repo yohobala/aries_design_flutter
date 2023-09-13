@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+.dart_tool/
 
 
 # flutter 相关的文件
