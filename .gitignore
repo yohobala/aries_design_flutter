@@ -10,6 +10,7 @@
 .svn/
 migrate_working_dir/
 .dart_tool/
+.idea/
 
 
 # flutter 相关的文件
@@ -24,6 +25,7 @@ migrate_working_dir/
 /build/
 *.lock
 generated_plugin_registrant.*
+.metadata
 
 # 符号相关
 app.*.symbols
