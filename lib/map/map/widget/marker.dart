@@ -97,7 +97,10 @@ class AriMarkerLayer extends StatelessWidget {
           point: item.latLng,
           width: item.width,
           height: item.height,
-          builder: (context) => AriMarkerBuider(key: item.key),
+          builder: (context) => AriMarkerBuider(
+            key: item.key,
+            marker: item,
+          ),
         ));
       });
 
@@ -108,9 +111,11 @@ class AriMarkerLayer extends StatelessWidget {
       bloc: markerBloc,
       listener: (context, state) {
         if (state is CreateMarkerState && state.layerKey == layerKey) {
+          layer.updateMarker(state.marker);
           shouldBuild.value += 1; // 修改 ValueNotifier 的值
         }
         if (state is UpdateMarkerState && state.layerKey == layerKey) {
+          layer.updateMarker(state.marker);
           shouldBuild.value += 1; // 修改 ValueNotifier 的值
         }
       },
@@ -133,11 +138,11 @@ class AriMarkerLayer extends StatelessWidget {
 /// 在AriMapMarker生成实例的时候，会自动调用该widget
 ///
 class AriMarkerBuider extends StatelessWidget {
-  AriMarkerBuider({
-    required Key key,
-  }) : super(key: key);
+  AriMarkerBuider({required Key key, required this.marker}) : super(key: key);
 
   final ValueNotifier<int> shouldBuild = ValueNotifier(0);
+
+  final AriMarkerModel marker;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +156,14 @@ class AriMarkerBuider extends StatelessWidget {
       child: ValueListenableBuilder<int>(
         valueListenable: shouldBuild,
         builder: (context, shouldBuild, child) {
-          return _buildMarker(marker);
+          return GestureDetector(
+            onTap: () {
+              if (marker.onTap != null) {
+                marker.onTap!(marker);
+              }
+            },
+            child: _buildMarker(marker),
+          );
         },
       ),
     );

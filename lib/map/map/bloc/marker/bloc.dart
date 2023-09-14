@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   AriMarkerBloc(this.markerRepo, this.geoLocationRepo)
       : super(InitAriMarkerBlocState()) {
-    /***************  添加监听  ***************/
     on<InitAriMarkerEvent>(initAriMarkerEvent);
 
     on<UpdateMarkerLayerEvent>(updateLayerEvent);
@@ -19,7 +18,6 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
     add(InitAriMarkerEvent());
   }
 
-  /***************  公有变量  ***************/
   /// 标记仓库
   final AriMarkerRepo markerRepo;
 
@@ -37,8 +35,6 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   /// key: 标记的key
   /// value: 标记
   Map<Key, AriMarkerModel> get markers => _markers;
-
-  /***************  私有变量  ***************/
 
   /// 当前地图的全部图层
   final Map<Key, AriMarkerLayerModel> _layers = {};
@@ -128,6 +124,7 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   }
 
   /***************  私有方法  ***************/
+
   /// 创建标记图层图层
   ///
   /// - `key`: 图层的key

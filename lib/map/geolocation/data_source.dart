@@ -18,7 +18,7 @@ class AriGeoLocationDevice {
 
   bool _isOpenStream = false;
 
-  LatLng _currentLocation = LatLng(0, 0);
+  LatLng? _currentLocation;
 
   /***************  公有方法  ***************/
 
@@ -26,14 +26,14 @@ class AriGeoLocationDevice {
   ///
   /// 如果开启了流，则会返回流中的位置
   Future<LatLng> getCurrentLocation() async {
-    if (!_isOpenStream) {
+    if (_currentLocation == null) {
       Position position = await Geolocator.getCurrentPosition();
       LatLng latLng = LatLng(position.latitude, position.longitude);
       _currentLocation = latLng;
       logger.t('getCurrentLocation: $_currentLocation');
       return latLng;
     } else {
-      return _currentLocation;
+      return _currentLocation!;
     }
   }
 
@@ -55,8 +55,8 @@ class AriGeoLocationDevice {
     // NOTE:
     // 如果开启了流，则会返回流中的位置
     // 如果没有开启流，则会返回当前位置
-    if (_isOpenStream) {
-      _locationStreamController.add(_currentLocation);
+    if (_currentLocation != null) {
+      _locationStreamController.add(_currentLocation!);
     } else {
       Geolocator.getCurrentPosition().then((value) {
         _locationStreamController.add(_posToLatLng(value));

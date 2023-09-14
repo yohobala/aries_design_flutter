@@ -14,6 +14,8 @@ enum MarkerType {
   position,
 }
 
+typedef MarkerTapCallback = void Function(AriMarkerModel marker);
+
 class AriMarkerLayerModel {
   AriMarkerLayerModel({
     this.key = defalutMakerLayerKey,
@@ -23,7 +25,6 @@ class AriMarkerLayerModel {
     _initMarkers(initMarkers);
   }
 
-  //**************** 公有变量 ****************
   /// 标记层的key
   ///
   /// 用于标记层的唯一性
@@ -40,7 +41,13 @@ class AriMarkerLayerModel {
   /// 标记层的所有标记
   Map<Key, AriMarkerModel> markers = {};
 
-  //**************** 私有方法 ****************
+  /// 更新标记
+  ///
+  /// 如果标记不存在，将会创建新的标记
+  void updateMarker(AriMarkerModel marker) {
+    markers[marker.key] = marker;
+  }
+
   /// 初始化标记
   ///
   /// - `initMarkers`: 初始化的标记
@@ -76,12 +83,13 @@ class AriMarkerModel {
     double width = 80,
     double height = 80,
     MarkerType type = MarkerType.normal,
+    this.onTap,
   })  : _layerkey = layerkey ?? defalutMakerLayerKey,
         _latLng = latLng ?? LatLng(0, 0),
         _width = width,
         _height = height,
         _type = type;
-  //**************** 公有变量 ****************
+
   /// marker的key。如果为空，将默认为`UniqueKey().toString()`
   final Key key;
 
@@ -95,7 +103,7 @@ class AriMarkerModel {
 
   MarkerType get type => _type;
 
-  /**************** 私有变量 ***************/
+  final MarkerTapCallback? onTap;
 
   final Key _layerkey;
 
@@ -106,8 +114,6 @@ class AriMarkerModel {
   late double _height;
 
   late MarkerType _type;
-
-  /**************** 公有方法 ***************/
 
   /// 更新marker的坐标
   ///
