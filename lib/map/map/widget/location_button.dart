@@ -95,16 +95,19 @@ class AriLocationButtonState extends AriIconButtonState {
 
     // NOTE:
     // 按钮点击回调
-    onPressedCallback = (selectIndex, animationController) {
+    onPressedCallback = (_, animationController) {
       animationController.duration = AriTheme.duration.mapDuration;
+      logger.d(LocationButtonEnum.offset.index);
       if (mapBloc.geoLocationAvailable) {
-        if (selectIndex.value == LocationButtonEnum.offset.index) {
+        if (widget.selectIndex.value == LocationButtonEnum.offset.index) {
+          logger.d("更新");
           mapBloc
               .add(GoToPositionEvent(animationController: animationController));
-          selectIndex.value = LocationButtonEnum.aligned.index;
+          widget.selectIndex.value = LocationButtonEnum.aligned.index;
+          super.animationForward();
         }
       } else {
-        selectIndex.value = LocationButtonEnum.unauthorized.index;
+        widget.selectIndex.value = LocationButtonEnum.unauthorized.index;
 
         // 标题
         Widget title = Text(

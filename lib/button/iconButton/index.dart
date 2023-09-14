@@ -152,12 +152,17 @@ class AriIconButtonState extends State<AriIconButton>
     widget.selectIndex.addListener(() {
       animationForward();
     });
+
+    // NOTE:
+    // 不应该移动到build里
+    // 因为当动画播放后,build会刷新,
+    // 如果_build放到build中执行,会造成icon重新绘制
+    // 会造成1.icon无法切换 2.icon放大后突然消失
+    _elements = _build(widget.width, widget.height);
   }
 
   @override
   Widget build(BuildContext context) {
-    _elements = _build(widget.width, widget.height);
-
     return Stack(
       children: _elements,
     );
@@ -175,6 +180,7 @@ class AriIconButtonState extends State<AriIconButton>
       if (widget.icons[preSelectIndex] == null) {
         if (widget.icons[widget.selectIndex.value] != null) {
           if (_animationControllers[widget.selectIndex.value].value == 0.0) {
+            _animationControllers[widget.selectIndex.value].reset();
             _animationControllers[widget.selectIndex.value].forward();
           } else {
             _animationControllers[widget.selectIndex.value].reverse();
