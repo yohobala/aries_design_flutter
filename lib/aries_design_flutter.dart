@@ -17,6 +17,7 @@ export 'modal/index.dart';
 export 'button/index.dart';
 export 'icons/index.dart';
 export 'form/index.dart';
+export 'widgets/index.dart';
 
 import 'package:logger/logger.dart';
 
