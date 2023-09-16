@@ -19,7 +19,7 @@ class FetchRes<T> {
   }
 }
 
-FetchRes<dynamic> parseFetchRes(String data) {
+FetchRes<dynamic> parseFetchRes(dynamic data) {
   final Map<String, dynamic> jsonData = json.decode(data);
   return FetchRes<dynamic>.fromJson(jsonData);
 }
