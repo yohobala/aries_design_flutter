@@ -9,6 +9,7 @@ class AriTextFormField extends StatefulWidget {
     this.textFieldKey,
     this.textFieldType,
     this.controller,
+    this.style,
     this.focusNode,
     required this.width,
     this.keyboardType,
@@ -26,6 +27,8 @@ class AriTextFormField extends StatefulWidget {
     this.suffixIconIndex,
     this.suffixIconColor,
     this.suffixIconOnPressed,
+    this.suffixIconWidth = 48,
+    this.contentPadding,
   });
 
   /// 输入框的key
@@ -41,6 +44,8 @@ class AriTextFormField extends StatefulWidget {
 
   /// 文本控制器
   final TextEditingController? controller;
+
+  final TextStyle? style;
 
   /// 输入框的焦点控制
   final FocusNode? focusNode;
@@ -112,6 +117,11 @@ class AriTextFormField extends StatefulWidget {
 
   /// 点击事件
   final AriIconButtonOnPressed? suffixIconOnPressed;
+
+  /// 后缀图标宽度
+  final double suffixIconWidth;
+
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   State<AriTextFormField> createState() => _AriTextFormFieldState();
@@ -204,16 +214,16 @@ class _AriTextFormFieldState extends State<AriTextFormField>
     final theme = Theme.of(context);
     Widget inputField;
     inputField = TextFormField(
-      key: widget.textFieldKey,
-      controller: widget.controller,
-      focusNode: widget.focusNode,
-      decoration: _getInputDecoration(theme),
-      keyboardType: widget.keyboardType,
-      obscureText: widget.obscureText,
-      validator: widget.validator,
-      enabled: widget.enabled,
-      autofillHints: widget.autofillHints,
-    );
+        key: widget.textFieldKey,
+        controller: widget.controller,
+        focusNode: widget.focusNode,
+        decoration: _getInputDecoration(theme, context),
+        keyboardType: widget.keyboardType,
+        obscureText: widget.obscureText,
+        validator: widget.validator,
+        enabled: widget.enabled,
+        autofillHints: widget.autofillHints,
+        style: widget.style);
     if (widget.loadingController != null) {
       inputField = ScaleTransition(
         scale: scaleAnimation,
@@ -234,8 +244,8 @@ class _AriTextFormFieldState extends State<AriTextFormField>
 
   @override
   void dispose() {
-    widget.inertiaController?.removeStatusListener(handleAnimationStatus);
     super.dispose();
+    widget.inertiaController?.removeStatusListener(handleAnimationStatus);
   }
 
   void handleAnimationStatus(AnimationStatus status) {
@@ -244,27 +254,32 @@ class _AriTextFormFieldState extends State<AriTextFormField>
     }
   }
 
-  InputDecoration _getInputDecoration(ThemeData theme) {
+  InputDecoration _getInputDecoration(ThemeData theme, BuildContext context) {
     return InputDecoration(
-      filled: true,
-      labelText: widget.labelText,
-      prefixIcon: widget.prefixIcon != null
-          ? Container(
-              padding:
-                  AriTheme.textField.borderTextfieldInputDecorationIconPadding,
-              child: widget.prefixIcon,
-            )
-          : null,
-      prefixIconColor: widget.prefixIconColor,
-      suffixIcon: widget.suffixIcon != null
-          ? AriIconButton(
-              icons: widget.suffixIcon!,
-              onPressed: widget.suffixIconOnPressed,
-              selectIndex: widget.suffixIconIndex,
-            )
-          : null,
-      suffixIconColor: widget.suffixIconColor,
-      border: AriTheme.textField.borderTextfieldInputDecoration.border,
-    );
+        filled: true,
+        labelText: widget.labelText,
+        prefixIcon: widget.prefixIcon != null
+            ? Container(
+                padding: AriTheme
+                    .textField.borderTextfieldInputDecorationIconPadding,
+                child: widget.prefixIcon,
+              )
+            : null,
+        prefixIconColor: widget.prefixIconColor,
+        suffixIcon: widget.suffixIcon != null
+            ? SizedBox(
+                width: widget.suffixIconWidth,
+                child: Center(
+                  child: AriIconButton(
+                    icons: widget.suffixIcon!,
+                    onPressed: widget.suffixIconOnPressed,
+                    selectIndex: widget.suffixIconIndex,
+                  ),
+                ),
+              )
+            : null,
+        suffixIconColor: widget.suffixIconColor,
+        border: AriTheme.textField.borderTextfieldInputDecoration.border,
+        contentPadding: widget.contentPadding);
   }
 }
