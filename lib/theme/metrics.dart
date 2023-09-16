@@ -18,6 +18,8 @@ class AriThemeInsets {
 /// widget与屏幕的间距
 ///
 /// 一般用于设定与屏幕的间距
+/// 设备垂直时一般只设置left和right
+/// 设备水平时一般只设置top和bottom
 class AriThemeWindowsInsets {
   final double top = AriTheme.insets.medium;
   final double bottom = AriTheme.insets.medium;
