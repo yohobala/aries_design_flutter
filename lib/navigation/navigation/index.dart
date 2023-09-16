@@ -113,8 +113,8 @@ class AriNavigator extends StatefulWidget {
 class _AriNavigatorState extends State<AriNavigator> {
   @override
   Widget build(BuildContext context) {
-    Map<String, AriRouteItem> children =
-        getRouteItems(widget.routeItem.children, widget.initialRoute, null);
+    Map<String, AriRouteItem> children = getRouteItems(
+        widget.routeItem.children, widget.initialRoute, null, null);
 
     return Navigator(
       initialRoute: widget.initialRoute,

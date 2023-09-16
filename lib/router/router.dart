@@ -35,16 +35,17 @@ class AriRouter {
   ///
   /// - `routeItems`: 需要设置的路由
   /// - `navigationBar`: 导航栏
+  /// - `showNavigationBar`: 是否显示导航栏,只对默认的导航栏有效,如果navigationBar不为空,则无效
   ///
   /// *说明*
   /// 1. 会根据父路由,重新设置route
   /// 2. 如果路由的[hasNavigation]为true，会重新设置widget，
   /// 3. 设置自定义的导航栏  优先使用传入的[navigationBar]
   void set(List<AriRouteItem> routeItems,
-      [Widget Function(BuildContext, List<AriRouteItem>, int selectedIndex,
-              OnTapcallback)?
-          navigationBar]) {
-    routeItemMap.addAll(getRouteItems(routeItems, "/", navigationBar));
+      {BottomNavigationBarBuilder navigationBar,
+      ValueNotifier<bool>? showNavigationBar}) {
+    routeItemMap.addAll(
+        getRouteItems(routeItems, "/", navigationBar, showNavigationBar));
   }
 
   /// 跳转到指定name的路由
@@ -94,12 +95,10 @@ class AriRouter {
 /// *return*
 /// 返回全部的[AriRouteItem]
 Map<String, AriRouteItem> getRouteItems(
-  List<AriRouteItem> routeItems,
-  String parentRoute,
-  Widget Function(
-          BuildContext, List<AriRouteItem>, int selectedIndex, OnTapcallback)?
-      navigationBar,
-) {
+    List<AriRouteItem> routeItems,
+    String parentRoute,
+    BottomNavigationBarBuilder navigationBar,
+    ValueNotifier<bool>? showNavigationBar) {
   Map<String, AriRouteItem> lr = {};
   for (var routeItem in routeItems) {
     // 设置route
@@ -111,9 +110,7 @@ Map<String, AriRouteItem> getRouteItems(
     Widget Function(BuildContext)? widget = routeItem.widget;
     if (routeItem.hasNavigation) {
       widget = _generateBottomNavigationContainer(
-        routeItem,
-        navigationBar,
-      );
+          routeItem, navigationBar, showNavigationBar);
     } else {
       if (widget == null) {
         assert(false, "当hasNavigation为false时，widget不能为null");
@@ -133,6 +130,7 @@ Map<String, AriRouteItem> getRouteItems(
         routeItem.children,
         newRouteItem.route,
         navigationBar,
+        showNavigationBar,
       ));
     }
   }
@@ -151,13 +149,12 @@ bool isNameUnique(String name) {
 
 /// 生成底部导航栏容器
 Widget Function(BuildContext) _generateBottomNavigationContainer(
-  AriRouteItem routeItem,
-  Widget Function(
-          BuildContext, List<AriRouteItem>, int selectedIndex, OnTapcallback)?
-      widget,
-) {
+    AriRouteItem routeItem,
+    BottomNavigationBarBuilder widget,
+    ValueNotifier<bool>? showNavigationBar) {
   return (context) => AriBottomNavigationPage(
         routeItem: routeItem,
         navigationBar: widget,
+        showNavigationBar: showNavigationBar,
       );
 }
