@@ -1,5 +1,4 @@
 import 'package:aries_design_flutter/navigation/bottom_navigation_page/index.dart';
-import 'package:aries_design_flutter/navigation/navigation_bar/index.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 
@@ -22,8 +21,6 @@ class AriRouter {
   // 存储单例
   static final AriRouter _instance = AriRouter._internal();
 
-  //**************** 公有方法 ****************
-
   /// 得到路由表,返回MaterialApp中routes属性支持的格式
   ///
   /// 例如：
@@ -42,9 +39,11 @@ class AriRouter {
   /// *说明*
   /// 1. 会根据父路由,重新设置route
   /// 2. 如果路由的[hasNavigation]为true，会重新设置widget，
-  ///   优先使用传入的[navigationBar]
+  /// 3. 设置自定义的导航栏  优先使用传入的[navigationBar]
   void set(List<AriRouteItem> routeItems,
-      [AriNavigationBar Function(BuildContext)? navigationBar]) {
+      [Widget Function(BuildContext, List<AriRouteItem>, int selectedIndex,
+              OnTapcallback)?
+          navigationBar]) {
     routeItemMap.addAll(getRouteItems(routeItems, "/", navigationBar));
   }
 
@@ -71,7 +70,6 @@ class AriRouter {
     routeNames.clear();
   }
 
-  //**************** 私有方法 ****************
   /// 生成路由表
   Map<String, Widget Function(BuildContext)> _generateRoutes(
       Map<String, AriRouteItem> routeItems) {
@@ -98,7 +96,9 @@ class AriRouter {
 Map<String, AriRouteItem> getRouteItems(
   List<AriRouteItem> routeItems,
   String parentRoute,
-  AriNavigationBar Function(BuildContext)? navigationBar,
+  Widget Function(
+          BuildContext, List<AriRouteItem>, int selectedIndex, OnTapcallback)?
+      navigationBar,
 ) {
   Map<String, AriRouteItem> lr = {};
   for (var routeItem in routeItems) {
@@ -152,7 +152,9 @@ bool isNameUnique(String name) {
 /// 生成底部导航栏容器
 Widget Function(BuildContext) _generateBottomNavigationContainer(
   AriRouteItem routeItem,
-  AriNavigationBar Function(BuildContext)? widget,
+  Widget Function(
+          BuildContext, List<AriRouteItem>, int selectedIndex, OnTapcallback)?
+      widget,
 ) {
   return (context) => AriBottomNavigationPage(
         routeItem: routeItem,
