@@ -71,7 +71,6 @@ class Geometry {
       };
 
   factory Geometry.fromJson(Map<String, dynamic> json) {
-    print(json['coordinates']);
     List<double> coordinates = [];
     if (json['coordinates'] is List) {
       for (var item in json['coordinates']) {
