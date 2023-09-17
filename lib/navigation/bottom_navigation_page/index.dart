@@ -156,16 +156,16 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
       removeBottomPadding: false,
     );
     return Scaffold(
-        /*
+      /*
       * 底部导航栏，点击后会改变[selectedIndex]
       * 从而触发更新setState,重新渲染[RouteWidgets]
       */
-        // bottomNavigationBar: navigationBar,
-        extendBody: true,
-        body: CustomMultiChildLayout(
-          delegate: BttonNavigationLayoutDelegate(),
-          children: children,
-        ));
+      // bottomNavigationBar: navigationBar,
+      body: CustomMultiChildLayout(
+        delegate: BttonNavigationLayoutDelegate(),
+        children: children,
+      ),
+    );
   }
 
   @override
@@ -194,15 +194,17 @@ class _BodyBuilder extends StatelessWidget {
         final double bottom = math.max(
             metrics.padding.bottom, bodyConstraints.bottomWidgetsHeight);
 
-        return MediaQuery(
-          key: mediaQueryKey,
-          data: metrics.copyWith(
-            padding: metrics.padding.copyWith(
-              top: metrics.padding.top,
-              bottom: bottom,
+        return Scaffold(
+          body: MediaQuery(
+            key: mediaQueryKey,
+            data: metrics.copyWith(
+              padding: metrics.padding.copyWith(
+                top: metrics.padding.top,
+                bottom: bottom,
+              ),
             ),
+            child: body,
           ),
-          child: body,
         );
       },
     );

@@ -116,13 +116,9 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
   // 添加监听器
   void handleNavigationBarVisibilityChange() {
     if (widget.showNavigationBar?.value ?? true) {
-      // controller.reverse();
+      controller.reverse();
     } else {
-      // controller.forward();
+      controller.forward();
     }
-  }
-
-  void test() {
-    print("test");
   }
 }
