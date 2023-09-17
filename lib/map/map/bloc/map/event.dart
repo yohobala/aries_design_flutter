@@ -43,17 +43,29 @@ class MapMoveEvent extends AriMapEvent {
 
 /***************  位置有关事件  ***************/
 
-/// 地图移动到当前定位
+/// 地图移动到指定位置
+///
+/// 如果[latLng]为空,则跳转到GPS定位位置,如果[zoom]为空,则会缩放到13
 ///
 /// emit:
 ///  - [MapLocationState]
 ///  - [IsCenterOnPostion]
-class GoToPositionEvent extends AriMapEvent {
-  GoToPositionEvent({
-    this.animationController,
+class MoveToLocationEvent extends AriMapEvent {
+  MoveToLocationEvent({
+    this.isAnimated = true,
+    this.latLng,
+    this.zoom,
+    this.offset = Offset.zero,
   });
 
-  AnimationController? animationController;
+  bool isAnimated;
+
+  LatLng? latLng;
+
+  double? zoom;
+
+  /// 地图中心点偏移量
+  final Offset offset;
 }
 
 /// GPS定位发生改变

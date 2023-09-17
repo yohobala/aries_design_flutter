@@ -97,7 +97,8 @@ class AriMap extends StatefulWidget {
   State<AriMap> createState() => _AriMapState();
 }
 
-class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
+class _AriMapState extends State<AriMap>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   late final AriMapBloc mapBloc;
   late final MapController mapController;
 
@@ -107,6 +108,8 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
   late EdgeInsets padding;
   late double safeAreaTop;
   late double safeAreaBottom;
+
+  late AnimationController moveLocationController;
 
   @override
   void initState() {
@@ -179,15 +182,21 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
               listener: (context, state) => {
                     if (state is InitAriMapState)
                       {
-                        mapBloc.add(GoToPositionEvent()),
+                        mapBloc.add(MoveToLocationEvent()),
                       },
-                    if (state is MapLocationState)
+                    if (state is MoveToLocationState)
                       {
-                        _goToPosition(
+                        moveLocationController = AnimationController(
+                          vsync: this,
+                          duration: AriTheme.duration.mapDuration,
+                        ),
+                        _moveToLocation(
                           mapController: mapController,
                           latLng: state.center,
                           zoom: state.zoom,
-                          animationController: state.animationController,
+                          offset: state.offset,
+                          animationController:
+                              state.isAnimated ? moveLocationController : null,
                         )
                       },
                     if (state is ChangeLocation) {}
@@ -246,6 +255,7 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     mapBloc.cancelGeoLocationSubscription();
+    moveLocationController.dispose();
     super.dispose();
   }
 
@@ -277,10 +287,11 @@ void _addMapControllerListener(
 /// 判断是否传入[animationController] :
 /// - `有animationController`: 通过动画控制器实现平滑跳转，会有一个缓慢的移动和缩放效果
 /// - `没有animationController`: 直接跳转，不平滑
-void _goToPosition({
+void _moveToLocation({
   required MapController mapController,
   required LatLng latLng,
-  required double zoom,
+  required double? zoom,
+  required Offset offset,
   AnimationController? animationController,
 }) async {
   if (animationController != null) {
@@ -293,14 +304,19 @@ void _goToPosition({
         begin: mapController.center.longitude, end: latLng.longitude);
 
     /// 缩放跳转区间
-    final zoomTween = Tween<double>(begin: mapController.zoom, end: zoom);
+    final zoomTween = Tween<double>(
+        begin: mapController.zoom, end: zoom ?? mapController.zoom);
+
+    final offsetTween =
+        Tween<Offset>(begin: Offset(0, 0), end: offset ?? Offset(0, 0));
 
     /// 动画设置
     final Animation<double> animation = CurvedAnimation(
         parent: animationController, curve: Curves.fastOutSlowIn);
 
     animationController.addListener(() {
-      _mapFlyToPostion(mapController, animation, latTween, lngTween, zoomTween);
+      _mapFlyToPostion(
+          mapController, animation, latTween, lngTween, zoomTween, offsetTween);
     });
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -311,7 +327,7 @@ void _goToPosition({
     });
     animationController.forward();
   } else {
-    mapController.move(latLng, zoom);
+    mapController.move(latLng, zoom ?? mapController.zoom, offset: offset);
   }
 }
 
@@ -335,13 +351,18 @@ void _goToPosition({
 /// controller.forward();
 /// print(tween.evaluate(controller)); // 输出依赖于controller当前的值
 /// ```
-void _mapFlyToPostion(MapController mapController, Animation<double> animation,
-    Tween<double> latTween, Tween<double> lngTween, Tween<double> zoomTween) {
+void _mapFlyToPostion(
+    MapController mapController,
+    Animation<double> animation,
+    Tween<double> latTween,
+    Tween<double> lngTween,
+    Tween<double> zoomTween,
+    Tween<Offset> offsetTween) {
   try {
     mapController.move(
-      LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
-      zoomTween.evaluate(animation),
-    );
+        LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+        zoomTween.evaluate(animation),
+        offset: offsetTween.evaluate(animation));
   } catch (e) {
     logger.w(e);
   }

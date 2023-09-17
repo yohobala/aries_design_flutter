@@ -15,7 +15,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
     on<MapMoveEvent>(mapMoveEvent);
 
-    on<GoToPositionEvent>(goToPositionEvent);
+    on<MoveToLocationEvent>(moveToLocationEvent);
     on<ChangeLocationEvent>(changeLocationEvent);
     on<UpdateLocationMarkerEvent>(updateLocationMarkerEvent);
 
@@ -110,19 +110,30 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /***************  位置有关事件  ***************/
 
   /// 地图移动到当前定位
-  void goToPositionEvent(
-      GoToPositionEvent event, Emitter<AriMapState> emit) async {
+  void moveToLocationEvent(
+      MoveToLocationEvent event, Emitter<AriMapState> emit) async {
     if (_geoLocationAvailable) {
-      LatLng latLng = await geoLocationRepo.getLocation();
-      // NOTE: 移动地图
-      emit(MapLocationState(
-        center: latLng,
-        zoom: 13,
-        animationController: event.animationController,
-      ));
-      // NOTE:
-      // 改变为当前位置是在地图中心
-      emit(IsCenterOnPostion(isCenter: true));
+      if (event.latLng == null) {
+        LatLng latLng = await geoLocationRepo.getLocation();
+        // NOTE: 移动地图
+        emit(MoveToLocationState(
+          center: latLng,
+          zoom: event.zoom ?? 13,
+          offset: event.offset,
+          isAnimated: event.isAnimated,
+        ));
+        // NOTE:
+        // 改变为当前位置是在地图中心
+        emit(IsCenterOnPostion(isCenter: true));
+      } else {
+        LatLng latLng = event.latLng!;
+        emit(MoveToLocationState(
+          center: latLng,
+          zoom: event.zoom,
+          offset: event.offset,
+          isAnimated: event.isAnimated,
+        ));
+      }
     }
   }
 

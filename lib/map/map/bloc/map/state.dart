@@ -18,23 +18,26 @@ class UpdateGeoLocationAvailableState extends AriMapState {}
 /***************  位置有关状态  ***************/
 
 /// 地图进行定位，把地图中心点移动到GPS位置
-class MapLocationState extends AriMapState {
-  MapLocationState({
+class MoveToLocationState extends AriMapState {
+  MoveToLocationState({
     required this.center,
     required this.zoom,
-    this.animationController,
+    required this.offset,
+    required this.isAnimated,
   });
 
   /// 中心点
   final LatLng center;
 
   /// 缩放等级
-  final double zoom;
+  final double? zoom;
+
+  final Offset offset;
 
   /// 动画控制器
   ///
-  /// 如果不为空，则会通过动画形式进行移动
-  AnimationController? animationController;
+  /// 如果为true，则会通过动画形式进行移动
+  bool isAnimated;
 }
 
 /// 当前位置是否在地图中心
