@@ -58,8 +58,10 @@ class AriGeoLocationDevice {
     if (_currentLocation != null) {
       _locationStreamController.add(_currentLocation!);
     } else {
-      Geolocator.getCurrentPosition().then((value) {
-        _locationStreamController.add(_posToLatLng(value));
+      Geolocator.getCurrentPosition().then((Position position) {
+        LatLng location = _posToLatLng(position);
+        _currentLocation = location;
+        _locationStreamController.add(location);
       });
     }
     Geolocator.getPositionStream(
