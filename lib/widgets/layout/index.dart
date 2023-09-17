@@ -28,7 +28,6 @@ void addIfNonNull(
   if (removeBottomInset) {
     data = data.removeViewInsets(removeBottom: true);
   }
-  print(data);
   if (maintainBottomViewPadding && data.viewInsets.bottom != 0.0) {
     data = data.copyWith(
       padding: data.padding.copyWith(bottom: data.viewPadding.bottom),

@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
-import 'package:aries_design_flutter/widgets/Index.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -58,7 +57,7 @@ class BttonNavigationLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
-    return false;
+    return true;
   }
 }
 
@@ -88,15 +87,10 @@ class AriBottomNavigationPage extends StatefulWidget {
       __AriBottomNavigationPageState();
 }
 
-class __AriBottomNavigationPageState extends State<AriBottomNavigationPage>
-    with TickerProviderStateMixin {
+class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
   int selectedIndex = 0;
   String initialRoute = "/";
 
-  late AnimationController _controller;
-  late Animation<Offset> _offset;
-
-  final GlobalKey _navBarKey = GlobalKey();
   final GlobalKey _bodyKey = GlobalKey();
   final GlobalKey _mediaQueryKey = GlobalKey();
 
@@ -111,28 +105,6 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage>
     selectedIndex = navigationConfig != null
         ? navigationConfig.initialIndex
         : AriRouteItemNavigationConfig().initialIndex;
-
-    // 初始化显隐动画
-    _controller = AnimationController(
-      duration: AriTheme.duration.medium1,
-      vsync: this,
-    );
-    _offset = Tween<Offset>(begin: Offset.zero, end: Offset(0, 1))
-        .animate(_controller);
-
-    if (widget.navigationBar == null) {
-      if (widget.showNavigationBar?.value ?? true) {
-        _controller.reverse();
-      } else {
-        _controller.forward();
-      }
-      widget.showNavigationBar
-          ?.addListener(handleNavigationBarVisibilityChange);
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getNavBarHeight();
-    });
   }
 
   @override
@@ -165,7 +137,18 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage>
     addIfNonNull(
       context,
       children,
-      buildBottomNavigationBar(context),
+      AriBottonNavigationBar(
+        key: bottomNavigationBarKey,
+        navigationItems: widget.routeItem.children,
+        initSelectedIndex: selectedIndex,
+        itemChangeCallback: (int index, String route) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        navigationBar: widget.navigationBar,
+        showNavigationBar: widget.showNavigationBar,
+      ),
       _PageSlot.bottomNavigationBar,
       removeLeftPadding: false,
       removeTopPadding: true,
@@ -188,67 +171,6 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage>
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
-    widget.showNavigationBar
-        ?.removeListener(handleNavigationBarVisibilityChange);
-  }
-
-  // 添加监听器
-  void handleNavigationBarVisibilityChange() {
-    if (widget.showNavigationBar?.value ?? true) {
-      _controller.reverse();
-    } else {
-      _controller.forward();
-    }
-  }
-
-  void _getNavBarHeight() {
-    final RenderBox? renderBox =
-        _navBarKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox != null) {
-      final navBarHeight = renderBox.size.height;
-      print('AriNavigationBar 的高度是: $navBarHeight');
-    }
-  }
-
-  Widget buildBottomNavigationBar(BuildContext context) {
-    /// 导航栏项
-    List<AriRouteItem> navigationItems = widget.routeItem.children;
-
-    /// 底部导航栏
-    Widget navigationBar;
-    if (widget.navigationBar != null) {
-      navigationBar = widget.navigationBar!(
-        context,
-        navigationItems,
-        selectedIndex,
-        (int index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-      );
-    } else {
-      final GlobalKey navigationBarkey = GlobalKey();
-      navigationBar = Visibility(
-        key: navigationBarkey,
-        visible: widget.showNavigationBar?.value ?? true,
-        child: SlideTransition(
-          position: _offset,
-          child: AriNavigationBar(
-            key: _navBarKey,
-            itemChangeCallback: (int index, String route) {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
-            navigationItems: navigationItems,
-            initSelectedIndex: selectedIndex,
-          ),
-        ),
-      );
-    }
-    return navigationBar;
   }
 }
 

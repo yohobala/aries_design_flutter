@@ -101,6 +101,13 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
   late final AriMapBloc mapBloc;
   late final MapController mapController;
 
+  late final AnimationController? controller;
+  late final Animation<Offset>? offset;
+
+  late EdgeInsets padding;
+  late double safeAreaTop;
+  late double safeAreaBottom;
+
   @override
   void initState() {
     super.initState();
@@ -119,6 +126,19 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
     mapBloc = context.read<AriMapBloc>();
     // final markerBloc = context.read<AriMarkerBloc>();
     mapController = MapController();
+
+    // NOTE:
+    // 针对底部导航栏的监听
+    AriBottonNavigationBarState? state = bottomNavigationBarKey.currentState;
+    controller = state?.controller;
+    offset = state?.offset;
+    state?.widget.showNavigationBar?.addListener(() {
+      if (state.widget.showNavigationBar?.value ?? true) {
+        controller?.reverse();
+      } else {
+        controller?.forward();
+      }
+    });
   }
 
   @override
@@ -135,22 +155,15 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     var mapBloc = context.read<AriMapBloc>();
 
-    _addMapControllerListener(mapController, mapBloc);
     // NOTE:
     // 获取安全区域
     // 用于对自定义的widget进行定位
     // 防止出现在安全区域之外被遮挡的情况
-    EdgeInsets padding = MediaQuery.of(context).padding;
-    double safeAreaTop = padding.top + AriTheme.windowsInsets.top;
-    double safeAreaBottom = padding.bottom + AriTheme.windowsInsets.bottom;
+    padding = MediaQuery.of(context).padding;
+    safeAreaTop = padding.top + AriTheme.windowsInsets.top;
+    safeAreaBottom = padding.bottom + AriTheme.windowsInsets.bottom;
 
-    /// NOTE:
-    /// 地图长按事件
-    void onLongPress(tapPosition, LatLng latLng) {
-      if (widget.onLongPress != null) {
-        widget.onLongPress!(latLng);
-      }
-    }
+    _addMapControllerListener(mapController, mapBloc);
 
     // NOTE:
     // 使用Scaffold做最外层是因为子节点需要用到，比如:
@@ -212,7 +225,10 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
           // MODULE:
           // 自定义的widget
           Positioned(
-            child: widget.rightBottomChild ?? Container(),
+            child: SlideTransition(
+              position: offset!,
+              child: widget.rightBottomChild ?? Container(),
+            ),
             bottom: safeAreaBottom,
             right: AriTheme.windowsInsets.right,
           ),
@@ -231,6 +247,14 @@ class _AriMapState extends State<AriMap> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     mapBloc.cancelGeoLocationSubscription();
     super.dispose();
+  }
+
+  /// NOTE:
+  /// 地图长按事件
+  void onLongPress(tapPosition, LatLng latLng) {
+    if (widget.onLongPress != null) {
+      widget.onLongPress!(latLng);
+    }
   }
 }
 

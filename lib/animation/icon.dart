@@ -61,13 +61,7 @@ Widget Function(Widget child, AnimationController animationController,
   }
 };
 
-/// 页面淡入淡出切换动画控制器
-///
-/// 主要用于通过Offstage创建自定义的页面淡入淡出效果
-///
-/// 在调用该函数的页面中，需要继承TickerProviderStateMixin
-///
-///
+/// 用于切换图标的动画
 List<AnimationController> ariIconSwitchAnimationController(
     TickerProvider vsync, int length) {
   /// 页面切换动画

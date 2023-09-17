@@ -1,4 +1,4 @@
-export 'widget_fader.dart';
+export 'widget.dart';
 export 'interval.dart';
 export 'icon.dart';
 export 'button.dart';

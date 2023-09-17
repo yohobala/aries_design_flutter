@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// 按钮缩放动画
+///
+/// 动画效果是让按钮在点击时缩小，然后在松开时恢复原状
 Widget Function(
   Widget child,
   AnimationController animationController, {
