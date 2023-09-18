@@ -71,6 +71,7 @@ class AriMap extends StatefulWidget {
     this.minZoom = 1,
     this.center,
     this.onLongPress,
+    this.buildMarker,
   });
 
   /// 地图右下角的子组件
@@ -92,6 +93,8 @@ class AriMap extends StatefulWidget {
   final LatLng? center;
 
   final MapVoidCallback? onLongPress;
+
+  final BuildMarker? buildMarker;
 
   @override
   State<AriMap> createState() => _AriMapState();
@@ -227,7 +230,7 @@ class _AriMapState extends State<AriMap>
                 ],
                 children: [
                   AriMapLayer(),
-                  AriMarker(),
+                  AriMarker(buildMarker: widget.buildMarker),
                 ],
               )),
 
@@ -307,8 +310,7 @@ void _moveToLocation({
     final zoomTween = Tween<double>(
         begin: mapController.zoom, end: zoom ?? mapController.zoom);
 
-    final offsetTween =
-        Tween<Offset>(begin: Offset(0, 0), end: offset ?? Offset(0, 0));
+    final offsetTween = Tween<Offset>(begin: Offset(0, 0), end: offset);
 
     /// 动画设置
     final Animation<double> animation = CurvedAnimation(

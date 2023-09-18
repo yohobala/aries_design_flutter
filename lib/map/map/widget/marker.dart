@@ -17,13 +17,18 @@ List<SingleChildWidget> ariMarkerProvider() {
   ];
 }
 
+typedef BuildMarker = Widget Function(AriMarkerModel marker, bool isSelected);
+
 /// 地图标记组件
 class AriMarker extends StatelessWidget {
   AriMarker({
     Key? key,
+    this.buildMarker,
   }) : super(key: key);
 
-  final ValueNotifier<int> shouldBuild = ValueNotifier(0);
+  final ValueNotifier<int> rebuild = ValueNotifier(0);
+
+  final BuildMarker? buildMarker;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,11 @@ class AriMarker extends StatelessWidget {
       List<Widget> layerWidgets = [];
       layers.forEach((key, value) {
         AriMarkerLayerModel layer = value;
-        layerWidgets.add(AriMarkerLayer(layerKey: key, layer: layer));
+        layerWidgets.add(AriMarkerLayer(
+          layerKey: key,
+          layer: layer,
+          buildMarker: buildMarker,
+        ));
       });
 
       return layerWidgets;
@@ -48,15 +57,15 @@ class AriMarker extends StatelessWidget {
           bloc: markerBloc,
           listener: (context, state) {
             if (state is InitAriMarkerState) {
-              shouldBuild.value += 1; // 修改 ValueNotifier 的值
+              rebuild.value += 1; // 修改 ValueNotifier 的值
             }
             if (state is CreateMarkerLayerState) {
-              shouldBuild.value += 1;
+              rebuild.value += 1;
             }
           },
           child: ValueListenableBuilder<int>(
-            valueListenable: shouldBuild,
-            builder: (context, shouldBuild, child) {
+            valueListenable: rebuild,
+            builder: (context, rebuild, child) {
               return Stack(children: buildLayers());
             },
           ),
@@ -72,6 +81,7 @@ class AriMarkerLayer extends StatelessWidget {
     Key? key,
     required this.layer,
     required this.layerKey,
+    this.buildMarker,
   }) : super(key: key);
 
   /// 地图标记层
@@ -80,7 +90,9 @@ class AriMarkerLayer extends StatelessWidget {
   /// 当前地图标记层索引
   final Key layerKey;
 
-  final ValueNotifier<int> shouldBuild = ValueNotifier(0);
+  final ValueNotifier<int> rebuild = ValueNotifier(0);
+
+  final BuildMarker? buildMarker;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +112,7 @@ class AriMarkerLayer extends StatelessWidget {
           builder: (context) => AriMarkerBuider(
             key: item.key,
             marker: item,
+            buildMarker: buildMarker,
           ),
         ));
       });
@@ -112,16 +125,16 @@ class AriMarkerLayer extends StatelessWidget {
       listener: (context, state) {
         if (state is CreateMarkerState && state.layerKey == layerKey) {
           layer.updateMarker(state.marker);
-          shouldBuild.value += 1; // 修改 ValueNotifier 的值
+          rebuild.value += 1; // 修改 ValueNotifier 的值
         }
         if (state is UpdateMarkerState && state.layerKey == layerKey) {
           layer.updateMarker(state.marker);
-          shouldBuild.value += 1; // 修改 ValueNotifier 的值
+          rebuild.value += 1; // 修改 ValueNotifier 的值
         }
       },
       child: ValueListenableBuilder<int>(
-        valueListenable: shouldBuild,
-        builder: (context, shouldBuild, child) {
+        valueListenable: rebuild,
+        builder: (context, rebuild, child) {
           return MarkerLayer(
             markers: buildMarkers(),
           );
@@ -138,11 +151,17 @@ class AriMarkerLayer extends StatelessWidget {
 /// 在AriMapMarker生成实例的时候，会自动调用该widget
 ///
 class AriMarkerBuider extends StatelessWidget {
-  AriMarkerBuider({required Key key, required this.marker}) : super(key: key);
+  AriMarkerBuider({
+    required Key key,
+    required this.marker,
+    this.buildMarker,
+  }) : super(key: key);
 
-  final ValueNotifier<int> shouldBuild = ValueNotifier(0);
+  final ValueNotifier<int> rebuild = ValueNotifier(0);
 
   final AriMarkerModel marker;
+
+  final BuildMarker? buildMarker;
 
   @override
   Widget build(BuildContext context) {
@@ -150,33 +169,38 @@ class AriMarkerBuider extends StatelessWidget {
 
     AriMarkerModel marker = markerBloc.getMarker(key!);
 
-    return BlocListener<AriMarkerBloc, AriMarkerState>(
-      bloc: markerBloc,
-      listener: (context, state) {},
-      child: ValueListenableBuilder<int>(
-        valueListenable: shouldBuild,
-        builder: (context, shouldBuild, child) {
-          return GestureDetector(
-            onTap: () {
-              if (marker.onTap != null) {
-                marker.onTap!(marker);
-              }
-            },
-            child: _buildMarker(marker),
-          );
+    bool isSelected = false;
+
+    return GestureDetector(
+        onTap: () {
+          if (marker.onTap != null) {
+            marker.onTap!(marker);
+          }
         },
-      ),
-    );
+        child: BlocListener<AriMarkerBloc, AriMarkerState>(
+          bloc: markerBloc,
+          listener: (context, state) {},
+          child: ValueListenableBuilder<int>(
+            valueListenable: rebuild,
+            builder: (context, rebuild, child) {
+              return _buildMarker(marker, isSelected);
+            },
+          ),
+        ));
   }
 
-  Widget _buildMarker(AriMarkerModel marker) {
+  Widget _buildMarker(AriMarkerModel marker, bool isSelected) {
     Widget widget;
+    if (buildMarker != null) {
+      widget = buildMarker!(marker, isSelected);
+      return widget;
+    }
     switch (marker.type) {
       case MarkerType.normal:
         widget = _NormalWidget();
         break;
-      case MarkerType.position:
-        widget = _PostionWidget();
+      case MarkerType.location:
+        widget = _LocationWidget();
         break;
       default:
         widget = _NormalWidget();
@@ -192,16 +216,22 @@ class _NormalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(Icons.location_on);
+    return Icon(
+      Icons.circle,
+      size: 15,
+    );
   }
 }
 
 /// 位置标记
-class _PostionWidget extends StatelessWidget {
-  const _PostionWidget({Key? key}) : super(key: key);
+class _LocationWidget extends StatelessWidget {
+  const _LocationWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FlutterLogo();
+    return Icon(
+      Icons.location_on_outlined,
+      size: 24,
+    );
   }
 }

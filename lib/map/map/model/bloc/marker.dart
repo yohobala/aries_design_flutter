@@ -11,7 +11,15 @@ enum MarkerType {
   normal,
 
   /// 位置标记
-  position,
+  location,
+
+  image,
+
+  label,
+
+  icon,
+
+  unknown,
 }
 
 typedef MarkerTapCallback = void Function(AriMarkerModel marker);
@@ -61,20 +69,16 @@ class AriMarkerLayerModel {
 
 /// 标记的实现
 ///
-/// *功能*
-/// 1. 更新标记的坐标[updateLatLng]
-///   - 调用
-///     - 外部调用
-///   - 作用
-///     - 更新标记的坐标
+/// 如果需要添加属性,先继承AriMarkerModel,之后使用[as]
+///
 class AriMarkerModel {
   /// 地图中的标记
   ///
   /// - `key`: marker的key。如果为空，将默认为`UniqueKey().toString()`。
   /// - `layerkey`: marker所属的层的key。如果为空，将默认为[defalutMakerLayerKey]。
   /// - `latLng`: marker的坐标。如果为空，将默认为`LatLng(0, 0)`。
-  /// - `width`: marker的宽度。默认为80。
-  /// - `height`: marker的高度。默认为80。
+  /// - `width`: marker的宽度。默认为80。这个限制的是marker的最大宽度,内部widget的宽度将不会超过这个尺寸
+  /// - `height`: marker的高度。默认为80。这个限制的是marker的最大高度,内部widget的高度将不会超过这个尺寸
   /// - `type`: marker的类型。默认为[MarkerType.normal]。
   AriMarkerModel({
     required this.key,

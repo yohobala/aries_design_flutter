@@ -60,7 +60,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   final AriMarkerModel _postionMarker = AriMarkerModel(
       key: defalutPositionMarkerKey,
       layerkey: defalutPositionMakerLayerKey,
-      type: MarkerType.position);
+      type: MarkerType.location);
 
   @override
   Future<void> close() {
