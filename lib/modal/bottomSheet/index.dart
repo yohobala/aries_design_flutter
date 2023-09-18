@@ -137,14 +137,12 @@ class _AriBottomSheetState extends State<_AriBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    Brightness brightness = MediaQuery.of(context).platformBrightness;
-    AriThemeColor theme = AriThemeController().getThemeColor(brightness);
     return RepaintBoundary(
       child: Container(
         height: finalHeight,
         width: MediaQuery.of(context).size.width,
 
-        decoration: theme.modal.bottomSheet,
+        decoration: AriThemeColor.of(context).modal.bottomSheet,
         // color: widget.backgroundColor ??
         //     theme.colorScheme.background.withOpacity(0.4),
         padding: AriTheme.modal.bottomSheetContainer.padding,
