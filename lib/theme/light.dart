@@ -58,4 +58,5 @@ AriThemeColorPrime _prime = AriThemeColorPrime(
   red: Colors.red[700]!,
   yellow: _colorScheme.primaryContainer,
   orange: Colors.orange[700]!,
+  white: Colors.white,
 );

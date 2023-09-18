@@ -30,31 +30,32 @@ AriThemeColor generateThemeColor({
   // MODULE:
   // 按钮样式
   AriThemeColorButton button = AriThemeColorButton(
-      gradientButton: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          Colors.transparent,
-        ),
-        foregroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.onPrimary,
-        ),
+    gradientButton: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(
+        Colors.transparent,
       ),
-      segmentedIconButton: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.onSecondaryContainer,
-        ),
+      foregroundColor: MaterialStateProperty.all<Color>(
+        colorScheme.onPrimary,
       ),
-      segmentedIconButtonContainer: BoxDecoration(
-        color: colorScheme.secondaryContainer,
-        borderRadius: AriTheme.button.segmentedIconButtonContainer.borderRadius,
-        boxShadow: [
-          boxShadow.standard,
-        ],
+    ),
+    segmentedIconButton: ButtonStyle(
+      foregroundColor: MaterialStateProperty.all<Color>(
+        colorScheme.primary,
       ),
-      filledIconButton: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.surfaceVariant,
-        ),
-      ));
+    ),
+    segmentedIconButtonContainer: BoxDecoration(
+      color: colorScheme.secondaryContainer,
+      borderRadius: AriTheme.button.segmentedIconButtonContainer.borderRadius,
+      boxShadow: [
+        boxShadow.standard,
+      ],
+    ),
+    filledIconButton: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(
+        colorScheme.surfaceVariant,
+      ),
+    ),
+  );
 
   // MODULE:
   // 弹出框样式

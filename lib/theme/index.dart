@@ -33,30 +33,6 @@ class AriThemeController {
       return ariThemeDataDark;
     }
   }
-
-  /// 获取对于Brightness模式下的AriThemeColor
-  ///
-  /// AriThemeColor是当前灯光模式下的颜色样式，如果是需要数值方面的样式，调用[AriTheme]即可
-  ///
-  /// AriThemeColor通过AriThemeController().getTheme()来获取，
-  /// 例如：
-  /// ```dart
-  /// Brightness brightness = MediaQuery.of(context).platformBrightness;
-  /// AriThemeColor themeColor = AriThemeController().getTheme(brightness);
-  /// ```
-  ///
-  /// *参数*
-  /// - `brightness`: 亮度模式
-  ///
-  /// *return*
-  /// - `AriThemeColor`: 对应的AriThemeColor
-  AriThemeColor getThemeColor(Brightness? brightness) {
-    if (brightness == Brightness.light || brightness == null) {
-      return ariThemeLight;
-    } else {
-      return ariThemeDark;
-    }
-  }
 }
 
 /// Aries的度量或数值方面的主题设置
@@ -116,13 +92,14 @@ class AriTheme {
 @immutable
 class AriThemeColor {
   /// {@macro ari_theme_color}
-  AriThemeColor(
-      {required this.colorScheme,
-      required this.prime,
-      required this.shadow,
-      required this.button,
-      required this.modal,
-      required this.gradient});
+  AriThemeColor({
+    required this.colorScheme,
+    required this.prime,
+    required this.shadow,
+    required this.button,
+    required this.modal,
+    required this.gradient,
+  });
 
   /// 主色调
   final ColorScheme colorScheme;
@@ -140,6 +117,28 @@ class AriThemeColor {
 
   /// 渐变
   final AriThemeColorGradient gradient;
+
+  /// 获取对于Brightness模式下的AriThemeColor
+  ///
+  /// AriThemeColor是当前灯光模式下的颜色样式，如果是需要数值方面的样式，调用[AriTheme]即可
+  /// 例如：
+  /// ```dart
+  /// AriThemeColor themeColor = AriThemeColor.of(context);
+  /// ```
+  ///
+  /// *参数*
+  /// - `context`: 上下文
+  ///
+  /// *return*
+  /// - `AriThemeColor`: 对应的AriThemeColor
+  static AriThemeColor of(BuildContext context) {
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+    if (brightness == Brightness.light) {
+      return ariThemeLight;
+    } else {
+      return ariThemeDark;
+    }
+  }
 }
 
 /// {@template ari_theme_color_scheme}
@@ -153,6 +152,7 @@ class AriThemeColorPrime {
     required this.blue,
     required this.yellow,
     required this.orange,
+    required this.white,
   });
 
   final Color red;
@@ -160,6 +160,7 @@ class AriThemeColorPrime {
   final Color blue;
   final Color yellow;
   final Color orange;
+  final Color white;
 }
 
 /// Aries的阴影样式
