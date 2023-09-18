@@ -32,7 +32,7 @@ enum LocationButtonEnum {
 ///   AriLocationButton().build(),
 ///])
 class AriLocationButton extends AriIconButton {
-  AriLocationButton({Key? key})
+  AriLocationButton({GlobalKey<AriIconButtonState>? key})
       : super(
           key: key,
           icons: const [

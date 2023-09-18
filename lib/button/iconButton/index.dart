@@ -11,13 +11,14 @@ typedef AriIconButtonOnPressed = void Function(
 /// 背景填充的图标按钮
 class AriFilledIconButton extends StatelessWidget {
   AriFilledIconButton({
+    Key? key,
     required this.icons,
     this.width = 40,
     this.height = 40,
     this.iconSize = 24,
     this.style,
     this.onPressed,
-  });
+  }) : super(key: key);
 
   final List<Widget?> icons;
 
@@ -34,12 +35,12 @@ class AriFilledIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Brightness brightness = MediaQuery.of(context).platformBrightness;
-    AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
     ButtonStyle? buttonStyle = style ??
         ButtonStyle(
-            backgroundColor:
-                themeColor.button.filledIconButton.backgroundColor);
+            backgroundColor: AriThemeColor.of(context)
+                .button
+                .filledIconButton
+                .backgroundColor);
     return AriIconButton(
         icons: icons,
         style: buttonStyle,
@@ -62,21 +63,23 @@ class AriIconButton extends StatefulWidget {
   /// - `borderRadius` 圆角
   /// - `style` 按钮样式，默认为[ButtonStyle]
   AriIconButton({
-    Key? key,
+    GlobalKey<AriIconButtonState>? key,
     required this.icons,
     ValueNotifier<int>? selectIndex,
     double rotateAngle = 0.0,
     this.onPressed,
     BorderRadiusGeometry? borderRadius,
-    ButtonStyle? style,
+    this.style,
     this.width = 40,
     this.height = 40,
     this.iconSize = 24,
   })  : selectIndex = selectIndex ?? ValueNotifier<int>(0),
         rotateAngle = ValueNotifier<double>(rotateAngle),
         borderRadius = ValueNotifier<BorderRadiusGeometry?>(borderRadius),
-        style = ValueNotifier<ButtonStyle>(style ?? ButtonStyle()),
+        iconKey = key ?? GlobalKey<AriIconButtonState>(),
         super(key: key);
+
+  final GlobalKey<AriIconButtonState> iconKey;
 
   //*--- 公有变量 ---*
   /// 图标列表，根据[selectIndex]显示相应的图标
@@ -95,7 +98,7 @@ class AriIconButton extends StatefulWidget {
   final ValueNotifier<BorderRadiusGeometry?> borderRadius;
 
   /// 按钮样式
-  final ValueNotifier<ButtonStyle> style;
+  final ButtonStyle? style;
 
   final double width;
 
@@ -136,6 +139,8 @@ class AriIconButtonState extends State<AriIconButton>
   /// 图标列表
   late List<Widget> _elements;
 
+  late ButtonStyle _style;
+
   //*--- 生命周期 ---*
   @override
   void initState() {
@@ -145,13 +150,11 @@ class AriIconButtonState extends State<AriIconButton>
     _animationControllers =
         ariIconSwitchAnimationController(this, widget.icons.length);
 
-    widget.style.addListener(() {
-      setState(() {});
-    });
-
     widget.selectIndex.addListener(() {
       animationForward();
     });
+
+    _style = widget.style ?? ButtonStyle();
 
     // NOTE:
     // 不应该移动到build里
@@ -264,7 +267,7 @@ class AriIconButtonState extends State<AriIconButton>
           child: IconButton(
             onPressed: _onPressed,
             icon: animation,
-            style: widget.style.value,
+            style: _style,
             iconSize: widget.iconSize,
           ),
         );
@@ -282,12 +285,18 @@ class AriIconButtonState extends State<AriIconButton>
         child: IconButton(
           onPressed: _onPressed,
           icon: animation,
-          style: widget.style.value,
+          style: widget.style ?? ButtonStyle(),
           iconSize: widget.iconSize,
         ),
       );
       elements.add(element);
     }
     return elements;
+  }
+
+  void updateStyle(ButtonStyle? style) {
+    setState(() {
+      _style = style ?? _style;
+    });
   }
 }

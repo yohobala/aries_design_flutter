@@ -35,9 +35,6 @@ class GradientButton extends StatelessWidget {
    */
   @override
   Widget build(BuildContext context) {
-    Brightness brightness = MediaQuery.of(context).platformBrightness;
-    AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
-
     return Container(
       width: width ?? AriTheme.button.buttonSize.resolve({}).width,
       height: height ?? AriTheme.button.buttonSize.resolve({}).height,
@@ -54,7 +51,7 @@ class GradientButton extends StatelessWidget {
       child: FilledButton(
         onPressed: () => {},
         child: child,
-        style: themeColor.button.gradientButton,
+        style: AriThemeColor.of(context).button.gradientButton,
       ),
     );
   }
