@@ -73,7 +73,8 @@ class AriGeoLocationDevice {
       (Position position) {
         _isOpenLocationStream = true;
         LatLng location = _posToLatLng(position);
-        if (location != _currentLocation) {
+        if (location != _currentLocation &&
+            !_locationStreamController.isClosed) {
           _currentLocation = location;
           _locationStreamController.add(location); // 向流中添加新的位置数据
         }
