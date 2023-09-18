@@ -94,7 +94,6 @@ class _BuildButtonList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("direction: $direction");
     Widget dividerWidget = _buildDivider(direction, width);
 
     List<Widget> rebuttons = [];
