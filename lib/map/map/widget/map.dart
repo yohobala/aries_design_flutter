@@ -12,13 +12,18 @@ import 'package:url_launcher/url_launcher.dart';
 typedef MapVoidCallback = void Function(LatLng latLng);
 
 /// 初始化AriMap的依赖
-List<SingleChildWidget> ariMapProvider() {
+List<SingleChildWidget> ariMapProvider({bool openLoaction = true}) {
   return [
     ...ariMarkerProvider(),
     Provider<AriMapRepo>(create: (_) => AriMapRepo()),
     ProxyProvider3<AriMapRepo, AriGeoLocationRepo, AriMarkerBloc, AriMapBloc>(
       update: (_, ariMapRepo, ariGeoLocationRepo, ariMarkerBloc, __) =>
-          AriMapBloc(ariMapRepo, ariGeoLocationRepo, ariMarkerBloc),
+          AriMapBloc(
+        ariMapRepo,
+        ariGeoLocationRepo,
+        ariMarkerBloc,
+        openLoaction,
+      ),
     ),
   ];
 }

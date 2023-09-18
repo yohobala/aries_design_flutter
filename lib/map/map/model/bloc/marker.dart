@@ -77,6 +77,7 @@ class AriMarkerModel {
   /// - `key`: marker的key。如果为空，将默认为`UniqueKey().toString()`。
   /// - `layerkey`: marker所属的层的key。如果为空，将默认为[defalutMakerLayerKey]。
   /// - `latLng`: marker的坐标。如果为空，将默认为`LatLng(0, 0)`。
+  /// - `direction`: marker的方向。默认为null。
   /// - `width`: marker的宽度。默认为80。这个限制的是marker的最大宽度,内部widget的宽度将不会超过这个尺寸
   /// - `height`: marker的高度。默认为80。这个限制的是marker的最大高度,内部widget的高度将不会超过这个尺寸
   /// - `type`: marker的类型。默认为[MarkerType.normal]。
@@ -84,12 +85,13 @@ class AriMarkerModel {
     required this.key,
     Key? layerkey,
     LatLng? latLng,
+    this.direction,
     double width = 80,
     double height = 80,
     MarkerType type = MarkerType.normal,
     this.onTap,
   })  : _layerkey = layerkey ?? defalutMakerLayerKey,
-        _latLng = latLng ?? LatLng(0, 0),
+        latLng = latLng ?? LatLng(0, 0),
         _width = width,
         _height = height,
         _type = type;
@@ -99,7 +101,9 @@ class AriMarkerModel {
 
   Key get layerkey => _layerkey;
 
-  LatLng get latLng => _latLng;
+  LatLng latLng;
+
+  double? direction;
 
   double get width => _width;
 
@@ -111,20 +115,9 @@ class AriMarkerModel {
 
   final Key _layerkey;
 
-  late LatLng _latLng;
-
   late double _width;
 
   late double _height;
 
   late MarkerType _type;
-
-  /// 更新marker的坐标
-  ///
-  /// - `newLatLng`: 新的坐标
-  ///
-  /// 在操作完成后会对changeNotifier自增
-  void updateLatLng(LatLng newLatLng) {
-    _latLng = newLatLng;
-  }
 }

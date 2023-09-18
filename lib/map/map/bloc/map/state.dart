@@ -51,7 +51,20 @@ class IsCenterOnPostion extends AriMapState {
 }
 
 /// 当前定位改变
-class ChangeLocation extends AriMapState {}
+class ChangeLocation extends AriMapState {
+  ChangeLocation({
+    required this.latLng,
+  });
+
+  final LatLng latLng;
+}
+
+class ChangeCompassState extends AriMapState {
+  ChangeCompassState({
+    required this.direction,
+  });
+  final double direction;
+}
 
 /***************  图层有关状态  ***************/
 

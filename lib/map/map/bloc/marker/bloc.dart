@@ -93,7 +93,7 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
     }
   }
 
-  /***************  公有方法  ***************/
+  /***************  方法  ***************/
 
   /// 获得标记
   AriMarkerModel getMarker(Key key) {
@@ -122,8 +122,6 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
       layer.markers[marker.key] = marker;
     }
   }
-
-  /***************  私有方法  ***************/
 
   /// 创建标记图层图层
   ///

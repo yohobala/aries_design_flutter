@@ -115,6 +115,20 @@ class AriGeoLocationRepo {
     deivce.unregisterLocationListener();
   }
 
+  /// 获得方向流
+  ///
+  /// 调用该方法前，先调用[checkPermission]检查完定位权限后，如果权限开启,则会开启监听.
+  ///
+  Stream<double> get compassStream {
+    deivce.registerCompassListener();
+
+    return deivce.compassStream.handleError((error) {
+      // 在这里处理错误，例如转换为自定义的异常并抛出
+      deivce.unregisterCompassListener();
+      _updateState(false);
+    });
+  }
+
   /***************  私有方法  ***************/
 
   /// 更新状态

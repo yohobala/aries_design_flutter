@@ -6,8 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 
 class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
-  AriMapBloc(this.mapRepo, this.geoLocationRepo, this.markerBloc)
-      : super(InitAriMapBlocState()) {
+  AriMapBloc(
+    this.mapRepo,
+    this.geoLocationRepo,
+    this.markerBloc,
+    this.openLocation,
+  ) : super(InitAriMapBlocState()) {
     /***************  添加监听  ***************/
     on<InitAriMapEvent>(initAriMapEvent);
     on<InitAriMapCompleteEvent>(initAriMapCompleteEvent);
@@ -18,6 +22,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     on<MoveToLocationEvent>(moveToLocationEvent);
     on<ChangeLocationEvent>(changeLocationEvent);
     on<UpdateLocationMarkerEvent>(updateLocationMarkerEvent);
+    on<ChangeCompassEvent>(changeCompassEvent);
 
     on<UpdateLayerEvent>(updateLayerEvent);
 
@@ -34,6 +39,8 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   final AriGeoLocationRepo geoLocationRepo;
 
   final AriMarkerBloc markerBloc;
+
+  final bool openLocation;
 
   /// 是否支持定位
   bool get geoLocationAvailable => _geoLocationAvailable;
@@ -52,6 +59,12 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
   /// 是否支持定位
   bool _geoLocationAvailable = false;
+
+  /// 方位流
+  // ignore: unused_field
+  StreamSubscription<double>? _compassSubscription;
+
+  bool _compassAvailabel = false;
 
   /// 图层
   List<AriLayerModel> _layers = [];
@@ -74,14 +87,18 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /// 初始化事件
   void initAriMapEvent(InitAriMapEvent event, Emitter<AriMapState> emit) async {
     if (!isInit) {
-      /// NOTE:
-      /// 检查定位权限
-      _geoLocationAvailable = await geoLocationRepo.checkPermission();
-      emit(UpdateGeoLocationAvailableState());
+      if (openLocation) {
+        /// NOTE:
+        /// 检查定位权限
+        _geoLocationAvailable = await geoLocationRepo.checkPermission();
+        emit(UpdateGeoLocationAvailableState());
 
-      /// NOTE:
-      /// 开启定位流
-      listenLocationStream();
+        /// NOTE:
+        /// 开启定位流
+        listenLocationStream();
+
+        listenHeadingStream();
+      }
     } else {
       emit(InitAriMapState());
     }
@@ -140,25 +157,42 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /// GPS定位发生改变
   void changeLocationEvent(
       ChangeLocationEvent event, Emitter<AriMapState> emit) async {
+    /// NOTE:
+    /// 更新定位标记
+    LatLng latLng = await geoLocationRepo.getLocation();
+
     // NOTE:
     // 发出当前位置改变状态
-    emit(ChangeLocation());
+    emit(ChangeLocation(latLng: latLng));
 
     // NOTE:
     // 改变为当前位置是在地图中心
     emit(IsCenterOnPostion(isCenter: false));
 
-    /// NOTE:
-    /// 更新定位标记
-    LatLng latLng = await geoLocationRepo.getLocation();
-    updateLocationMarkerEvent(UpdateLocationMarkerEvent(latLng: latLng), emit);
+    if (openLocation) {
+      add(UpdateLocationMarkerEvent(latLng: latLng, direction: null));
+    }
   }
 
   /// 更新定位标记
   FutureOr<void> updateLocationMarkerEvent(
       UpdateLocationMarkerEvent event, Emitter<AriMapState> emit) {
-    _postionMarker.updateLatLng(event.latLng);
+    if (event.latLng != null) {
+      _postionMarker.latLng = event.latLng!;
+    }
+    if (event.direction != null) {
+      _postionMarker.direction = event.direction!;
+    }
     markerBloc.add(UpdateMarkeEvent(marker: _postionMarker));
+  }
+
+  FutureOr<void> changeCompassEvent(
+      ChangeCompassEvent event, Emitter<AriMapState> emit) {
+    emit(ChangeCompassState(direction: event.direction));
+
+    if (openLocation) {
+      add(UpdateLocationMarkerEvent(latLng: null, direction: event.direction));
+    }
   }
 
   /***************  图层有关事件  ***************/
@@ -185,14 +219,12 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
           add(ChangeLocationEvent(latLng: location));
         },
         onError: (error) {
-          isInit = true;
           // 在这里处理错误
-          logger.d("出现错误");
+          isInit = true;
         },
         onDone: () {
-          isInit = true;
           // 处理流关闭的情况
-          logger.d("处理流关闭的情况");
+          isInit = true;
         },
       );
     }
@@ -202,5 +234,25 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     _locationSubscription?.cancel();
   }
 
-  /***************  私有方法  ***************/
+  /// 监听方位流
+  Future<void> listenHeadingStream() async {
+    if (_geoLocationAvailable && _compassSubscription == null) {
+      _compassSubscription = geoLocationRepo.compassStream.listen(
+        (direction) {
+          add(ChangeCompassEvent(direction: direction));
+          _compassAvailabel = true;
+        },
+        onError: (error) {
+          _compassAvailabel = false;
+        },
+        onDone: () {
+          _compassAvailabel = false;
+        },
+      );
+    }
+  }
+
+  void cancelHeadingSubscription() {
+    _compassSubscription?.cancel();
+  }
 }

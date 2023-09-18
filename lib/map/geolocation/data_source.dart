@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 
 const geoLocationSettings =
     LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
@@ -9,14 +10,16 @@ const geoLocationSettings =
 class AriGeoLocationDevice {
   Stream<LatLng> get locationStream => _locationStreamController.stream;
 
+  Stream<double> get compassStream => _compassStream.stream;
+
   /***************  私有变量  ***************/
 
   /// 使用 _locationStreamController 来创建自己的流
   late StreamController<LatLng> _locationStreamController;
+  late StreamController<double> _compassStream;
 
-  StreamSubscription<Position>? positionStream;
-
-  bool _isOpenStream = false;
+  bool _isOpenLocationStream = false;
+  bool _isOpenCompassStream = false;
 
   LatLng? _currentLocation;
 
@@ -47,7 +50,7 @@ class AriGeoLocationDevice {
   void registerLocationListener() {
     // NOTE:
     // 如果开启了监听，则先取消监听,再注册监听
-    if (_isOpenStream) {
+    if (_isOpenLocationStream) {
       unregisterLocationListener();
     }
     _createLocationStreamController();
@@ -68,7 +71,7 @@ class AriGeoLocationDevice {
       locationSettings: geoLocationSettings,
     ).listen(
       (Position position) {
-        _isOpenStream = true;
+        _isOpenLocationStream = true;
         LatLng location = _posToLatLng(position);
         if (location != _currentLocation) {
           _currentLocation = location;
@@ -85,14 +88,50 @@ class AriGeoLocationDevice {
 
     // 当流不再使用时，取消订阅
     _locationStreamController.onCancel = () {
-      positionStream?.cancel();
+      _locationStreamController.close();
     };
   }
 
   /// 停止监听位置变化
   void unregisterLocationListener() {
-    _isOpenStream = false;
+    _isOpenLocationStream = false;
     _locationStreamController.close();
+  }
+
+  /// 开始监听罗盘
+  void registerCompassListener() {
+    if (_isOpenCompassStream) {
+      unregisterCompassListener();
+    }
+
+    _createCompassStreamController();
+
+    FlutterCompass.events?.first.then((event) {
+      if (event.heading != null) {
+        _isOpenLocationStream = true;
+        _compassStream.add(event.heading!);
+      }
+    });
+
+    FlutterCompass.events?.listen(((event) {
+      if (event.heading != null) {
+        _isOpenLocationStream = true;
+        _compassStream.add(event.heading!);
+      }
+    }), onError: (Object error, [StackTrace? stackTrace]) {
+      _compassStream.addError('error');
+    });
+
+    // 当流不再使用时，取消订阅
+    _compassStream.onCancel = () {
+      _compassStream.close();
+    };
+  }
+
+  /// 停止监听罗盘
+  void unregisterCompassListener() {
+    _isOpenCompassStream = false;
+    _compassStream.close();
   }
 
   /***************  私有方法  ***************/
@@ -110,5 +149,9 @@ class AriGeoLocationDevice {
 
   void _createLocationStreamController() {
     _locationStreamController = StreamController<LatLng>();
+  }
+
+  void _createCompassStreamController() {
+    _compassStream = StreamController<double>();
   }
 }

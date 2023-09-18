@@ -80,8 +80,17 @@ class ChangeLocationEvent extends AriMapEvent {
 class UpdateLocationMarkerEvent extends AriMapEvent {
   UpdateLocationMarkerEvent({
     required this.latLng,
+    required this.direction,
   });
-  final LatLng latLng;
+  final LatLng? latLng;
+  final double? direction;
+}
+
+class ChangeCompassEvent extends AriMapEvent {
+  ChangeCompassEvent({
+    required this.direction,
+  });
+  final double direction;
 }
 
 /***************  图层有关事件  ***************/
