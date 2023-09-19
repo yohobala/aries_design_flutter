@@ -53,10 +53,10 @@ const ColorScheme _colorScheme = ColorScheme(
 );
 
 AriThemeColorPrime _prime = AriThemeColorPrime(
-  blue: Colors.blue[700]!,
-  green: Colors.green[700]!,
-  red: Colors.red[700]!,
+  blue: Colors.blue[600]!,
+  green: Colors.green[600]!,
+  red: Colors.red[600]!,
   yellow: _colorScheme.primaryContainer,
-  orange: Colors.orange[700]!,
+  orange: Colors.orange[600]!,
   white: Colors.white,
 );

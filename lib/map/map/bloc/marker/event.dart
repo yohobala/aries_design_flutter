@@ -31,3 +31,12 @@ class UpdateMarkeEvent extends AriMarkerEvent {
   });
   final AriMarkerModel marker;
 }
+
+class SelectedMarkerEvent extends AriMarkerEvent {
+  SelectedMarkerEvent({
+    required this.marker,
+    required this.isSelected,
+  });
+  final AriMarkerModel marker;
+  final bool isSelected;
+}

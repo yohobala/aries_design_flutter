@@ -57,3 +57,52 @@ Widget Function(Widget child, Animation<double> animation)
     ),
   );
 };
+
+/// widget缩放动画
+///
+/// - `scale`: 缩放的比例
+/// - `reverse`: 是否反向,默认为false,false:从1 -> scale;true:从scale -> 1
+Widget widgetScaleAnimatedBuilder(
+  Widget widget,
+  AnimationController animationController, {
+  double scale = 0.5,
+  reverse = false,
+}) {
+  var begin = !reverse ? 1.0 : scale;
+  var end = !reverse ? scale : 1.0;
+  var animation = Tween<double>(
+    begin: begin,
+    end: end,
+  ).animate(animationController);
+  // 返回一个 AnimatedBuilder 来根据动画值进行缩放
+  return AnimatedBuilder(
+    animation: animation,
+    builder: (context, child) {
+      return Transform.scale(scale: animation.value, child: widget);
+    },
+  );
+}
+
+Widget widgetVisibilityAnimatedBuilder(
+  Widget widget,
+  AnimationController animationController, {
+  bool reverse = false,
+}) {
+  var animation = Tween<double>(
+    begin: !reverse ? 0 : 1,
+    end: !reverse ? 1 : 0,
+  ).animate(animationController);
+  // 返回一个 AnimatedBuilder 来根据动画值进行缩放
+  return AnimatedBuilder(
+    animation: animation,
+    builder: (context, child) {
+      return Visibility(
+        visible: animation.value > 0,
+        child: Opacity(
+          opacity: animation.value,
+          child: widget,
+        ),
+      );
+    },
+  );
+}

@@ -1,3 +1,4 @@
+import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'router.dart';
 
@@ -116,6 +117,7 @@ class AriRouteItemNavigationConfig {
   AriRouteItemNavigationConfig({
     this.initialRoute = "/",
     this.initialIndex = 0,
+    this.container,
   });
 
   /// 初始路由,默认为/，这个和[AriRouteItem]的[route]不一样，
@@ -127,6 +129,20 @@ class AriRouteItemNavigationConfig {
 
   /// 默认打开的底部导航栏的index
   final int initialIndex;
+
+  /// 用于在NavigationBar的情况下，包裹NavigationBar的widget
+  ///
+  /// 例如:
+  /// ```dart
+  /// container = (group, navigationBar) {
+  ///     return Scaffold(
+  //        bottomNavigationBar: navigationBar,
+  //        body: group,
+  //    );
+  /// }
+  /// ```
+  final Widget Function(AriNavigatorGroup navigatorGroup,
+      AriBottonNavigationBar bottonNavigationBar)? container;
 }
 
 /// 判断HasNavigation不同情况下AriRouteItem的正确性

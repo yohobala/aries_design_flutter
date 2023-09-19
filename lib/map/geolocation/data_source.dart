@@ -84,6 +84,7 @@ class AriGeoLocationDevice {
       onError: (error) {
         // 处理错误...
         _locationStreamController.addError(error);
+        unregisterLocationListener();
       },
     );
 
@@ -96,7 +97,9 @@ class AriGeoLocationDevice {
   /// 停止监听位置变化
   void unregisterLocationListener() {
     _isOpenLocationStream = false;
-    _locationStreamController.close();
+    if (!_locationStreamController.isClosed) {
+      _locationStreamController.close();
+    }
   }
 
   /// 开始监听罗盘

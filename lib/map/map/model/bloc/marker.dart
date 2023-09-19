@@ -86,10 +86,11 @@ class AriMarkerModel {
     Key? layerkey,
     LatLng? latLng,
     this.direction,
-    double width = 80,
-    double height = 80,
+    double width = 150,
+    double height = 150,
     MarkerType type = MarkerType.normal,
     this.onTap,
+    this.selected = false,
   })  : _layerkey = layerkey ?? defalutMakerLayerKey,
         latLng = latLng ?? LatLng(0, 0),
         _width = width,
@@ -112,6 +113,8 @@ class AriMarkerModel {
   MarkerType get type => _type;
 
   final MarkerTapCallback? onTap;
+
+  bool selected;
 
   final Key _layerkey;
 

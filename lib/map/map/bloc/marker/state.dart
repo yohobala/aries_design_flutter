@@ -36,3 +36,13 @@ class CreateMarkerState extends AriMarkerState {
   final AriMarkerModel marker;
   final Key layerKey;
 }
+
+class SelectdMarkerState extends AriMarkerState {
+  SelectdMarkerState({
+    required this.marker,
+    required this.isSelected,
+  });
+
+  final AriMarkerModel marker;
+  final bool isSelected;
+}

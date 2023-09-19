@@ -14,6 +14,7 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
     on<CreateMarkerLayerEvent>(createLayerEvent);
 
     on<UpdateMarkeEvent>(updateMarkeEvent);
+    on<SelectedMarkerEvent>(selectedMarkerEvent);
 
     add(InitAriMarkerEvent());
   }
@@ -93,6 +94,13 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
     }
   }
 
+  FutureOr<void> selectedMarkerEvent(
+      SelectedMarkerEvent event, Emitter<AriMarkerState> emit) {
+    event.marker.selected = event.isSelected;
+    emit(
+        SelectdMarkerState(marker: event.marker, isSelected: event.isSelected));
+  }
+
   /***************  方法  ***************/
 
   /// 获得标记
@@ -143,24 +151,4 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   void _addLayer(Key key, AriMarkerLayerModel layer) {
     _layers[key] = layer;
   }
-
-  /// 添加标记
-  ///
-  /// - `marker`: 标记
-  ///
-  /// layer.markers[key] = marker并没有创建新的AriMapMarker对象，只是将layer.markers[key]
-  /// 的引用指向了marker的新引用，这个性能开销非常小
-  ///
-  /// layer.markers[key].height = 80 也只是修改了AriMapMarker对象属性值，性能开销也很小
-  ///
-  /// 所以如果只是更新AriMapMarker对象中的某些属性值，上面两种操作的性能开销相差无几，
-  /// 在考虑到代码的可读性和可维护性上，选择layer.markers[key] = marker更好点
-  // void _updateMarker(AriMarkerModel marker) {
-  //   final String key = marker.key;
-  //   final String layerKey = marker.layerkey;
-  //   AriMarkerLayerModel layer = _layers[layerKey]!;
-
-  //   layer.markers[key] = marker;
-  //   layer.changeNotifier.value++;
-  // }
 }

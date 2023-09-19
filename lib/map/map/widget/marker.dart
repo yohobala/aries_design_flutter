@@ -17,7 +17,7 @@ List<SingleChildWidget> ariMarkerProvider() {
   ];
 }
 
-typedef BuildMarker = Widget Function(AriMarkerModel marker, bool isSelected);
+typedef BuildMarker = Widget Function(AriMarkerModel marker);
 
 /// 地图标记组件
 class AriMarker extends StatelessWidget {
@@ -183,16 +183,16 @@ class AriMarkerBuider extends StatelessWidget {
           child: ValueListenableBuilder<int>(
             valueListenable: rebuild,
             builder: (context, rebuild, child) {
-              return _buildMarker(marker, isSelected);
+              return _buildMarker(marker);
             },
           ),
         ));
   }
 
-  Widget _buildMarker(AriMarkerModel marker, bool isSelected) {
+  Widget _buildMarker(AriMarkerModel marker) {
     Widget widget;
     if (buildMarker != null) {
-      widget = buildMarker!(marker, isSelected);
+      widget = buildMarker!(marker);
       return widget;
     }
     switch (marker.type) {

@@ -24,7 +24,7 @@ Widget Function(Widget child, AnimationController animationController,
         bool reverse,
         bool signle}) ariIconSwitchAnimatedBuilder =
     (Widget widget, AnimationController animationController,
-        {double scale = 0.7, reverse = false, bool signle = false}) {
+        {double scale = 0.5, reverse = false, bool signle = false}) {
   if (!signle) {
     var begin = !reverse ? 1.0 : scale;
     var end = !reverse ? scale : 1.0;
@@ -37,7 +37,7 @@ Widget Function(Widget child, AnimationController animationController,
         animation: animation,
         builder: (context, child) {
           return Visibility(
-            visible: animation.value > scale, // 根据实际需求来设置这个条件
+            visible: animation.value > scale,
             child: Transform.scale(scale: animation.value, child: widget),
           );
         });
@@ -63,11 +63,14 @@ Widget Function(Widget child, AnimationController animationController,
 
 /// 用于切换图标的动画
 List<AnimationController> ariIconSwitchAnimationController(
-    TickerProvider vsync, int length) {
+    TickerProvider vsync, int length,
+    {Duration? duration}) {
   /// 页面切换动画
   AnimationController buildController() {
-    final AnimationController controller =
-        AnimationController(vsync: vsync, duration: AriTheme.duration.fast3);
+    final AnimationController controller = AnimationController(
+      vsync: vsync,
+      duration: duration ?? AriTheme.duration.fast3,
+    );
     return controller;
   }
 

@@ -187,8 +187,7 @@ class AriThemeButton {
   final MaterialStateProperty<Size> iconButtonSize =
       MaterialStateProperty.all<Size>(Size(40, 40));
 
-  final MaterialStateProperty<Size> unselectedMarker =
-      MaterialStateProperty.all<Size>(Size(20, 20));
+  final double unselectedMarker = 20;
 
   // MODULE:
   // 分段按钮

@@ -35,11 +35,12 @@ void addIfNonNull(
   }
   data = data.copyWith(
       padding: data.padding.copyWith(
-    bottom: data.padding.bottom + addBottomPadding,
-    top: data.padding.top + addTopPadding,
-    left: data.padding.left + addLeftPadding,
-    right: data.padding.right + addRightPadding,
-  ));
+        bottom: data.padding.bottom + addBottomPadding,
+        top: data.padding.top + addTopPadding,
+        left: data.padding.left + addLeftPadding,
+        right: data.padding.right + addRightPadding,
+      ),
+      viewInsets: EdgeInsets.all(0));
 
   if (child != null) {
     children.add(

@@ -99,6 +99,12 @@ class AriMap extends StatefulWidget {
 
   final MapVoidCallback? onLongPress;
 
+  /// 构建标记的回调
+  ///
+  /// 如果为空,将使用自带的标记样式
+  ///
+  /// 可以通过AriMarkerState的SelectdMarkerState来判断marker是否被选中
+  /// 需要先调用SelectedMarkerEvent来触发,可以在AriMarkerModel的onTap中调用
   final BuildMarker? buildMarker;
 
   @override
@@ -170,93 +176,96 @@ class _AriMapState extends State<AriMap>
     // 获取安全区域
     // 用于对自定义的widget进行定位
     // 防止出现在安全区域之外被遮挡的情况
-    padding = MediaQuery.of(context).padding;
-    safeAreaTop = padding.top + AriTheme.windowsInsets.top;
-    safeAreaBottom = padding.bottom + AriTheme.windowsInsets.bottom;
-
+    // padding = MediaQuery.of(context).padding;
+    // safeAreaTop = padding.top + AriTheme.windowsInsets.top;
+    // safeAreaBottom = padding.bottom + AriTheme.windowsInsets.bottom;
+    safeAreaTop = 0;
+    safeAreaBottom = 0;
     _addMapControllerListener(mapController, mapBloc);
 
     // NOTE:
     // 使用Scaffold做最外层是因为子节点需要用到，比如:
     // AriMapLocationButton
-    return Scaffold(
-      body: Stack(
-        children: [
-          BlocListener<AriMapBloc, AriMapState>(
-              bloc: mapBloc,
+    return RepaintBoundary(
+        child: Stack(
+      children: [
+        BlocListener<AriMapBloc, AriMapState>(
+          bloc: mapBloc,
 
-              /// MODULE:
-              /// 监听BLoC的状态
-              listener: (context, state) => {
-                    if (state is InitAriMapState)
-                      {
-                        mapBloc.add(MoveToLocationEvent()),
-                      },
-                    if (state is MoveToLocationState)
-                      {
-                        moveLocationController = AnimationController(
-                          vsync: this,
-                          duration: AriTheme.duration.mapDuration,
-                        ),
-                        _moveToLocation(
-                          mapController: mapController,
-                          latLng: state.center,
-                          zoom: state.zoom,
-                          offset: state.offset,
-                          animationController:
-                              state.isAnimated ? moveLocationController : null,
-                        )
-                      },
-                    if (state is ChangeLocation) {}
-                  },
-
-              /// MODULE:
-              /// 设置FlutterMap
-              child: FlutterMap(
-                mapController: mapController,
-                options: MapOptions(
-                  center: widget.center,
-                  zoom: widget.zoom,
-                  maxZoom: widget.maxZoom,
-                  minZoom: widget.minZoom,
-                  onLongPress: onLongPress,
+          /// MODULE:
+          /// 监听BLoC的状态
+          listener: (context, state) => {
+            print(state),
+            if (state is InitAriMapState)
+              {
+                mapBloc.add(MoveToLocationEvent()),
+              }
+            else if (state is MoveToLocationState)
+              {
+                moveLocationController = AnimationController(
+                  vsync: this,
+                  duration: AriTheme.duration.mapDuration,
                 ),
-                nonRotatedChildren: [
-                  RichAttributionWidget(
-                    alignment: AttributionAlignment.bottomLeft,
-                    attributions: [
-                      TextSourceAttribution(
-                        'OpenStreetMap contributors',
-                        onTap: () => launchUrl(
-                            Uri.parse('https://openstreetmap.org/copyright')),
-                      ),
-                    ],
+                _moveToLocation(
+                  mapController: mapController,
+                  latLng: state.center,
+                  zoom: state.zoom,
+                  offset: state.offset,
+                  animationController:
+                      state.isAnimated ? moveLocationController : null,
+                )
+              }
+            else if (state is ChangeLocation)
+              {}
+          },
+
+          /// MODULE:
+          /// 设置FlutterMap
+          child: FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              center: widget.center,
+              zoom: widget.zoom,
+              maxZoom: widget.maxZoom,
+              minZoom: widget.minZoom,
+              onLongPress: onLongPress,
+            ),
+            nonRotatedChildren: [
+              RichAttributionWidget(
+                alignment: AttributionAlignment.bottomLeft,
+                attributions: [
+                  TextSourceAttribution(
+                    'OpenStreetMap contributors',
+                    onTap: () => launchUrl(
+                        Uri.parse('https://openstreetmap.org/copyright')),
                   ),
                 ],
-                children: [
-                  AriMapLayer(),
-                  AriMarker(buildMarker: widget.buildMarker),
-                ],
-              )),
+              ),
+            ],
+            children: [
+              AriMapLayer(),
+              AriMarker(buildMarker: widget.buildMarker),
+            ],
+          ),
+        ),
 
-          // MODULE:
-          // 自定义的widget
-          Positioned(
-            child: SlideTransition(
-              position: offset!,
-              child: widget.rightBottomChild ?? Container(),
-            ),
-            bottom: safeAreaBottom,
-            right: AriTheme.windowsInsets.right,
+        // MODULE:
+        // 自定义的widget
+        Positioned(
+          child: SlideTransition(
+            position: offset!,
+            child: widget.rightBottomChild ?? Container(),
           ),
-          Positioned(
-            child: widget.rightTopChild ?? Container(),
-            top: safeAreaTop,
-            right: AriTheme.windowsInsets.right,
-          ),
-        ],
-      ),
-    );
+          bottom: safeAreaBottom,
+          right: AriTheme.windowsInsets.right,
+        ),
+        Positioned(
+          child: widget.rightTopChild ?? Container(),
+          top: safeAreaTop,
+          right: AriTheme.windowsInsets.right,
+        ),
+      ],
+    ));
   }
 
   @override

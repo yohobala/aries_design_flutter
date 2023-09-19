@@ -186,6 +186,7 @@ class AriThemeColorButton {
     required this.segmentedIconButton,
     required this.segmentedIconButtonContainer,
     required this.filledIconButton,
+    required this.markerIcon,
   });
 
   /// 渐变按钮
@@ -198,6 +199,8 @@ class AriThemeColorButton {
   final BoxDecoration segmentedIconButtonContainer;
 
   final ButtonStyle filledIconButton;
+
+  final Color markerIcon;
 }
 
 /// Aries的弹出框样式
