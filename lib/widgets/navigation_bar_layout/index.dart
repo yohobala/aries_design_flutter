@@ -1,12 +1,17 @@
+import 'dart:async';
+
+import 'package:aries_design_flutter/aries_design_flutter.dart';
+import 'package:aries_design_flutter/modal/bottomSheet/index.dart';
 import 'package:aries_design_flutter/widgets/Index.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 enum _PageSlot {
   body,
   bottomNavigationBar,
-  bottomSheet,
 }
 
 class AriNavigationBarScaffold extends StatefulWidget {
@@ -29,8 +34,90 @@ class AriNavigationBarScaffold extends StatefulWidget {
       _AriNavigationBarLayoutState();
 }
 
-class _AriNavigationBarLayoutState extends State<AriNavigationBarScaffold> {
+class _AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   final GlobalKey _bodyKey = GlobalKey();
+
+  // MODULE:
+  // 软键盘相关参数
+  double bottomViewInset = 0;
+  double keyboardHeight = 0;
+  double prevKeyboardHeight = 0;
+  Timer? debounceTimer;
+  bool isCalculateKeyboardHeight = false;
+  ValueNotifier<bool> isKeyboardUp = ValueNotifier(false);
+  late AnimationController keyboardAnimationController;
+  late Animation keyboardAnimation;
+
+  PersistentBottomSheetController? bottomSheetController; // 增加一个成员变量来存储控制器
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    keyboardAnimationController = AnimationController(
+      duration: AriTheme.duration.medium1,
+      vsync: this,
+    );
+    isKeyboardUp.addListener(() {
+      if (keyboardAnimationController.status == AnimationStatus.completed ||
+          keyboardAnimationController.status == AnimationStatus.dismissed) {
+        if (isKeyboardUp.value) {
+          keyboardAnimationController.forward().then((value) {});
+        } else {
+          keyboardAnimationController.reverse().then((value) {});
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// 如果是第一次弹出软键盘,那么[isCalculateKeyboardHeight]是false
+  /// bottomSheet会随着[bottomViewInset]变化,每次都会重新渲染
+  ///
+  /// 如果不是第一次弹出软键盘,判断[bottomViewInset]与[prevKeyboardHeight]来确定是升起还是收起
+  ///
+  /// 每次改变都会出现一个定时器,定时器结束的时候,
+  /// - newHeight > keyboardHeight 那么说明需要改变软键盘的高度
+  /// - 如果newHeight == 0 && keyboardHeight > 0 && !isCalculateKeyboardHeight,
+  ///   则意味着是第一次弹出软键盘,并且此时是收起了状态,那么改变动画和[isCalculateKeyboardHeight],
+  ///   并且刷新bottomSheet,因为有可能出现没有关闭bottomSheet又打开软键盘的情况
+  @override
+  void didChangeMetrics() {
+    bottomViewInset = MediaQuery.of(context).viewInsets.bottom;
+
+    if (!isCalculateKeyboardHeight) {
+      bottomSheetController!.setState!(() {});
+    } else {
+      if (prevKeyboardHeight < bottomViewInset) {
+        isKeyboardUp.value = true;
+      } else if (prevKeyboardHeight > bottomViewInset) {
+        isKeyboardUp.value = false;
+      }
+      prevKeyboardHeight = bottomViewInset;
+    }
+    debounceTimer?.cancel();
+    debounceTimer = Timer(Duration(milliseconds: 200), () {
+      final double newHeight = MediaQuery.of(context).viewInsets.bottom;
+      if (newHeight > keyboardHeight) {
+        keyboardHeight = newHeight;
+      } else if (newHeight == 0 &&
+          keyboardHeight > 0 &&
+          !isCalculateKeyboardHeight) {
+        isCalculateKeyboardHeight = true;
+        keyboardAnimation = Tween<double>(begin: 0, end: keyboardHeight)
+            .animate(keyboardAnimationController);
+        bottomSheetController?.setState!(() {});
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<LayoutId> children = <LayoutId>[];
@@ -67,11 +154,45 @@ class _AriNavigationBarLayoutState extends State<AriNavigationBarScaffold> {
       */
 
       resizeToAvoidBottomInset: false,
-      body: CustomMultiChildLayout(
-        delegate: BttonNavigationLayoutDelegate(),
-        children: children,
+      body: Stack(
+        children: [
+          CustomMultiChildLayout(
+            delegate: BttonNavigationLayoutDelegate(),
+            children: children,
+          ),
+        ],
       ),
     );
+  }
+
+  PersistentBottomSheetController showBottomSheet({
+    required BuildContext context,
+    required Color backgroundColor,
+    required Widget Function(BuildContext) builder,
+  }) {
+    Widget child = builder(context);
+
+    bottomSheetController = Scaffold.of(context).showBottomSheet(
+      // (context) =>
+      (context) => isCalculateKeyboardHeight
+          ? AnimatedBuilder(
+              animation: keyboardAnimation,
+              builder: (context, child) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: keyboardAnimation.value), // 控制垂直偏移
+                  child: builder(context),
+                );
+              },
+            )
+          : Padding(
+              padding: EdgeInsets.only(bottom: bottomViewInset),
+              child: child,
+            ),
+      backgroundColor: backgroundColor,
+    );
+
+    return bottomSheetController!;
   }
 }
 
@@ -131,39 +252,35 @@ class _BodyBuilder extends StatefulWidget {
 
   final Widget body;
   @override
-  State<_BodyBuilder> createState() => _BodyBuilderState(body: body);
+  State<_BodyBuilder> createState() => _BodyBuilderState();
 }
 
 class _BodyBuilderState extends State<_BodyBuilder>
     with WidgetsBindingObserver {
-  _BodyBuilderState({
-    required this.body,
-  });
+  _BodyBuilderState();
 
-  final Widget body;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addObserver(this);
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance?.addObserver(this);
-  }
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeMetrics() {
-    final FlutterView view = View.of(context);
-    final bottomInset = view.viewInsets.bottom;
-    if (bottomInset > 0) {
-      // Keyboard is shown
-    } else {
-      // Keyboard is hidden
-    }
-  }
+  // @override
+  // void didChangeMetrics() {
+  //   final FlutterView view = View.of(context);
+  //   final bottomInset = view.viewInsets.bottom;
+  //   if (bottomInset > 0) {
+  //     // Keyboard is shown
+  //   } else {
+  //     // Keyboard is hidden
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +301,7 @@ class _BodyBuilderState extends State<_BodyBuilder>
                 bottom: bottom,
               ),
             ),
-            child: body,
+            child: widget.body,
           ),
         );
       },
@@ -218,4 +335,24 @@ class _BodyBoxConstraints extends BoxConstraints {
 
   @override
   int get hashCode => Object.hash(super.hashCode, bottomWidgetsHeight);
+}
+
+class YourBottomSheet extends StatelessWidget {
+  final VoidCallback onClose;
+
+  YourBottomSheet({required this.onClose});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      color: Colors.blue,
+      child: Center(
+        child: ElevatedButton(
+          onPressed: onClose,
+          child: Text('Close BottomSheet'),
+        ),
+      ),
+    );
+  }
 }
