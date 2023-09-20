@@ -195,7 +195,6 @@ class _AriMapState extends State<AriMap>
           /// MODULE:
           /// 监听BLoC的状态
           listener: (context, state) => {
-            print(state),
             if (state is InitAriMapState)
               {
                 mapBloc.add(MoveToLocationEvent()),

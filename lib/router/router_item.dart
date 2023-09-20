@@ -1,6 +1,5 @@
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/widgets.dart';
-import 'router.dart';
 
 /// {@template AriRouteItem}
 /// AriRoute单个路由的配置

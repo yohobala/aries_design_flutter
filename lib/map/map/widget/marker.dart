@@ -169,8 +169,6 @@ class AriMarkerBuider extends StatelessWidget {
 
     AriMarkerModel marker = markerBloc.getMarker(key!);
 
-    bool isSelected = false;
-
     return GestureDetector(
         onTap: () {
           if (marker.onTap != null) {

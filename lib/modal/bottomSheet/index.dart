@@ -5,11 +5,17 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 
 // 创建一个控制器
 class AriBottomSheetController {
-  VoidCallback? closeFunction;
+  Function? _closeFunction;
+
+  void setCloseFunction(Function closeFunction) {
+    _closeFunction = closeFunction;
+  }
 
   /// 关闭
   void close() {
-    closeFunction?.call();
+    if (_closeFunction != null) {
+      _closeFunction!();
+    }
   }
 }
 
@@ -24,23 +30,47 @@ void showAriBottomSheet(
   double minHeight = 300,
   AriBottomSheetController? controller,
 }) {
-  final sheetController = showBottomSheet(
-    context: context,
-    backgroundColor: Colors.transparent,
-    builder: (context) {
-      return _AriBottomSheet(
-        children: children,
-        backgroundColor: backgroundColor,
-        heightFactor: heightFactor,
-        minHeight: minHeight,
-      );
-    },
-  );
+  final nbScaffold = AriNavigationBarScaffold.of(context);
 
-  // 将关闭函数保存到控制器中
-  controller?.closeFunction = () {
-    sheetController.close();
-  };
+  if (nbScaffold != null) {
+    final sheetController = nbScaffold.showBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return _AriBottomSheet(
+          children: children,
+          backgroundColor: backgroundColor,
+          heightFactor: heightFactor,
+          minHeight: minHeight,
+        );
+      },
+    );
+    void close() {
+      sheetController.close();
+    }
+
+    // 将关闭函数保存到控制器中
+    controller?.setCloseFunction(close);
+  } else {
+    final sheetController = showBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return _AriBottomSheet(
+          children: children,
+          backgroundColor: backgroundColor,
+          heightFactor: heightFactor,
+          minHeight: minHeight,
+        );
+      },
+    );
+    void close() {
+      sheetController.close();
+    }
+
+    // 将关闭函数保存到控制器中
+    controller?.setCloseFunction(close);
+  }
 }
 
 /// 底部弹出框

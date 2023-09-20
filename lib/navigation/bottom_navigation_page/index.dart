@@ -77,7 +77,7 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
       element =
           widget.routeItem.navigationConfig!.container!(group, navigationBar);
     } else {
-      element = AriNavigationBarLayout(
+      element = AriNavigationBarScaffold(
         body: group,
         bottomNavigationBar: navigationBar,
       );
