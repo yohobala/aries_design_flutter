@@ -55,6 +55,11 @@ AriThemeColor generateThemeColor({
           colorScheme.primaryContainer,
         ),
       ),
+      filledButton: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          colorScheme.surfaceVariant,
+        ),
+      ),
       markerIcon: colorScheme.background);
 
   // MODULE:

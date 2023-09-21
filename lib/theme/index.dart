@@ -44,6 +44,12 @@ class AriThemeController {
 /// ```dart
 /// double insets = AriTheme.insets.standard
 /// ````
+///
+/// 颜色方面的主题颜色
+///
+/// ```dart
+/// AriThemeColor themeColor = AriThemeColor.of(context);
+/// ```
 @immutable
 class AriTheme {
   /// 间距
@@ -83,10 +89,8 @@ class AriTheme {
 /// {@template ari_theme_color}
 /// Aries的颜色主题
 ///
-/// 应该通过LeapThemeController().getTheme()来对应的主题。例如
 /// ```dart
-/// Brightness brightness = MediaQuery.of(context).platformBrightness;
-/// AriThemeColor themeColor = AriThemeController().getThemeColor(brightness);
+/// AriThemeColor themeColor = AriThemeColor.of(context);
 /// ```
 /// {@endtemplate}
 @immutable
@@ -153,6 +157,7 @@ class AriThemeColorPrime {
     required this.yellow,
     required this.orange,
     required this.white,
+    required this.grey,
   });
 
   final Color red;
@@ -161,6 +166,7 @@ class AriThemeColorPrime {
   final Color yellow;
   final Color orange;
   final Color white;
+  final Color grey;
 }
 
 /// Aries的阴影样式
@@ -186,6 +192,7 @@ class AriThemeColorButton {
     required this.segmentedIconButton,
     required this.segmentedIconButtonContainer,
     required this.filledIconButton,
+    required this.filledButton,
     required this.markerIcon,
   });
 
@@ -198,8 +205,12 @@ class AriThemeColorButton {
   /// segmentedIconButton容器的样式
   final BoxDecoration segmentedIconButtonContainer;
 
+  /// 背景填充的iconButton样式
   final ButtonStyle filledIconButton;
 
+  final ButtonStyle filledButton;
+
+  /// 标记的icon颜色
   final Color markerIcon;
 }
 

@@ -29,6 +29,8 @@ class AriTextFormField extends StatefulWidget {
     this.suffixIconOnPressed,
     this.suffixIconWidth = 48,
     this.contentPadding,
+    this.maxLength,
+    this.onChanged,
   });
 
   /// 输入框的key
@@ -121,7 +123,12 @@ class AriTextFormField extends StatefulWidget {
   /// 后缀图标宽度
   final double suffixIconWidth;
 
+  /// 输入内容框和边框的间距
   final EdgeInsetsGeometry? contentPadding;
+
+  final int? maxLength;
+
+  final ValueChanged<String>? onChanged;
 
   @override
   State<AriTextFormField> createState() => _AriTextFormFieldState();
@@ -214,16 +221,20 @@ class _AriTextFormFieldState extends State<AriTextFormField>
     final theme = Theme.of(context);
     Widget inputField;
     inputField = TextFormField(
-        key: widget.textFieldKey,
-        controller: widget.controller,
-        focusNode: widget.focusNode,
-        decoration: _getInputDecoration(theme, context),
-        keyboardType: widget.keyboardType,
-        obscureText: widget.obscureText,
-        validator: widget.validator,
-        enabled: widget.enabled,
-        autofillHints: widget.autofillHints,
-        style: widget.style);
+      scrollPadding: EdgeInsets.all(10),
+      key: widget.textFieldKey,
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      decoration: _getInputDecoration(theme, context),
+      keyboardType: widget.keyboardType,
+      obscureText: widget.obscureText,
+      validator: widget.validator,
+      enabled: widget.enabled,
+      autofillHints: widget.autofillHints,
+      style: widget.style,
+      maxLength: widget.maxLength,
+      onChanged: widget.onChanged,
+    );
     if (widget.loadingController != null) {
       inputField = ScaleTransition(
         scale: scaleAnimation,

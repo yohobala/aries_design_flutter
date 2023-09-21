@@ -176,11 +176,9 @@ class _AriMapState extends State<AriMap>
     // 获取安全区域
     // 用于对自定义的widget进行定位
     // 防止出现在安全区域之外被遮挡的情况
-    // padding = MediaQuery.of(context).padding;
-    // safeAreaTop = padding.top + AriTheme.windowsInsets.top;
-    // safeAreaBottom = padding.bottom + AriTheme.windowsInsets.bottom;
-    safeAreaTop = 0;
-    safeAreaBottom = 0;
+    padding = MediaQuery.of(context).padding;
+    safeAreaTop = padding.top + AriTheme.windowsInsets.top;
+    safeAreaBottom = padding.bottom + AriTheme.windowsInsets.bottom;
     _addMapControllerListener(mapController, mapBloc);
 
     // NOTE:
@@ -250,17 +248,18 @@ class _AriMapState extends State<AriMap>
 
         // MODULE:
         // 自定义的widget
+
+        Positioned(
+          child: widget.rightTopChild ?? Container(),
+          top: safeAreaTop,
+          right: AriTheme.windowsInsets.right,
+        ),
         Positioned(
           child: SlideTransition(
             position: offset!,
             child: widget.rightBottomChild ?? Container(),
           ),
           bottom: safeAreaBottom,
-          right: AriTheme.windowsInsets.right,
-        ),
-        Positioned(
-          child: widget.rightTopChild ?? Container(),
-          top: safeAreaTop,
           right: AriTheme.windowsInsets.right,
         ),
       ],

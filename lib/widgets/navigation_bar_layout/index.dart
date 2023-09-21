@@ -1,13 +1,9 @@
 import 'dart:async';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
-import 'package:aries_design_flutter/modal/bottomSheet/index.dart';
-import 'package:aries_design_flutter/widgets/Index.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:ui';
-
-import 'package:flutter/material.dart';
 
 enum _PageSlot {
   body,
@@ -23,18 +19,18 @@ class AriNavigationBarScaffold extends StatefulWidget {
   final Widget body;
   final Widget bottomNavigationBar;
 
-  static _AriNavigationBarLayoutState? of(BuildContext context) {
-    final _AriNavigationBarLayoutState? result =
-        context.findAncestorStateOfType<_AriNavigationBarLayoutState>();
+  static AriNavigationBarLayoutState? of(BuildContext context) {
+    final AriNavigationBarLayoutState? result =
+        context.findAncestorStateOfType<AriNavigationBarLayoutState>();
     return result;
   }
 
   @override
   State<AriNavigationBarScaffold> createState() =>
-      _AriNavigationBarLayoutState();
+      AriNavigationBarLayoutState();
 }
 
-class _AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
+class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   final GlobalKey _bodyKey = GlobalKey();
 
