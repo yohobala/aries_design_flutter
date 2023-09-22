@@ -40,22 +40,17 @@ AriThemeColor generateThemeColor({
       ),
       segmentedIconButton: ButtonStyle(
         foregroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.primaryContainer,
+          colorScheme.onPrimaryContainer,
         ),
       ),
       segmentedIconButtonContainer: BoxDecoration(
-        color: colorScheme.primaryContainer,
+        color: colorScheme.surface,
         borderRadius: AriTheme.button.segmentedIconButtonContainer.borderRadius,
         boxShadow: [
           boxShadow.standard,
         ],
       ),
       filledIconButton: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.primaryContainer,
-        ),
-      ),
-      filledButton: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
           colorScheme.surfaceVariant,
         ),
@@ -66,7 +61,7 @@ AriThemeColor generateThemeColor({
   // 弹出框样式
   AriThemeColorModal modal = AriThemeColorModal(
     bottomSheet: BoxDecoration(
-      color: colorScheme.background,
+      color: colorScheme.surface,
       borderRadius: AriTheme.modal.bottomSheet.borderRadius,
       boxShadow: [
         boxShadow.bottomSheet,
@@ -117,24 +112,24 @@ AriThemeColor generateThemeColor({
 /// 需要传入`useMaterial3: true`,否则会使用Material2的主题
 ThemeData generateThemeData(Brightness brightness,
     {required AriThemeColor colorTheme}) {
-  var baseTheme = generateMetricsTheme(
-      ThemeData(useMaterial3: true, brightness: brightness));
+  var baseTheme = ThemeData(
+    useMaterial3: true,
+    brightness: brightness,
+    extensions: [colorTheme.prime],
+  );
 
   return baseTheme.copyWith(
     colorScheme: colorTheme.colorScheme,
-  );
-}
-
-/// 生成不同Brightness模式下的ThemeData需要的度量样式
-ThemeData generateMetricsTheme(ThemeData baseTheme) {
-  return baseTheme.copyWith(
-    // 在这里修改你的共享样式
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
-          shape: AriTheme.button.standardShape,
-          tapTargetSize: AriTheme.button.tapTargetSize,
-          minimumSize: AriTheme.button.iconButtonSize,
-          maximumSize: AriTheme.button.iconButtonSize),
+        shape: AriTheme.button.standardShape,
+        tapTargetSize: AriTheme.button.tapTargetSize,
+        minimumSize: AriTheme.button.iconButtonSize,
+        maximumSize: AriTheme.button.iconButtonSize,
+        foregroundColor: MaterialStateProperty.all<Color>(
+          colorTheme.colorScheme.onPrimaryContainer,
+        ),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
@@ -146,10 +141,26 @@ ThemeData generateMetricsTheme(ThemeData baseTheme) {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+            colorTheme.colorScheme.surfaceVariant),
+        foregroundColor: MaterialStateProperty.all<Color>(
+          colorTheme.colorScheme.onPrimaryContainer,
+        ),
         shape: AriTheme.button.standardShape,
         tapTargetSize: AriTheme.button.tapTargetSize,
         padding: AriTheme.button.padding,
         minimumSize: AriTheme.button.buttonSize,
+      ),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: colorTheme.colorScheme.background,
+      surfaceTintColor: colorTheme.colorScheme.tertiaryContainer,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(
+          colorTheme.colorScheme.tertiary,
+        ),
       ),
     ),
   );

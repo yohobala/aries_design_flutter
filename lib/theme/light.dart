@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'index.dart';
-import 'generate.dart';
+import 'generator.dart';
+
+final AriThemeColor ariThemeLight = generateThemeColor(
+  colorScheme: _colorScheme,
+  prime: _prime,
+);
 
 /// Aries的浅色主题
 final ariThemeDataLight = generateThemeData(
@@ -8,30 +13,25 @@ final ariThemeDataLight = generateThemeData(
   colorTheme: ariThemeLight,
 );
 
-final AriThemeColor ariThemeLight = generateThemeColor(
-  colorScheme: _colorScheme,
-  prime: _prime,
-);
-
 /// 配色
-/// primary: #765b00
-/// Secondary: #9e8f6e
-/// Tertiary: #7495ac
-/// Neutral: #a7a29c
+/// primary: #fbce71
+/// Secondary: #a08e6e
+/// Tertiary: #5e93d8
+/// Neutral: #959088
 const ColorScheme _colorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF765B00),
+  primary: Color(0xFF7A5900),
   onPrimary: Color(0xFFFFFFFF),
-  primaryContainer: Color(0xFFFFDF93),
-  onPrimaryContainer: Color(0xFF241A00),
-  secondary: Color(0xFF6A5D3F),
+  primaryContainer: Color(0xFFFFDEA1),
+  onPrimaryContainer: Color(0xFF261900),
+  secondary: Color(0xFF6C5C3F),
   onSecondary: Color(0xFFFFFFFF),
-  secondaryContainer: Color(0xFFF3E1BB),
-  onSecondaryContainer: Color(0xFF231A04),
-  tertiary: Color(0xFF00658D),
+  secondaryContainer: Color(0xFFF5E0BB),
+  onSecondaryContainer: Color(0xFF241A04),
+  tertiary: Color(0xFF1B60A5),
   onTertiary: Color(0xFFFFFFFF),
-  tertiaryContainer: Color(0xFFC6E7FF),
-  onTertiaryContainer: Color(0xFF001E2D),
+  tertiaryContainer: Color(0xFFD4E3FF),
+  onTertiaryContainer: Color(0xFF001C39),
   error: Color(0xFFBA1A1A),
   errorContainer: Color(0xFFFFDAD6),
   onError: Color(0xFFFFFFFF),
@@ -40,24 +40,34 @@ const ColorScheme _colorScheme = ColorScheme(
   onBackground: Color(0xFF1E1B16),
   surface: Color(0xFFFFFBFF),
   onSurface: Color(0xFF1E1B16),
-  surfaceVariant: Color(0xFFECE1CF),
-  onSurfaceVariant: Color(0xFF4C4639),
-  outline: Color(0xFF7E7667),
-  onInverseSurface: Color(0xFFF7F0E7),
-  inverseSurface: Color(0xFF33302A),
-  inversePrimary: Color(0xFFEDC148),
+  surfaceVariant: Color.fromARGB(255, 240, 240, 240),
+  onSurfaceVariant: Color(0xFF4D4639),
+  outline: Color(0xFF7F7667),
+  onInverseSurface: Color(0xFFF8EFE7),
+  inverseSurface: Color(0xFF34302A),
+  inversePrimary: Color(0xFFF4BF48),
   shadow: Color(0xFF000000),
-  surfaceTint: Color(0xFF765B00),
-  outlineVariant: Color(0xFFCFC5B4),
+  surfaceTint: Color(0xFF7A5900),
+  outlineVariant: Color(0xFFD1C5B4),
   scrim: Color(0xFF000000),
 );
 
-AriThemeColorPrime _prime = AriThemeColorPrime(
-  blue: Colors.blue[600]!,
-  green: Colors.green[600]!,
-  red: Colors.red[600]!,
-  yellow: _colorScheme.primaryContainer,
-  orange: Colors.orange[600]!,
-  white: Colors.white,
-  grey: Colors.grey[200]!,
+AriThemeColorPrime _prime = const AriThemeColorPrime(
+  blue: Color.fromARGB(255, 30, 136, 229),
+  green: Color.fromARGB(255, 67, 160, 71),
+  red: Color.fromARGB(255, 229, 57, 53),
+  yellow: Color(0xFFFFDF93),
+  orange: Color.fromARGB(255, 251, 140, 0),
+  grey: Color.fromARGB(255, 240, 240, 240),
+  white: Color.fromARGB(255, 240, 240, 240),
 );
+
+// AriThemeColorPrime _prime = AriThemeColorPrime(
+//   blue: Colors.blue[600]!,
+//   green: Colors.green[600]!,
+//   red: Colors.red[600]!,
+//   yellow: _colorScheme.primaryContainer,
+//   orange: Colors.orange[600]!,
+//   white: Colors.white,
+//   ,
+// );

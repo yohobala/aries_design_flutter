@@ -52,8 +52,7 @@ class _AriNavigationBarState extends State<AriNavigationBar> {
       destinations: items,
       selectedIndex: _selectedIndex,
       onDestinationSelected: _onItemTapped,
-      // shadowColor: const Color.fromARGB(255, 4, 4, 4),
-      elevation: 20.0,
+      elevation: 5.0,
     );
   }
 

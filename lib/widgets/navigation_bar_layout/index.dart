@@ -88,7 +88,7 @@ class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
   void didChangeMetrics() {
     bottomViewInset = MediaQuery.of(context).viewInsets.bottom;
 
-    if (!isCalculateKeyboardHeight) {
+    if (!isCalculateKeyboardHeight && bottomSheetController != null) {
       bottomSheetController!.setState!(() {});
     } else {
       if (prevKeyboardHeight < bottomViewInset) {

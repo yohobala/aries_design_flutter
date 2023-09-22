@@ -35,12 +35,8 @@ class AriFilledIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ButtonStyle? buttonStyle = style ??
-        ButtonStyle(
-            backgroundColor: AriThemeColor.of(context)
-                .button
-                .filledIconButton
-                .backgroundColor);
+    ButtonStyle? buttonStyle =
+        style ?? AriThemeColor.of(context).button.filledIconButton;
     return AriIconButton(
         icons: icons,
         style: buttonStyle,
@@ -139,7 +135,7 @@ class AriIconButtonState extends State<AriIconButton>
   /// 图标列表
   late List<Widget> _elements;
 
-  late ButtonStyle _style;
+  ButtonStyle? _style;
 
   //*--- 生命周期 ---*
   @override
@@ -154,7 +150,7 @@ class AriIconButtonState extends State<AriIconButton>
       animationForward();
     });
 
-    _style = widget.style ?? ButtonStyle();
+    _style = widget.style;
 
     // NOTE:
     // 不应该移动到build里
@@ -285,7 +281,7 @@ class AriIconButtonState extends State<AriIconButton>
         child: IconButton(
           onPressed: _onPressed,
           icon: animation,
-          style: widget.style ?? ButtonStyle(),
+          style: widget.style,
           iconSize: widget.iconSize,
         ),
       );

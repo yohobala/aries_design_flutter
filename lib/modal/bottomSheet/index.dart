@@ -24,24 +24,27 @@ class AriBottomSheetController {
 /// - `context` 上下文
 void showAriBottomSheet(
   BuildContext context, {
-  required List<Widget> children,
+  required ScrollableWidgetBuilder child,
   Color? backgroundColor,
   double heightFactor = 0.5,
   double minHeight = 300,
   AriBottomSheetController? controller,
+  bool snap = true,
+  List<double> snapSizes = const [0.3, 0.5, 0.9],
 }) {
   final nbScaffold = AriNavigationBarScaffold.of(context);
-
+  double factor = recalculateHeight(context, heightFactor, minHeight);
   if (nbScaffold != null) {
     final sheetController = nbScaffold.showBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return _AriBottomSheet(
-          children: children,
+          child: child,
           backgroundColor: backgroundColor,
-          heightFactor: heightFactor,
-          minHeight: minHeight,
+          heightFactor: factor,
+          snap: snap,
+          snapSizes: snapSizes,
         );
       },
     );
@@ -57,10 +60,11 @@ void showAriBottomSheet(
       backgroundColor: Colors.transparent,
       builder: (context) {
         return _AriBottomSheet(
-          children: children,
+          child: child,
           backgroundColor: backgroundColor,
-          heightFactor: heightFactor,
-          minHeight: minHeight,
+          heightFactor: factor,
+          snap: snap,
+          snapSizes: snapSizes,
         );
       },
     );
@@ -83,14 +87,16 @@ class AriBottomSheet extends StatelessWidget {
   /// 底部弹出框
   const AriBottomSheet({
     Key? key,
-    required this.children,
+    required this.child,
     this.backgroundColor,
     this.heightFactor = 0.5,
     this.minHeight = 300,
+    this.snap = false,
+    this.snapSizes = const [],
   }) : super(key: key);
 
   /// 子组件
-  final List<Widget> children;
+  final ScrollableWidgetBuilder child;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -100,15 +106,21 @@ class AriBottomSheet extends StatelessWidget {
 
   final double minHeight;
 
+  final bool snap;
+
+  final List<double> snapSizes;
+
   @override
   Widget build(BuildContext context) {
+    double factor = recalculateHeight(context, heightFactor, minHeight);
     return Align(
       alignment: Alignment.bottomCenter,
       child: _AriBottomSheet(
-        children: children,
+        child: child,
         backgroundColor: backgroundColor,
-        heightFactor: heightFactor,
-        minHeight: minHeight,
+        heightFactor: factor,
+        snap: snap,
+        snapSizes: snapSizes,
       ),
     );
   }
@@ -119,14 +131,16 @@ class _AriBottomSheet extends StatefulWidget {
   /// 底部弹出框
   const _AriBottomSheet({
     Key? key,
-    required this.children,
+    required this.child,
     this.backgroundColor,
     this.heightFactor = 0.5,
-    this.minHeight = 300,
-  }) : super(key: key);
+    required this.snap,
+    required this.snapSizes,
+  })  : assert(snap == true ? snapSizes.length > 0 : true),
+        super(key: key);
 
   /// 子组件
-  final List<Widget> children;
+  final ScrollableWidgetBuilder child;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -134,14 +148,15 @@ class _AriBottomSheet extends StatefulWidget {
   /// 百分比高度
   final double heightFactor;
 
-  final double minHeight;
+  final bool snap;
+
+  final List<double> snapSizes;
 
   @override
   State<StatefulWidget> createState() => _AriBottomSheetState();
 }
 
 class _AriBottomSheetState extends State<_AriBottomSheet> {
-  late final double finalHeight;
   bool isInit = false;
   @override
   void initState() {
@@ -153,37 +168,53 @@ class _AriBottomSheetState extends State<_AriBottomSheet> {
     super.didChangeDependencies();
     if (!isInit) {
       isInit = true;
-      // NOTE:
-      // 计算高度
-      double screenHeight = MediaQuery.of(context).size.height;
-      double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-      double availableHeight = screenHeight - keyboardHeight;
-      double dynamicHeight = availableHeight * widget.heightFactor;
-
-      double minHeight = widget.minHeight;
-      finalHeight = max(minHeight, dynamicHeight);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: Container(
-        height: finalHeight,
-        width: MediaQuery.of(context).size.width,
-
-        decoration: AriThemeColor.of(context).modal.bottomSheet,
-        // color: widget.backgroundColor ??
-        //     theme.colorScheme.background.withOpacity(0.4),
-        padding: AriTheme.modal.bottomSheetContainer.padding,
-        child: _build(),
-      ),
+    double minChildSize;
+    double maxChildSize;
+    if (widget.snap) {
+      minChildSize = widget.snapSizes.isNotEmpty
+          ? widget.snapSizes.first - 0.01
+          : widget.heightFactor;
+      maxChildSize = widget.snapSizes.isNotEmpty
+          ? widget.snapSizes.last
+          : widget.heightFactor;
+    } else {
+      minChildSize = widget.heightFactor;
+      maxChildSize = widget.heightFactor;
+    }
+    return DraggableScrollableSheet(
+      expand: false,
+      snap: widget.snap,
+      snapSizes: widget.snap ? widget.snapSizes : null,
+      initialChildSize: widget.heightFactor,
+      minChildSize: minChildSize,
+      maxChildSize: maxChildSize,
+      builder: (BuildContext context, ScrollController scrollController) {
+        return RepaintBoundary(
+          child: Container(
+            decoration: AriThemeColor.of(context).modal.bottomSheet,
+            padding: AriTheme.modal.bottomSheetContainer.padding,
+            child: widget.child(context, scrollController),
+          ),
+        );
+      },
     );
   }
+}
 
-  Widget _build() {
-    return Column(
-      children: widget.children,
-    );
-  }
+double recalculateHeight(
+    BuildContext context, double heightFactor, double minHeight) {
+  double screenHeight = MediaQuery.of(context).size.height;
+  double dynamicHeight = screenHeight * heightFactor;
+  double height = max(minHeight, dynamicHeight);
+
+  ScaffoldState state = Scaffold.of(context);
+  double keyboardHeight = MediaQuery.of(state.context).viewInsets.bottom;
+  double factor = height / (screenHeight - keyboardHeight);
+
+  return factor;
 }

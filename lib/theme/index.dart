@@ -2,7 +2,9 @@ export 'metrics.dart';
 export 'light.dart';
 export 'dark.dart';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+
 import 'light.dart';
 import 'dark.dart';
 import 'metrics.dart';
@@ -145,30 +147,6 @@ class AriThemeColor {
   }
 }
 
-/// {@template ari_theme_color_scheme}
-/// Aries的不同颜色的主要颜色
-/// {@endtemplate}
-@immutable
-class AriThemeColorPrime {
-  AriThemeColorPrime({
-    required this.red,
-    required this.green,
-    required this.blue,
-    required this.yellow,
-    required this.orange,
-    required this.white,
-    required this.grey,
-  });
-
-  final Color red;
-  final Color green;
-  final Color blue;
-  final Color yellow;
-  final Color orange;
-  final Color white;
-  final Color grey;
-}
-
 /// Aries的阴影样式
 @immutable
 class AriThemeColorBoxShadow {
@@ -192,7 +170,6 @@ class AriThemeColorButton {
     required this.segmentedIconButton,
     required this.segmentedIconButtonContainer,
     required this.filledIconButton,
-    required this.filledButton,
     required this.markerIcon,
   });
 
@@ -207,8 +184,6 @@ class AriThemeColorButton {
 
   /// 背景填充的iconButton样式
   final ButtonStyle filledIconButton;
-
-  final ButtonStyle filledButton;
 
   /// 标记的icon颜色
   final Color markerIcon;
@@ -233,4 +208,110 @@ class AriThemeColorGradient {
   });
 
   final Gradient loginBackgroundGradient;
+}
+
+/// Defines a set of custom colors, each comprised of 4 complementary tones.
+///
+/// See also:
+///   * <https://m3.material.io/styles/color/the-color-system/custom-colors>
+@immutable
+class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
+  const AriThemeColorPrime({
+    required this.blue,
+    required this.green,
+    required this.red,
+    required this.yellow,
+    required this.orange,
+    required this.grey,
+    required this.white,
+  });
+
+  final Color? blue;
+  final Color? green;
+  final Color? red;
+  final Color? yellow;
+  final Color? orange;
+  final Color? grey;
+  final Color? white;
+
+  @override
+  AriThemeColorPrime copyWith({
+    Color? blue,
+    Color? green,
+    Color? red,
+    Color? yellow,
+    Color? orange,
+    Color? grey,
+    Color? white,
+  }) {
+    return AriThemeColorPrime(
+      blue: blue ?? this.blue,
+      green: green ?? this.green,
+      red: red ?? this.red,
+      yellow: yellow ?? this.yellow,
+      orange: orange ?? this.orange,
+      grey: grey ?? this.grey,
+      white: white ?? this.white,
+    );
+  }
+
+  @override
+  AriThemeColorPrime lerp(ThemeExtension<AriThemeColorPrime>? other, double t) {
+    if (other is! AriThemeColorPrime) {
+      return this;
+    }
+    return AriThemeColorPrime(
+      blue: Color.lerp(blue, other.blue, t),
+      green: Color.lerp(green, other.green, t),
+      red: Color.lerp(red, other.red, t),
+      yellow: Color.lerp(yellow, other.yellow, t),
+      orange: Color.lerp(orange, other.orange, t),
+      grey: Color.lerp(grey, other.grey, t),
+      white: Color.lerp(white, other.white, t),
+    );
+  }
+
+  /// Returns an instance of [AriThemeColorPrime] in which the following custom
+  /// colors are harmonized with [dynamic]'s [ColorScheme.primary].
+  ///   * [AriThemeColorPrime.sourceBlue]
+  ///   * [AriThemeColorPrime.blue]
+  ///   * [AriThemeColorPrime.onBlue]
+  ///   * [AriThemeColorPrime.blueContainer]
+  ///   * [AriThemeColorPrime.onBlueContainer]
+  ///   * [AriThemeColorPrime.sourceGreen]
+  ///   * [AriThemeColorPrime.green]
+  ///   * [AriThemeColorPrime.onGreen]
+  ///   * [AriThemeColorPrime.greenContainer]
+  ///   * [AriThemeColorPrime.onGreenContainer]
+  ///   * [AriThemeColorPrime.sourceRed]
+  ///   * [AriThemeColorPrime.red]
+  ///   * [AriThemeColorPrime.onRed]
+  ///   * [AriThemeColorPrime.redContainer]
+  ///   * [AriThemeColorPrime.onRedContainer]
+  ///   * [AriThemeColorPrime.sourceYellow]
+  ///   * [AriThemeColorPrime.yellow]
+  ///   * [AriThemeColorPrime.onYellow]
+  ///   * [AriThemeColorPrime.yellowContainer]
+  ///   * [AriThemeColorPrime.onYellowContainer]
+  ///   * [AriThemeColorPrime.sourceOrange]
+  ///   * [AriThemeColorPrime.orange]
+  ///   * [AriThemeColorPrime.onOrange]
+  ///   * [AriThemeColorPrime.orangeContainer]
+  ///   * [AriThemeColorPrime.onOrangeContainer]
+  ///   * [AriThemeColorPrime.grey]
+  ///  * [AriThemeColorPrime.white]
+  ///
+  /// See also:
+  ///   * <https://m3.material.io/styles/color/the-color-system/custom-colors#harmonization>
+  AriThemeColorPrime harmonized(ColorScheme dynamic) {
+    return copyWith(
+      blue: blue!.harmonizeWith(dynamic.primary),
+      green: green!.harmonizeWith(dynamic.primary),
+      red: red!.harmonizeWith(dynamic.primary),
+      yellow: yellow!.harmonizeWith(dynamic.primary),
+      orange: orange!.harmonizeWith(dynamic.primary),
+      grey: grey!.harmonizeWith(dynamic.primary),
+      white: white!.harmonizeWith(dynamic.primary),
+    );
+  }
 }
