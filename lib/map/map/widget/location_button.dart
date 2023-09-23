@@ -57,7 +57,7 @@ class AriLocationButtonState extends AriIconButtonState {
   StreamSubscription? _streamSubscription;
 
   /// 地图中心是否位于GPS位置的上一个状态
-  late bool _beforeIsCenterOnPostion = false;
+  late bool _beforeIsCenterOnLocation = false;
 
   late AriMapBloc mapBloc;
 
@@ -78,15 +78,15 @@ class AriLocationButtonState extends AriIconButtonState {
       }
       // NOTE:
       // 判断当前地图中心是否与定位一致
-      if (state is IsCenterOnPostion) {
-        if (_beforeIsCenterOnPostion != state.isCenter) {
+      if (state is IsCenterOnLocation) {
+        if (_beforeIsCenterOnLocation != state.isCenter) {
           setState(() {
             if (state.isCenter) {
               widget.selectIndex.value = LocationButtonEnum.aligned.index;
             } else {
               widget.selectIndex.value = LocationButtonEnum.offset.index;
             }
-            _beforeIsCenterOnPostion = state.isCenter;
+            _beforeIsCenterOnLocation = state.isCenter;
             super.animationForward();
           });
         }

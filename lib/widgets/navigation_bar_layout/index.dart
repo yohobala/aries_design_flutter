@@ -37,6 +37,7 @@ class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
   // MODULE:
   // 软键盘相关参数
   double bottomViewInset = 0;
+  // 这个一般情况下只会在第一次弹出软键盘的时候改变一次
   double keyboardHeight = 0;
   double prevKeyboardHeight = 0;
   Timer? debounceTimer;
@@ -99,7 +100,7 @@ class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
       prevKeyboardHeight = bottomViewInset;
     }
     debounceTimer?.cancel();
-    debounceTimer = Timer(Duration(milliseconds: 200), () {
+    debounceTimer = Timer(Duration(milliseconds: 300), () {
       final double newHeight = MediaQuery.of(context).viewInsets.bottom;
       if (newHeight > keyboardHeight) {
         keyboardHeight = newHeight;
@@ -109,6 +110,7 @@ class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
         isCalculateKeyboardHeight = true;
         keyboardAnimation = Tween<double>(begin: 0, end: keyboardHeight)
             .animate(keyboardAnimationController);
+        keyboardAnimationController.reset();
         bottomSheetController?.setState!(() {});
       }
     });

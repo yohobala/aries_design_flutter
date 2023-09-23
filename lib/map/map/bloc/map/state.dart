@@ -41,8 +41,8 @@ class MoveToLocationState extends AriMapState {
 }
 
 /// 当前位置是否在地图中心
-class IsCenterOnPostion extends AriMapState {
-  IsCenterOnPostion({
+class IsCenterOnLocation extends AriMapState {
+  IsCenterOnLocation({
     required this.isCenter,
   });
 

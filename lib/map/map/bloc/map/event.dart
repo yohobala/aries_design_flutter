@@ -33,15 +33,22 @@ class CheckGeoLocationAvailableEvent extends AriMapEvent {
 /// 监听map的mapEventStream，当地图移动时，可以通知
 ///
 /// emit:
-/// - [IsCenterOnPostion]
+/// - [IsCenterOnLocation]
 class MapMoveEvent extends AriMapEvent {
   MapMoveEvent({
+    required this.latLng,
+  });
+  final LatLng latLng;
+}
+
+/***************  位置有关事件  ***************/
+
+class IsCenterOnLocationEvent extends AriMapEvent {
+  IsCenterOnLocationEvent({
     required this.isCenter,
   });
   final bool isCenter;
 }
-
-/***************  位置有关事件  ***************/
 
 /// 地图移动到指定位置
 ///
@@ -49,7 +56,7 @@ class MapMoveEvent extends AriMapEvent {
 ///
 /// emit:
 ///  - [MapLocationState]
-///  - [IsCenterOnPostion]
+///  - [IsCenterOnLocation]
 class MoveToLocationEvent extends AriMapEvent {
   MoveToLocationEvent({
     this.isAnimated = true,
@@ -93,7 +100,7 @@ class ChangeCompassEvent extends AriMapEvent {
   final double direction;
 }
 
-/***************  图层有关事件  ***************/
+/***************  图层,标记有关事件  ***************/
 
 /// 更新图层
 class UpdateLayerEvent extends AriMapEvent {
@@ -101,4 +108,21 @@ class UpdateLayerEvent extends AriMapEvent {
     required this.layers,
   });
   final List<AriLayerModel> layers;
+}
+
+/// 移动标记状态
+///
+/// [offset]参数和[mapController.move]的offset参数一样
+///
+class MoveMarkerStatusEvent extends AriMapEvent {
+  MoveMarkerStatusEvent({
+    required this.marker,
+    this.offset = Offset.zero,
+    required this.isStart,
+  });
+  final AriMarkerModel marker;
+  final bool isStart;
+
+  /// 地图中心点偏移量
+  final Offset offset;
 }

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +12,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     this.mapRepo,
     this.geoLocationRepo,
     this.markerBloc,
+    this.mapController,
     this.openLocation,
   ) : super(InitAriMapBlocState()) {
     /***************  添加监听  ***************/
@@ -19,15 +22,24 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
     on<MapMoveEvent>(mapMoveEvent);
 
+    on<IsCenterOnLocationEvent>(isCenterOnLocationEvent);
     on<MoveToLocationEvent>(moveToLocationEvent);
     on<ChangeLocationEvent>(changeLocationEvent);
     on<UpdateLocationMarkerEvent>(updateLocationMarkerEvent);
     on<ChangeCompassEvent>(changeCompassEvent);
 
     on<UpdateLayerEvent>(updateLayerEvent);
+    on<MoveMarkerStatusEvent>(moveMarkerStatusEvent);
 
     // 派发初始化事件
     add(InitAriMapEvent());
+  }
+
+  @override
+  Future<void> close() {
+    // 取消订阅
+    cancelGeoLocationSubscription();
+    return super.close();
   }
 
   /***************  公有变量  ***************/
@@ -39,6 +51,8 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   final AriGeoLocationRepo geoLocationRepo;
 
   final AriMarkerBloc markerBloc;
+
+  final MapController mapController;
 
   final bool openLocation;
 
@@ -75,12 +89,11 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       layerkey: defalutPositionMakerLayerKey,
       type: MarkerType.location);
 
-  @override
-  Future<void> close() {
-    // 取消订阅
-    cancelGeoLocationSubscription();
-    return super.close();
-  }
+  /// 当前移动的标记
+  AriMarkerModel? currentMoveMarker;
+
+  /// 当前移动标记的地图中心偏移量
+  Offset? currentMoveMarkerOffset;
 
   /***************  初始化、权限有关事件 ***************/
 
@@ -119,12 +132,43 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
   /// 监听到地图移动
   void mapMoveEvent(MapMoveEvent event, Emitter<AriMapState> emit) async {
-    if (_geoLocationAvailable) {
-      emit(IsCenterOnPostion(isCenter: event.isCenter));
+    // NOTE:
+    // 如果当前有移动的标记
+    //
+    // offset在`flutter_map`的源代码中是`newPoint - CustomPoint(offset.dx, offset.dy)`这样操作的,
+    // 但是这是对地图的偏移,通过计算地图中心点,实现地图偏移,
+    // 如果offset = Offset(0, -100),那么中心点会是原来中心点`下方`100像素位置的点,
+    // 但是地图是显示的结果是地图`上移`,
+    // 这里我们得到的地图中心是向下偏移了100像素的点,
+    // 所以我们需要`newPoint + CustomPoint(offset.dx, offset.dy)`,来还原真正的位置
+
+    if (currentMoveMarker != null) {
+      LatLng latLng;
+      if (currentMoveMarkerOffset != null) {
+        MapOptions options = MapOptions();
+        CustomPoint<double> newPoint =
+            options.crs.latLngToPoint(event.latLng, mapController.zoom);
+        newPoint = newPoint +
+            CustomPoint(
+                currentMoveMarkerOffset!.dx, currentMoveMarkerOffset!.dy);
+        latLng = options.crs.pointToLatLng(newPoint, mapController.zoom);
+      } else {
+        latLng = event.latLng;
+      }
+
+      currentMoveMarker!.latLng = latLng;
+      markerBloc.add(UpdateMarkeEvent(marker: currentMoveMarker!));
     }
   }
 
   /***************  位置有关事件  ***************/
+
+  FutureOr<void> isCenterOnLocationEvent(
+      IsCenterOnLocationEvent event, Emitter<AriMapState> emit) {
+    if (_geoLocationAvailable) {
+      emit(IsCenterOnLocation(isCenter: false));
+    }
+  }
 
   /// 地图移动到当前定位
   void moveToLocationEvent(
@@ -141,7 +185,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
         ));
         // NOTE:
         // 改变为当前位置是在地图中心
-        emit(IsCenterOnPostion(isCenter: true));
+        emit(IsCenterOnLocation(isCenter: true));
       } else {
         LatLng latLng = event.latLng!;
         emit(MoveToLocationState(
@@ -167,7 +211,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
 
     // NOTE:
     // 改变为当前位置是在地图中心
-    emit(IsCenterOnPostion(isCenter: false));
+    emit(IsCenterOnLocation(isCenter: false));
 
     if (openLocation) {
       add(UpdateLocationMarkerEvent(latLng: latLng, direction: null));
@@ -202,6 +246,22 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       UpdateLayerEvent event, Emitter<AriMapState> emit) async {
     _layers = event.layers;
     emit(UpdateLayerState(layers: event.layers));
+  }
+
+  FutureOr<void> moveMarkerStatusEvent(
+      MoveMarkerStatusEvent event, Emitter<AriMapState> emit) {
+    if (event.isStart) {
+      AriMarkerModel marker = event.marker;
+      assert(marker.selected);
+
+      currentMoveMarker = marker;
+      if (event.offset != Offset.zero) {
+        currentMoveMarkerOffset = event.offset;
+      }
+    } else {
+      currentMoveMarker = null;
+      currentMoveMarkerOffset = null;
+    }
   }
 
   /***************  公有方法  ***************/

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -16,12 +18,17 @@ List<SingleChildWidget> ariMapProvider({bool openLoaction = true}) {
   return [
     ...ariMarkerProvider(),
     Provider<AriMapRepo>(create: (_) => AriMapRepo()),
-    ProxyProvider3<AriMapRepo, AriGeoLocationRepo, AriMarkerBloc, AriMapBloc>(
-      update: (_, ariMapRepo, ariGeoLocationRepo, ariMarkerBloc, __) =>
+    Provider<MapController>(create: (_) => MapController()),
+    Provider<MapController>(create: (_) => MapController()),
+    ProxyProvider4<AriMapRepo, AriGeoLocationRepo, AriMarkerBloc, MapController,
+        AriMapBloc>(
+      update: (_, ariMapRepo, ariGeoLocationRepo, ariMarkerBloc, mapController,
+              __) =>
           AriMapBloc(
         ariMapRepo,
         ariGeoLocationRepo,
         ariMarkerBloc,
+        mapController,
         openLoaction,
       ),
     ),
@@ -142,7 +149,7 @@ class _AriMapState extends State<AriMap>
 
     mapBloc = context.read<AriMapBloc>();
     // final markerBloc = context.read<AriMarkerBloc>();
-    mapController = MapController();
+    mapController = mapBloc.mapController;
 
     // NOTE:
     // 针对底部导航栏的监听
@@ -291,7 +298,9 @@ void _addMapControllerListener(
   mapController.mapEventStream.listen((evt) {
     //  事件：MapEventMoveEnd 的evt.source 是dragEnd
     if (evt.source == MapEventSource.dragEnd) {
-      mapBloc.add(MapMoveEvent(isCenter: false));
+      mapBloc.add(IsCenterOnLocationEvent(isCenter: false));
+    } else if (evt is MapEventWithMove) {
+      mapBloc.add(MapMoveEvent(latLng: evt.center));
     }
     // else if(evt.source == MapEventSource.)
   });
