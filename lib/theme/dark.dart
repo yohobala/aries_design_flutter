@@ -40,7 +40,7 @@ final ColorScheme _colorScheme = ColorScheme(
   onBackground: Color(0xFFE9E1D8),
   surface: Color(0xFF1E1B16),
   onSurface: Color(0xFFE9E1D8),
-  surfaceVariant: Color.fromARGB(255, 77, 77, 77),
+  surfaceVariant: _prime.grey,
   onSurfaceVariant: Color(0xFFD1C5B4),
   outline: Color(0xFF998F80),
   onInverseSurface: Color(0xFF1E1B16),
@@ -58,6 +58,7 @@ AriThemeColorPrime _prime = const AriThemeColorPrime(
   red: Color.fromARGB(255, 239, 154, 154),
   yellow: Color.fromARGB(255, 255, 245, 157),
   orange: Color.fromARGB(255, 255, 204, 128),
-  grey: Color.fromARGB(255, 77, 77, 77),
+  grey: Color.fromARGB(255, 70, 70, 70),
+  onGrey: Color.fromARGB(255, 130, 130, 130),
   white: Color.fromARGB(255, 240, 240, 240),
 );

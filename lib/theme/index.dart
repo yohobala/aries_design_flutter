@@ -223,6 +223,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     required this.yellow,
     required this.orange,
     required this.grey,
+    required this.onGrey,
     required this.white,
   });
 
@@ -232,6 +233,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
   final Color? yellow;
   final Color? orange;
   final Color? grey;
+  final Color? onGrey;
   final Color? white;
 
   @override
@@ -242,6 +244,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     Color? yellow,
     Color? orange,
     Color? grey,
+    Color? onGrey,
     Color? white,
   }) {
     return AriThemeColorPrime(
@@ -251,6 +254,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       yellow: yellow ?? this.yellow,
       orange: orange ?? this.orange,
       grey: grey ?? this.grey,
+      onGrey: onGrey ?? this.onGrey,
       white: white ?? this.white,
     );
   }
@@ -267,6 +271,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       yellow: Color.lerp(yellow, other.yellow, t),
       orange: Color.lerp(orange, other.orange, t),
       grey: Color.lerp(grey, other.grey, t),
+      onGrey: Color.lerp(onGrey, other.onGrey, t),
       white: Color.lerp(white, other.white, t),
     );
   }
@@ -311,6 +316,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       yellow: yellow!.harmonizeWith(dynamic.primary),
       orange: orange!.harmonizeWith(dynamic.primary),
       grey: grey!.harmonizeWith(dynamic.primary),
+      onGrey: onGrey!.harmonizeWith(dynamic.primary),
       white: white!.harmonizeWith(dynamic.primary),
     );
   }

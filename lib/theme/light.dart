@@ -18,7 +18,7 @@ final ariThemeDataLight = generateThemeData(
 /// Secondary: #a08e6e
 /// Tertiary: #5e93d8
 /// Neutral: #959088
-const ColorScheme _colorScheme = ColorScheme(
+final ColorScheme _colorScheme = ColorScheme(
   brightness: Brightness.light,
   primary: Color(0xFF7A5900),
   onPrimary: Color(0xFFFFFFFF),
@@ -40,7 +40,7 @@ const ColorScheme _colorScheme = ColorScheme(
   onBackground: Color(0xFF1E1B16),
   surface: Color(0xFFFFFBFF),
   onSurface: Color(0xFF1E1B16),
-  surfaceVariant: Color.fromARGB(255, 240, 240, 240),
+  surfaceVariant: _prime.grey,
   onSurfaceVariant: Color(0xFF4D4639),
   outline: Color(0xFF7F7667),
   onInverseSurface: Color(0xFFF8EFE7),
@@ -59,6 +59,7 @@ AriThemeColorPrime _prime = const AriThemeColorPrime(
   yellow: Color(0xFFFFDF93),
   orange: Color.fromARGB(255, 251, 140, 0),
   grey: Color.fromARGB(255, 240, 240, 240),
+  onGrey: Color.fromARGB(255, 180, 180, 180),
   white: Color.fromARGB(255, 240, 240, 240),
 );
 
