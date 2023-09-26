@@ -91,9 +91,7 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
           position: offset,
           child: AriNavigationBar(
             itemChangeCallback: (int index, String route) {
-              setState(() {
-                selectedIndex = index;
-              });
+              selectedIndex = index;
               widget.itemChangeCallback(index, route);
             },
             navigationItems: navigationItems,

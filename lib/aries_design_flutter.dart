@@ -9,6 +9,7 @@ export 'http/index.dart';
 export 'exception/index.dart';
 export 'animation/index.dart';
 export 'encoding/index.dart';
+export 'callback/index.dart';
 
 // UI界面类的
 export 'map/index.dart';
@@ -18,6 +19,7 @@ export 'button/index.dart';
 export 'icons/index.dart';
 export 'form/index.dart';
 export 'widgets/index.dart';
+export 'tabs/index.dart';
 
 import 'package:logger/logger.dart';
 
