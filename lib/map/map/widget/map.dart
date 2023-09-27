@@ -78,6 +78,7 @@ class AriMap extends StatefulWidget {
     Key? key,
     this.rightBottomChild,
     this.rightTopChild,
+    this.leftTopChild,
     this.zoom = 1.0,
     this.maxZoom = 18,
     this.minZoom = 1,
@@ -91,6 +92,8 @@ class AriMap extends StatefulWidget {
 
   /// 地图右上角的子组件
   final Widget? rightTopChild;
+
+  final Widget? leftTopChild;
 
   /// 打开地图时，地图的缩放等级
   final double zoom;
@@ -255,7 +258,11 @@ class _AriMapState extends State<AriMap>
 
         // MODULE:
         // 自定义的widget
-
+        Positioned(
+          child: widget.leftTopChild ?? Container(),
+          top: safeAreaTop,
+          left: AriTheme.windowsInsets.left,
+        ),
         Positioned(
           child: widget.rightTopChild ?? Container(),
           top: safeAreaTop,
