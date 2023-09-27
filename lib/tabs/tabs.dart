@@ -93,6 +93,7 @@ class _AriTabsState extends State<AriTabBar>
             selectedIndex = index;
             // 手动计算位置
             position = calculatePosition(index);
+            widget.onTap?.call(index);
           },
         );
       },
