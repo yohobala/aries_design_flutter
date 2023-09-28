@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,6 +8,10 @@ import 'package:provider/single_child_widget.dart';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'layer.dart';
+import 'marker.dart';
+import 'polyline.dart';
+
 /// 地图无返回值的回调函数
 typedef MapVoidCallback = void Function(LatLng latLng);
 
@@ -17,13 +19,13 @@ typedef MapVoidCallback = void Function(LatLng latLng);
 List<SingleChildWidget> ariMapProvider({bool openLoaction = true}) {
   return [
     ...ariMarkerProvider(),
+    ...ariMapPolylineProvider(),
     Provider<AriMapRepo>(create: (_) => AriMapRepo()),
     Provider<MapController>(create: (_) => MapController()),
-    Provider<MapController>(create: (_) => MapController()),
-    ProxyProvider4<AriMapRepo, AriGeoLocationRepo, AriMarkerBloc, MapController,
-        AriMapBloc>(
-      update: (_, ariMapRepo, ariGeoLocationRepo, ariMarkerBloc, mapController,
-              __) =>
+    ProxyProvider5<AriMapRepo, AriGeoLocationRepo, AriMapMarkerBloc,
+        AriMapPolylineBloc, MapController, AriMapBloc>(
+      update: (_, ariMapRepo, ariGeoLocationRepo, ariMarkerBloc, ariMapPolyline,
+              mapController, __) =>
           AriMapBloc(
         ariMapRepo,
         ariGeoLocationRepo,
@@ -113,8 +115,8 @@ class AriMap extends StatefulWidget {
   ///
   /// 如果为空,将使用自带的标记样式
   ///
-  /// 可以通过AriMarkerState的SelectdMarkerState来判断marker是否被选中
-  /// 需要先调用SelectedMarkerEvent来触发,可以在AriMarkerModel的onTap中调用
+  /// 可以通过AriMapMarkerState的SelectdMarkerState来判断marker是否被选中
+  /// 需要先调用SelectedMarkerEvent来触发,可以在AriMapMarkerModel的onTap中调用
   final BuildMarker? buildMarker;
 
   @override
@@ -133,7 +135,7 @@ class _AriMapState extends State<AriMap>
   late double safeAreaTop;
   late double safeAreaBottom;
 
-  late AnimationController moveLocationController;
+  late AnimationController? moveLocationController;
 
   @override
   void initState() {
@@ -151,7 +153,7 @@ class _AriMapState extends State<AriMap>
     WidgetsBinding.instance.addObserver(this);
 
     mapBloc = context.read<AriMapBloc>();
-    // final markerBloc = context.read<AriMarkerBloc>();
+    // final markerBloc = context.read<AriMapMarkerBloc>();
     mapController = mapBloc.mapController;
 
     // NOTE:
@@ -181,6 +183,7 @@ class _AriMapState extends State<AriMap>
   @override
   Widget build(BuildContext context) {
     var mapBloc = context.read<AriMapBloc>();
+    print("到这");
 
     // NOTE:
     // 获取安全区域
@@ -209,18 +212,21 @@ class _AriMapState extends State<AriMap>
               }
             else if (state is MoveToLocationState)
               {
-                moveLocationController = AnimationController(
-                  vsync: this,
-                  duration: AriTheme.duration.mapDuration,
-                ),
-                _moveToLocation(
-                  mapController: mapController,
-                  latLng: state.center,
-                  zoom: state.zoom,
-                  offset: state.offset,
-                  animationController:
-                      state.isAnimated ? moveLocationController : null,
-                )
+                if (mapBloc.openLocation)
+                  {
+                    moveLocationController = AnimationController(
+                      vsync: this,
+                      duration: AriTheme.duration.mapDuration,
+                    ),
+                    _moveToLocation(
+                      mapController: mapController,
+                      latLng: state.center,
+                      zoom: state.zoom,
+                      offset: state.offset,
+                      animationController:
+                          state.isAnimated ? moveLocationController : null,
+                    )
+                  }
               }
             else if (state is ChangeLocation)
               {}
@@ -251,7 +257,11 @@ class _AriMapState extends State<AriMap>
             ],
             children: [
               AriMapLayer(),
-              AriMarker(buildMarker: widget.buildMarker),
+              AriMapMarker(buildMarker: widget.buildMarker),
+              IgnorePointer(
+                ignoring: true,
+                child: AriMapPolyline(),
+              ),
             ],
           ),
         ),
@@ -284,7 +294,10 @@ class _AriMapState extends State<AriMap>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     mapBloc.cancelGeoLocationSubscription();
-    moveLocationController.dispose();
+    if (mapBloc.openLocation && moveLocationController != null) {
+      moveLocationController!.dispose();
+    }
+
     super.dispose();
   }
 

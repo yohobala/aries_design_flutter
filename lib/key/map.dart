@@ -11,3 +11,7 @@ const Key defalutPositionMarkerKey = Key("positionMarker");
 
 /// 默认位置标记图层key
 const Key defalutPositionMakerLayerKey = Key("positionMakerLayer");
+
+const Key defalutPolylineLayerKey = Key("defalutPolylineLayer");
+
+const String defalutPolylineLayerName = "默认图层";

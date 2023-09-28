@@ -1,3 +1,3 @@
-class AriMarkerRepo {
-  AriMarkerRepo();
+class AriMapMarkerRepo {
+  AriMapMarkerRepo();
 }

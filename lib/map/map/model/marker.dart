@@ -22,10 +22,10 @@ enum MarkerType {
   unknown,
 }
 
-typedef MarkerTapCallback = void Function(AriMarkerModel marker);
+typedef MarkerTapCallback = void Function(AriMapMarkerModel marker);
 
-class AriMarkerLayerModel {
-  AriMarkerLayerModel({
+class AriMapMarkerLayerModel {
+  AriMapMarkerLayerModel({
     this.key = defalutMakerLayerKey,
     this.initMarkers = const [],
     required this.name,
@@ -44,24 +44,24 @@ class AriMarkerLayerModel {
   final String name;
 
   /// 该标记层的初始标记，默认为[]
-  final List<AriMarkerModel> initMarkers;
+  final List<AriMapMarkerModel> initMarkers;
 
   /// 标记层的所有标记
-  Map<Key, AriMarkerModel> markers = {};
+  Map<Key, AriMapMarkerModel> markers = {};
 
   /// 更新标记
   ///
   /// 如果标记不存在，将会创建新的标记
-  void updateMarker(AriMarkerModel marker) {
+  void updateMarker(AriMapMarkerModel marker) {
     markers[marker.key] = marker;
   }
 
   /// 初始化标记
   ///
   /// - `initMarkers`: 初始化的标记
-  void _initMarkers(List<AriMarkerModel> initMarkers) {
+  void _initMarkers(List<AriMapMarkerModel> initMarkers) {
     for (var m in initMarkers) {
-      final marker = <Key, AriMarkerModel>{m.key: m};
+      final marker = <Key, AriMapMarkerModel>{m.key: m};
       markers.addEntries(marker.entries);
     }
   }
@@ -69,9 +69,9 @@ class AriMarkerLayerModel {
 
 /// 标记的实现
 ///
-/// 如果需要添加属性,先继承AriMarkerModel,之后使用[as]
+/// 如果需要添加属性,先继承AriMapMarkerModel,之后使用[as]
 ///
-class AriMarkerModel {
+class AriMapMarkerModel {
   /// 地图中的标记
   ///
   /// - `key`: marker的key。如果为空，将默认为`UniqueKey().toString()`。
@@ -81,7 +81,7 @@ class AriMarkerModel {
   /// - `width`: marker的宽度。默认为80。这个限制的是marker的最大宽度,内部widget的宽度将不会超过这个尺寸
   /// - `height`: marker的高度。默认为80。这个限制的是marker的最大高度,内部widget的高度将不会超过这个尺寸
   /// - `type`: marker的类型。默认为[MarkerType.normal]。
-  AriMarkerModel({
+  AriMapMarkerModel({
     required this.key,
     Key? layerkey,
     LatLng? latLng,

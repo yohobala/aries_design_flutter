@@ -1,1 +1,3 @@
-export 'bloc/index.dart';
+export 'layer.dart';
+export 'marker.dart';
+export 'polyline.dart';

@@ -1,48 +1,48 @@
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class AriMarkerState {}
+abstract class AriMapMarkerState {}
 
 /***************  初始化、权限有关状态  ***************/
 
-class InitAriMarkerBlocState extends AriMarkerState {}
+class InitAriMapMarkerBlocState extends AriMapMarkerState {}
 
-class InitAriMarkerState extends AriMarkerState {}
+class InitAriMapMarkerState extends AriMapMarkerState {}
 
 /***************  图层有关状态  ***************/
 
-class UpdateMarkerLayerState extends AriMarkerState {}
+class UpdateMarkerLayerState extends AriMapMarkerState {}
 
-class CreateMarkerLayerState extends AriMarkerState {}
+class CreateMarkerLayerState extends AriMapMarkerState {}
 
 /***************  标记有关状态  ***************/
 
-class UpdateMarkerState extends AriMarkerState {
+class UpdateMarkerState extends AriMapMarkerState {
   UpdateMarkerState({
     required this.marker,
     required this.layerKey,
   });
 
   final Key layerKey;
-  final AriMarkerModel marker;
+  final AriMapMarkerModel marker;
 }
 
-class CreateMarkerState extends AriMarkerState {
+class CreateMarkerState extends AriMapMarkerState {
   CreateMarkerState({
     required this.marker,
     required this.layerKey,
   });
 
-  final AriMarkerModel marker;
+  final AriMapMarkerModel marker;
   final Key layerKey;
 }
 
-class SelectdMarkerState extends AriMarkerState {
+class SelectdMarkerState extends AriMapMarkerState {
   SelectdMarkerState({
     required this.marker,
     required this.isSelected,
   });
 
-  final AriMarkerModel marker;
+  final AriMapMarkerModel marker;
   final bool isSelected;
 }

@@ -50,7 +50,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /// 定位仓库
   final AriGeoLocationRepo geoLocationRepo;
 
-  final AriMarkerBloc markerBloc;
+  final AriMapMarkerBloc markerBloc;
 
   final MapController mapController;
 
@@ -84,13 +84,13 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   List<AriLayerModel> _layers = [];
 
   /// GPS位置标记
-  final AriMarkerModel _postionMarker = AriMarkerModel(
+  final AriMapMarkerModel _postionMarker = AriMapMarkerModel(
       key: defalutPositionMarkerKey,
       layerkey: defalutPositionMakerLayerKey,
       type: MarkerType.location);
 
   /// 当前移动的标记
-  AriMarkerModel? currentMoveMarker;
+  AriMapMarkerModel? currentMoveMarker;
 
   /// 当前移动标记的地图中心偏移量
   Offset? currentMoveMarkerOffset;
@@ -251,7 +251,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   FutureOr<void> moveMarkerStatusEvent(
       MoveMarkerStatusEvent event, Emitter<AriMapState> emit) {
     if (event.isStart) {
-      AriMarkerModel marker = event.marker;
+      AriMapMarkerModel marker = event.marker;
       assert(marker.selected);
 
       currentMoveMarker = marker;

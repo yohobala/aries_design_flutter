@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
-  AriMarkerBloc(this.markerRepo, this.geoLocationRepo)
-      : super(InitAriMarkerBlocState()) {
-    on<InitAriMarkerEvent>(initAriMarkerEvent);
+class AriMapMarkerBloc extends Bloc<AriMapMarkerEvent, AriMapMarkerState> {
+  AriMapMarkerBloc(this.markerRepo, this.geoLocationRepo)
+      : super(InitAriMapMarkerBlocState()) {
+    on<InitAriMapMarkerEvent>(initAriMapMarkerEvent);
 
     on<UpdateMarkerLayerEvent>(updateLayerEvent);
     on<CreateMarkerLayerEvent>(createLayerEvent);
@@ -16,11 +16,11 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
     on<UpdateMarkeEvent>(updateMarkeEvent);
     on<SelectedMarkerEvent>(selectedMarkerEvent);
 
-    add(InitAriMarkerEvent());
+    add(InitAriMapMarkerEvent());
   }
 
   /// 标记仓库
-  final AriMarkerRepo markerRepo;
+  final AriMapMarkerRepo markerRepo;
 
   /// 定位仓库
   final AriGeoLocationRepo geoLocationRepo;
@@ -29,41 +29,41 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   ///
   /// key: 图层的key
   /// value: 图层
-  Map<Key, AriMarkerLayerModel> get layers => _layers;
+  Map<Key, AriMapMarkerLayerModel> get layers => _layers;
 
   /// 标记
   ///
   /// key: 标记的key
   /// value: 标记
-  Map<Key, AriMarkerModel> get markers => _markers;
+  Map<Key, AriMapMarkerModel> get markers => _markers;
 
   /// 当前地图的全部图层
-  final Map<Key, AriMarkerLayerModel> _layers = {};
+  final Map<Key, AriMapMarkerLayerModel> _layers = {};
 
   /// 当前地图的全部标记
-  final Map<Key, AriMarkerModel> _markers = {};
+  final Map<Key, AriMapMarkerModel> _markers = {};
 
   /***************  初始化、权限有关事件 ***************/
 
   /// 初始化事件
-  FutureOr<void> initAriMarkerEvent(
-      InitAriMarkerEvent event, Emitter<AriMarkerState> emit) {
+  FutureOr<void> initAriMapMarkerEvent(
+      InitAriMapMarkerEvent event, Emitter<AriMapMarkerState> emit) {
     // 添加默认图层
     if (!_layers.containsKey(defalutMakerLayerKey)) {
       _createLayer(defalutMakerLayerKey, defalutMakerLayerName);
     }
 
-    emit(InitAriMarkerState());
+    emit(InitAriMapMarkerState());
   }
 
   /***************  图层有关事件  ***************/
 
   /// 更新图层
   FutureOr<void> updateLayerEvent(
-      UpdateMarkerLayerEvent event, Emitter<AriMarkerState> emit) {}
+      UpdateMarkerLayerEvent event, Emitter<AriMapMarkerState> emit) {}
 
   FutureOr<void> createLayerEvent(
-      CreateMarkerLayerEvent event, Emitter<AriMarkerState> emit) {
+      CreateMarkerLayerEvent event, Emitter<AriMapMarkerState> emit) {
     emit(CreateMarkerLayerState());
   }
 
@@ -74,8 +74,9 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   /// 会判断是否存在标记，进行不同操作：
   /// - `存在`: 更新标记，会发起[UpdateMarkerState]
   /// - `不存在`: 创建标记，先判断是否存在图层，如果不存在则创建图层，再发起[CreateMarkerState]
-  void updateMarkeEvent(UpdateMarkeEvent event, Emitter<AriMarkerState> emit) {
-    final AriMarkerModel marker = event.marker;
+  void updateMarkeEvent(
+      UpdateMarkeEvent event, Emitter<AriMapMarkerState> emit) {
+    final AriMapMarkerModel marker = event.marker;
     if (!_markers.containsKey(marker.key)) {
       _markers[marker.key] = marker;
       var layerKey = marker.layerkey;
@@ -95,7 +96,7 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   }
 
   FutureOr<void> selectedMarkerEvent(
-      SelectedMarkerEvent event, Emitter<AriMarkerState> emit) {
+      SelectedMarkerEvent event, Emitter<AriMapMarkerState> emit) {
     event.marker.selected = event.isSelected;
     emit(
         SelectdMarkerState(marker: event.marker, isSelected: event.isSelected));
@@ -104,12 +105,12 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   /***************  方法  ***************/
 
   /// 获得标记
-  AriMarkerModel getMarker(Key key) {
+  AriMapMarkerModel getMarker(Key key) {
     return _markers[key]!;
   }
 
   /// 更新标记对应的图层
-  void updateMarkerLayer(AriMarkerModel marker, Key? oldLayerKey) {
+  void updateMarkerLayer(AriMapMarkerModel marker, Key? oldLayerKey) {
     if (oldLayerKey == null) {
       var layerKey = marker.layerkey;
       if (!_layers.containsKey(layerKey)) {
@@ -137,9 +138,9 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   /// - `name`: 图层的名称
   ///
   /// 如果没有传入图层名称，则默认使用图层的key作为图层名称
-  AriMarkerLayerModel _createLayer(Key key, [String? name]) {
+  AriMapMarkerLayerModel _createLayer(Key key, [String? name]) {
     name ??= key.toString();
-    AriMarkerLayerModel layer = AriMarkerLayerModel(key: key, name: name);
+    AriMapMarkerLayerModel layer = AriMapMarkerLayerModel(key: key, name: name);
     _addLayer(key, layer);
     return layer;
   }
@@ -148,7 +149,7 @@ class AriMarkerBloc extends Bloc<AriMarkerEvent, AriMarkerState> {
   ///
   /// - `key`: 图层的key
   /// - `layer`: 图层
-  void _addLayer(Key key, AriMarkerLayerModel layer) {
+  void _addLayer(Key key, AriMapMarkerLayerModel layer) {
     _layers[key] = layer;
   }
 }

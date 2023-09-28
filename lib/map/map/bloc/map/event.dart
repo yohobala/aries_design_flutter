@@ -120,7 +120,7 @@ class MoveMarkerStatusEvent extends AriMapEvent {
     this.offset = Offset.zero,
     required this.isStart,
   });
-  final AriMarkerModel marker;
+  final AriMapMarkerModel marker;
   final bool isStart;
 
   /// 地图中心点偏移量

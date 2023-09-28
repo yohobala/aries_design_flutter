@@ -125,8 +125,6 @@ Map<String, AriRouteItem> getRouteItems(
     lr[newRouteItem.name] = newRouteItem;
 
     // 如果hasNavigation为true,子路由不加入路由表
-    print(routeItem.name);
-    print(routeItem.children.isNotEmpty);
     if (!routeItem.hasNavigation && routeItem.children.isNotEmpty) {
       lr.addAll(getRouteItems(
         routeItem.children,
