@@ -129,7 +129,7 @@ class _AriMapState extends State<AriMap>
   late final MapController mapController;
 
   late final AnimationController? controller;
-  late final Animation<Offset>? offset;
+  late Animation<Offset>? offset;
 
   late EdgeInsets padding;
   late double safeAreaTop;
@@ -278,14 +278,21 @@ class _AriMapState extends State<AriMap>
           top: safeAreaTop,
           right: AriTheme.windowsInsets.right,
         ),
-        Positioned(
-          child: SlideTransition(
-            position: offset!,
-            child: widget.rightBottomChild ?? Container(),
+        if (offset != null)
+          Positioned(
+            child: SlideTransition(
+              position: offset!,
+              child: widget.rightBottomChild ?? Container(),
+            ),
+            bottom: safeAreaBottom,
+            right: AriTheme.windowsInsets.right,
           ),
-          bottom: safeAreaBottom,
-          right: AriTheme.windowsInsets.right,
-        ),
+        if (offset == null)
+          Positioned(
+            child: widget.rightBottomChild ?? Container(),
+            bottom: safeAreaBottom,
+            right: AriTheme.windowsInsets.right,
+          ),
       ],
     ));
   }
