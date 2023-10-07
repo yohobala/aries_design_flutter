@@ -224,6 +224,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     required this.orange,
     required this.grey,
     required this.onGrey,
+    required this.onGrey2,
     required this.white,
   });
 
@@ -234,6 +235,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
   final Color? orange;
   final Color? grey;
   final Color? onGrey;
+  final Color? onGrey2;
   final Color? white;
 
   @override
@@ -245,6 +247,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     Color? orange,
     Color? grey,
     Color? onGrey,
+    Color? onGrey2,
     Color? white,
   }) {
     return AriThemeColorPrime(
@@ -255,6 +258,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       orange: orange ?? this.orange,
       grey: grey ?? this.grey,
       onGrey: onGrey ?? this.onGrey,
+      onGrey2: onGrey2 ?? this.onGrey2,
       white: white ?? this.white,
     );
   }
@@ -272,37 +276,18 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       orange: Color.lerp(orange, other.orange, t),
       grey: Color.lerp(grey, other.grey, t),
       onGrey: Color.lerp(onGrey, other.onGrey, t),
+      onGrey2: Color.lerp(onGrey2, other.onGrey2, t),
       white: Color.lerp(white, other.white, t),
     );
   }
 
   /// Returns an instance of [AriThemeColorPrime] in which the following custom
   /// colors are harmonized with [dynamic]'s [ColorScheme.primary].
-  ///   * [AriThemeColorPrime.sourceBlue]
   ///   * [AriThemeColorPrime.blue]
-  ///   * [AriThemeColorPrime.onBlue]
-  ///   * [AriThemeColorPrime.blueContainer]
-  ///   * [AriThemeColorPrime.onBlueContainer]
-  ///   * [AriThemeColorPrime.sourceGreen]
   ///   * [AriThemeColorPrime.green]
-  ///   * [AriThemeColorPrime.onGreen]
-  ///   * [AriThemeColorPrime.greenContainer]
-  ///   * [AriThemeColorPrime.onGreenContainer]
-  ///   * [AriThemeColorPrime.sourceRed]
   ///   * [AriThemeColorPrime.red]
-  ///   * [AriThemeColorPrime.onRed]
-  ///   * [AriThemeColorPrime.redContainer]
-  ///   * [AriThemeColorPrime.onRedContainer]
-  ///   * [AriThemeColorPrime.sourceYellow]
   ///   * [AriThemeColorPrime.yellow]
-  ///   * [AriThemeColorPrime.onYellow]
-  ///   * [AriThemeColorPrime.yellowContainer]
-  ///   * [AriThemeColorPrime.onYellowContainer]
-  ///   * [AriThemeColorPrime.sourceOrange]
   ///   * [AriThemeColorPrime.orange]
-  ///   * [AriThemeColorPrime.onOrange]
-  ///   * [AriThemeColorPrime.orangeContainer]
-  ///   * [AriThemeColorPrime.onOrangeContainer]
   ///   * [AriThemeColorPrime.grey]
   ///  * [AriThemeColorPrime.white]
   ///
@@ -317,6 +302,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       orange: orange!.harmonizeWith(dynamic.primary),
       grey: grey!.harmonizeWith(dynamic.primary),
       onGrey: onGrey!.harmonizeWith(dynamic.primary),
+      onGrey2: onGrey2!.harmonizeWith(dynamic.primary),
       white: white!.harmonizeWith(dynamic.primary),
     );
   }

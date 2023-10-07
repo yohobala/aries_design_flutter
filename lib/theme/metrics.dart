@@ -130,7 +130,7 @@ class AriThemeTextStyle {
   /// 页面标题
   final TextStyle pageTitle = TextStyle(
     fontSize: AriThemeFontSize.displayMedium,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
   );
 

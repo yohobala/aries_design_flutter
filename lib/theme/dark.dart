@@ -60,5 +60,6 @@ AriThemeColorPrime _prime = const AriThemeColorPrime(
   orange: Color.fromARGB(255, 255, 204, 128),
   grey: Color.fromARGB(255, 70, 70, 70),
   onGrey: Color.fromARGB(255, 130, 130, 130),
+  onGrey2: Color.fromARGB(255, 150, 150, 150),
   white: Color.fromARGB(255, 240, 240, 240),
 );

@@ -7,8 +7,8 @@ class AriTabBar extends StatefulWidget {
     required this.selectedIndex,
     required this.onTap,
     required this.tabs,
-    this.width = 100,
-    this.height = 50,
+    this.width = 80,
+    this.height = 40,
     this.duration,
   }) : super(key: key);
 

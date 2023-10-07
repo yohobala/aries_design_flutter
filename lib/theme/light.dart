@@ -47,6 +47,7 @@ final ColorScheme _colorScheme = ColorScheme(
   inverseSurface: Color(0xFF34302A),
   inversePrimary: Color(0xFFF4BF48),
   shadow: Color(0xFF000000),
+  // 用于设置了elevation后的背景色
   surfaceTint: Color(0xFF7A5900),
   outlineVariant: Color(0xFFD1C5B4),
   scrim: Color(0xFF000000),
@@ -60,6 +61,7 @@ AriThemeColorPrime _prime = const AriThemeColorPrime(
   orange: Color.fromARGB(255, 251, 140, 0),
   grey: Color.fromARGB(255, 240, 240, 240),
   onGrey: Color.fromARGB(255, 180, 180, 180),
+  onGrey2: Color.fromARGB(255, 160, 160, 160),
   white: Color.fromARGB(255, 240, 240, 240),
 );
 

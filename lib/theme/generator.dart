@@ -163,5 +163,12 @@ ThemeData generateThemeData(Brightness brightness,
         ),
       ),
     ),
+    cardTheme: CardTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
+      ),
+      elevation: 1,
+      surfaceTintColor: colorTheme.prime.grey,
+    ),
   );
 }

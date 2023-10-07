@@ -34,14 +34,16 @@ class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   final GlobalKey _bodyKey = GlobalKey();
 
+  // 当前viewInsets的bottom值,会随着软键盘弹出和收起而改变
+  double bottomViewInset = 0;
+  double bottomNavigationBarHeight = 0;
+
   // MODULE:
   // 软键盘相关参数
-  double bottomViewInset = 0;
-  // 这个一般情况下只会在第一次弹出软键盘的时候改变一次
-  double keyboardHeight = 0;
-  double prevKeyboardHeight = 0;
-  Timer? debounceTimer;
-  bool isCalculateKeyboardHeight = false;
+  double keyboardHeight = 0; // 这个一般情况下只会在第一次弹出软键盘的时候改变值的大小
+  double prevKeyboardHeight = 0; // 软键盘弹出收起时,上一次软键盘高度值,用于判断是收起还是弹出
+  Timer? debounceTimer; // 定时器,用于判断软键盘高度
+  bool isCalculateKeyboardHeight = false; // 判断是否进过一次软键盘高度计算
   ValueNotifier<bool> isKeyboardUp = ValueNotifier(false);
   late AnimationController keyboardAnimationController;
   late Animation keyboardAnimation;
@@ -155,7 +157,10 @@ class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
       body: Stack(
         children: [
           CustomMultiChildLayout(
-            delegate: BttonNavigationLayoutDelegate(),
+            delegate: BttonNavigationLayoutDelegate(
+              onBottomNavigationBarHeightChanged:
+                  onBottomNavigationBarHeightChanged,
+            ),
             children: children,
           ),
         ],
@@ -192,9 +197,18 @@ class AriNavigationBarLayoutState extends State<AriNavigationBarScaffold>
 
     return bottomSheetController!;
   }
+
+  // 回调函数，用于获取bottomNavigationBarHeight
+  void onBottomNavigationBarHeightChanged(double height) {
+    bottomNavigationBarHeight = height;
+  }
 }
 
 class BttonNavigationLayoutDelegate extends MultiChildLayoutDelegate {
+  BttonNavigationLayoutDelegate({
+    required this.onBottomNavigationBarHeightChanged,
+  });
+  final void Function(double) onBottomNavigationBarHeightChanged;
   @override
   void performLayout(Size size) {
     double contentTop = 0.0;
@@ -210,6 +224,9 @@ class BttonNavigationLayoutDelegate extends MultiChildLayoutDelegate {
               .height;
       bottomWidgetsHeight += bottomNavigationBarHeight;
       bottomNavigationBarTop = math.max(0.0, size.height - bottomWidgetsHeight);
+
+      onBottomNavigationBarHeightChanged(bottomNavigationBarHeight);
+
       positionChild(
           _PageSlot.bottomNavigationBar, Offset(0.0, bottomNavigationBarTop));
     }
@@ -256,29 +273,6 @@ class _BodyBuilder extends StatefulWidget {
 class _BodyBuilderState extends State<_BodyBuilder>
     with WidgetsBindingObserver {
   _BodyBuilderState();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  // }
-
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-
-  // @override
-  // void didChangeMetrics() {
-  //   final FlutterView view = View.of(context);
-  //   final bottomInset = view.viewInsets.bottom;
-  //   if (bottomInset > 0) {
-  //     // Keyboard is shown
-  //   } else {
-  //     // Keyboard is hidden
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -333,24 +327,4 @@ class _BodyBoxConstraints extends BoxConstraints {
 
   @override
   int get hashCode => Object.hash(super.hashCode, bottomWidgetsHeight);
-}
-
-class YourBottomSheet extends StatelessWidget {
-  final VoidCallback onClose;
-
-  YourBottomSheet({required this.onClose});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      color: Colors.blue,
-      child: Center(
-        child: ElevatedButton(
-          onPressed: onClose,
-          child: Text('Close BottomSheet'),
-        ),
-      ),
-    );
-  }
 }
