@@ -30,7 +30,7 @@ class AriMapMarker extends StatelessWidget {
 
   final BuildMarker? buildMarker;
 
-  late AriMapMarkerBloc markerBloc;
+  late final AriMapMarkerBloc markerBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +171,6 @@ class AriMapMarkerBuider extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          print("到这");
           if (marker.onTap != null) {
             marker.onTap!(marker);
           }

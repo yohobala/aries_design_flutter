@@ -183,7 +183,6 @@ class _AriMapState extends State<AriMap>
   @override
   Widget build(BuildContext context) {
     var mapBloc = context.read<AriMapBloc>();
-    print("到这");
 
     // NOTE:
     // 获取安全区域
@@ -413,7 +412,5 @@ void _mapFlyToPostion(
         LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
         zoomTween.evaluate(animation),
         offset: offsetTween.evaluate(animation));
-  } catch (e) {
-    logger.w(e);
-  }
+  } catch (e) {}
 }

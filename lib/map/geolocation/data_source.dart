@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_compass/flutter_compass.dart';
@@ -33,7 +32,6 @@ class AriGeoLocationDevice {
       Position position = await Geolocator.getCurrentPosition();
       LatLng latLng = LatLng(position.latitude, position.longitude);
       _currentLocation = latLng;
-      logger.t('getCurrentLocation: $_currentLocation');
       return latLng;
     } else {
       return _currentLocation!;

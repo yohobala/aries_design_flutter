@@ -27,11 +27,22 @@ class Feature<T, G extends Geometry> {
   factory Feature.fromJson(
     Map<String, dynamic> json,
     T Function(Map<String, dynamic>) fromJsonT,
-    G Function(Map<String, dynamic>) fromJsonGeometry,
   ) {
+    Map<String, dynamic> geoJson = json['geometry'];
+    Geometry geometry;
+    switch (geoJson['type']) {
+      case 'Point':
+        geometry = Point.fromJson(geoJson);
+        break;
+      case 'LineString':
+        geometry = LineString.fromJson(geoJson);
+        break;
+      default:
+        throw Exception('Unsupported geometry type');
+    }
     return Feature<T, G>(
       type: json['type'],
-      geometry: fromJsonGeometry(json['geometry']),
+      geometry: geometry as G,
       properties: fromJsonT(json['properties']),
     );
   }
@@ -52,14 +63,11 @@ class FeatureCollection<T, G extends Geometry> {
       };
 
   factory FeatureCollection.fromJson(
-    Map<String, dynamic> json,
-    T Function(Map<String, dynamic>) fromJsonT,
-    Geometry Function(Map<String, dynamic>) fromJsonGeometry,
-  ) {
+      Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJsonT) {
     return FeatureCollection<T, G>(
       type: json['type'],
       features: List<Feature<T, G>>.from(json['features'].map(
-        (e) => Feature.fromJson(e, fromJsonT, fromJsonGeometry),
+        (e) => Feature<T, G>.fromJson(e, fromJsonT),
       )),
     );
   }
@@ -83,7 +91,7 @@ abstract class Geometry<T> {
 
   Geometry.fromJson(Map<String, dynamic> json)
       : type = json['type'],
-        coordinates = json['coordinates'];
+        coordinates = json['coordinates'] as T;
 }
 
 class Point extends Geometry<List<double>> {
@@ -94,8 +102,13 @@ class Point extends Geometry<List<double>> {
           coordinates: coordinates,
         );
 
-  @override
-  Point.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  Point.fromJson(Map<String, dynamic> json)
+      : super(
+          type: "Point",
+          coordinates: (json['coordinates'] as List<dynamic>)
+              .map((e) => e as double)
+              .toList(),
+        );
 
   Point.latlngToPoint(LatLng latLng)
       : super(
@@ -115,7 +128,13 @@ class LineString extends Geometry<List<List<double>>> {
         );
 
   @override
-  LineString.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  LineString.fromJson(Map<String, dynamic> json)
+      : super(
+          type: "LineString",
+          coordinates: (json['coordinates'] as List<dynamic>)
+              .map((e) => (e as List<dynamic>).map((e) => e as double).toList())
+              .toList(),
+        );
 
   LineString.latlngsToLineString(List<LatLng> latLngs)
       : super(

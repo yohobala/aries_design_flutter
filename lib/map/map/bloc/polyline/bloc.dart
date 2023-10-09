@@ -4,9 +4,6 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'event.dart';
-import 'state.dart';
-
 class AriMapPolylineBloc
     extends Bloc<AriMapPolylineEvent, AriMapPolylineState> {
   AriMapPolylineBloc() : super(InitAriMapPolylineBlocEvent()) {

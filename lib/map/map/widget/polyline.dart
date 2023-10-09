@@ -19,7 +19,7 @@ class AriMapPolyline extends StatelessWidget {
 
   final ValueNotifier<int> rebuild = ValueNotifier(0);
 
-  late AriMapPolylineBloc polylineBloc;
+  late final AriMapPolylineBloc polylineBloc;
 
   @override
   Widget build(BuildContext context) {
