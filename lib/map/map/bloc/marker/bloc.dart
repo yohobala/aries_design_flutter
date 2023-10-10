@@ -10,11 +10,11 @@ class AriMapMarkerBloc extends Bloc<AriMapMarkerEvent, AriMapMarkerState> {
       : super(InitAriMapMarkerBlocState()) {
     on<InitAriMapMarkerEvent>(initAriMapMarkerEvent);
 
-    on<UpdateMarkerLayerEvent>(updateLayerEvent);
+    on<UpdateAriMarkerLayerEvent>(updateLayerEvent);
     on<CreateMarkerLayerEvent>(createLayerEvent);
 
-    on<UpdateMarkeEvent>(updateMarkeEvent);
-    on<SelectedMarkerEvent>(selectedMarkerEvent);
+    on<UpdateAriMarkerEvent>(updateMarkeEvent);
+    on<SelectedAriMarkerEvent>(selectedMarkerEvent);
 
     add(InitAriMapMarkerEvent());
   }
@@ -60,7 +60,7 @@ class AriMapMarkerBloc extends Bloc<AriMapMarkerEvent, AriMapMarkerState> {
 
   /// 更新图层
   FutureOr<void> updateLayerEvent(
-      UpdateMarkerLayerEvent event, Emitter<AriMapMarkerState> emit) {}
+      UpdateAriMarkerLayerEvent event, Emitter<AriMapMarkerState> emit) {}
 
   FutureOr<void> createLayerEvent(
       CreateMarkerLayerEvent event, Emitter<AriMapMarkerState> emit) {
@@ -75,7 +75,7 @@ class AriMapMarkerBloc extends Bloc<AriMapMarkerEvent, AriMapMarkerState> {
   /// - `存在`: 更新标记，会发起[UpdateMarkerState]
   /// - `不存在`: 创建标记，先判断是否存在图层，如果不存在则创建图层，再发起[CreateMarkerState]
   void updateMarkeEvent(
-      UpdateMarkeEvent event, Emitter<AriMapMarkerState> emit) {
+      UpdateAriMarkerEvent event, Emitter<AriMapMarkerState> emit) {
     final AriMapMarkerModel marker = event.marker;
     if (!_markers.containsKey(marker.key)) {
       _markers[marker.key] = marker;
@@ -96,7 +96,7 @@ class AriMapMarkerBloc extends Bloc<AriMapMarkerEvent, AriMapMarkerState> {
   }
 
   FutureOr<void> selectedMarkerEvent(
-      SelectedMarkerEvent event, Emitter<AriMapMarkerState> emit) {
+      SelectedAriMarkerEvent event, Emitter<AriMapMarkerState> emit) {
     event.marker.selected = event.isSelected;
     emit(
         SelectdMarkerState(marker: event.marker, isSelected: event.isSelected));

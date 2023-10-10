@@ -10,10 +10,10 @@ class AriMapPolylineBloc
     /// 初始化事件
     on<InitAriMapPolylineEvent>(initAriMapPolylineEvent);
 
-    on<UpdatePolylineLayerEvent>(updateLayerEvent);
+    on<UpdateAriPolylineLayerEvent>(updateLayerEvent);
     on<CreatePolylineLayerEvent>(createLayerEvent);
 
-    on<UpdatePolylineEvent>(updatePolylineEvent);
+    on<UpdateAriPolylineEvent>(updatePolylineEvent);
 
     add(InitAriMapPolylineEvent());
   }
@@ -48,7 +48,7 @@ class AriMapPolylineBloc
 
   /// 更新图层
   FutureOr<void> updateLayerEvent(
-      UpdatePolylineLayerEvent event, Emitter<AriMapPolylineState> emit) {}
+      UpdateAriPolylineLayerEvent event, Emitter<AriMapPolylineState> emit) {}
 
   FutureOr<void> createLayerEvent(
       CreatePolylineLayerEvent event, Emitter<AriMapPolylineState> emit) {
@@ -58,7 +58,7 @@ class AriMapPolylineBloc
   /***************  线有关事件  ***************/
 
   FutureOr<void> updatePolylineEvent(
-      UpdatePolylineEvent event, Emitter<AriMapPolylineState> emit) {
+      UpdateAriPolylineEvent event, Emitter<AriMapPolylineState> emit) {
     final AriMapPolylineModel polyline = event.polyline;
     if (!_polylines.containsKey(polyline.key)) {
       _polylines[polyline.key] = polyline;

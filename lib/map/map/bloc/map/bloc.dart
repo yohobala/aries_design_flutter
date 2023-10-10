@@ -157,7 +157,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       }
 
       currentMoveMarker!.latLng = latLng;
-      markerBloc.add(UpdateMarkeEvent(marker: currentMoveMarker!));
+      markerBloc.add(UpdateAriMarkerEvent(marker: currentMoveMarker!));
     }
   }
 
@@ -227,7 +227,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     if (event.direction != null) {
       _postionMarker.direction = event.direction!;
     }
-    markerBloc.add(UpdateMarkeEvent(marker: _postionMarker));
+    markerBloc.add(UpdateAriMarkerEvent(marker: _postionMarker));
   }
 
   FutureOr<void> changeCompassEvent(
