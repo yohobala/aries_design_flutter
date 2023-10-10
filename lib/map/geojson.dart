@@ -106,7 +106,7 @@ class Point extends Geometry<List<double>> {
       : super(
           type: "Point",
           coordinates: (json['coordinates'] as List<dynamic>)
-              .map((e) => e as double)
+              .map((e) => (e is int) ? e.toDouble() : e as double)
               .toList(),
         );
 
