@@ -132,7 +132,9 @@ class LineString extends Geometry<List<List<double>>> {
       : super(
           type: "LineString",
           coordinates: (json['coordinates'] as List<dynamic>)
-              .map((e) => (e as List<dynamic>).map((e) => e as double).toList())
+              .map((e) => (e as List<dynamic>)
+                  .map((e) => (e is int) ? e.toDouble() : e as double)
+                  .toList())
               .toList(),
         );
 
