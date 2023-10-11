@@ -236,7 +236,6 @@ class AriThemeModal {
 
   final BoxDecoration messageBarDecoration = BoxDecoration(
     borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
-    color: Colors.black.withOpacity(0.8),
   );
 }
 
