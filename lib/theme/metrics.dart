@@ -149,6 +149,12 @@ class AriThemeFilter {
   final ImageFilter standard = ImageFilter.blur(sigmaX: 200, sigmaY: 200);
 }
 
+class AriThemeOpacity {
+  final double opaque = 0;
+  final double standard = 0.8;
+  final double semiTransparent = 0.5;
+}
+
 /// 按钮
 ///
 /// 如果要获得MaterialStateProperty<T>中的T，请使用如下代码，其中
@@ -207,7 +213,6 @@ class AriThemeButton {
 class AriThemeModal {
   // MODULE:
   // 底部弹出框
-
   /// 底部弹出框的样式
   final BoxDecoration bottomSheet = BoxDecoration(
     borderRadius: BorderRadius.only(
@@ -222,6 +227,16 @@ class AriThemeModal {
       top: AriTheme.insets.large,
       bottom: AriTheme.insets.large,
     ),
+  );
+
+  /// MODULE:
+  /// message-bar
+  final double messageBarHeight = 40;
+  final double messageBarWidthFactor = 0.8;
+
+  final BoxDecoration messageBarDecoration = BoxDecoration(
+    borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
+    color: Colors.black.withOpacity(0.8),
   );
 }
 

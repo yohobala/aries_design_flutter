@@ -76,6 +76,8 @@ class AriTheme {
   /// 模糊效果
   static final AriThemeFilter filter = AriThemeFilter();
 
+  static final AriThemeOpacity opacity = AriThemeOpacity();
+
   /// 按钮
   static final AriThemeButton button = AriThemeButton();
 
