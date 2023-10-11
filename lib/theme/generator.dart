@@ -25,6 +25,16 @@ AriThemeColor generateThemeColor({
       blurRadius: 5,
       offset: Offset(0, -3),
     ),
+    messageBar: BoxShadow(
+      color: colorScheme.shadow.withOpacity(0.5), // 设置透明度
+      // 扩散阴影,当为0时不扩散
+      spreadRadius: 0,
+      // 模仿 FloatingActionButton 的 elevation
+      // 但是在滑动的时候会造成阴影和背景分离
+      blurRadius: 6,
+      // 模仿 FloatingActionButton 的阴影偏移
+      offset: Offset(0, 2),
+    ),
   );
 
   // MODULE:
@@ -86,6 +96,14 @@ AriThemeColor generateThemeColor({
     ),
   );
 
+  AriThemeColorText text = AriThemeColorText(
+    messageBar: TextStyle(
+        color: colorScheme.onInverseSurface,
+        fontSize: AriThemeFontSize.titleMedium,
+        decoration: TextDecoration.none,
+        fontWeight: FontWeight.w500),
+  );
+
   final AriThemeColor ariThemeColor = AriThemeColor(
     colorScheme: colorScheme,
     prime: prime,
@@ -93,6 +111,7 @@ AriThemeColor generateThemeColor({
     button: button,
     modal: modal,
     gradient: gradient,
+    text: text,
   );
 
   return ariThemeColor;

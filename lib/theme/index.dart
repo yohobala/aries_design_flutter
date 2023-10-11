@@ -107,6 +107,7 @@ class AriThemeColor {
     required this.button,
     required this.modal,
     required this.gradient,
+    required this.text,
   });
 
   /// 主色调
@@ -125,6 +126,8 @@ class AriThemeColor {
 
   /// 渐变
   final AriThemeColorGradient gradient;
+
+  final AriThemeColorText text;
 
   /// 获取对于Brightness模式下的AriThemeColor
   ///
@@ -155,6 +158,7 @@ class AriThemeColorBoxShadow {
   const AriThemeColorBoxShadow({
     required this.standard,
     required this.bottomSheet,
+    required this.messageBar,
   });
 
   /// 标准阴影
@@ -162,6 +166,8 @@ class AriThemeColorBoxShadow {
 
   /// 底部弹出框阴影
   final BoxShadow bottomSheet;
+
+  final BoxShadow messageBar;
 }
 
 /// Aries的按钮样式
@@ -210,6 +216,15 @@ class AriThemeColorGradient {
   });
 
   final Gradient loginBackgroundGradient;
+}
+
+@immutable
+class AriThemeColorText {
+  const AriThemeColorText({
+    required this.messageBar,
+  });
+
+  final TextStyle messageBar;
 }
 
 /// Defines a set of custom colors, each comprised of 4 complementary tones.

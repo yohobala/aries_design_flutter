@@ -146,12 +146,13 @@ class AriThemeTextStyle {
 /// 模糊效果
 class AriThemeFilter {
   /// 标准模糊效果
-  final ImageFilter standard = ImageFilter.blur(sigmaX: 200, sigmaY: 200);
+  final ImageFilter standard = ImageFilter.blur(sigmaX: 20, sigmaY: 20);
 }
 
 class AriThemeOpacity {
   final double opaque = 0;
   final double standard = 0.8;
+  final double blurOpacity = 0.7;
   final double semiTransparent = 0.5;
 }
 
