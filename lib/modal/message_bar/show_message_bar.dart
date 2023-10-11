@@ -16,14 +16,21 @@ class _OverlayInfo {
 List<_OverlayInfo> _overlayEntryList = []; // 假设你有这个全局或状态变量来存储所有OverlayEntry
 
 void showAriMessageBar(
-  BuildContext context, {
-  Widget? title,
-  Widget? content,
-  List<Widget> Function(BuildContext)? buttonBuilder,
+  String message, {
+  BuildContext? context,
+  OverlayState? overlayState,
+  Key? key,
+  List<Widget>? prefixChildren,
+  List<Widget>? suffixChildren,
+  double? height,
+  double? widthFactor,
+  Decoration? decoration,
   bool barrierDismissible = true,
   bool isOnly = true,
-  bool autoClose = false,
+  bool autoClose = true,
 }) {
+  assert(context != null || overlayState != null);
+
   if (isOnly) {
     for (var entry in _overlayEntryList) {
       _closeOverlay(entry);
@@ -31,18 +38,30 @@ void showAriMessageBar(
   }
 
   // 创建一个 GlobalKey，这样我们就能访问动画状态。
-  final GlobalKey<_AnimatedOverlayState> key = GlobalKey();
+  GlobalKey<_AnimatedOverlayState> _key = GlobalKey();
+
+  AriMessageBar messageBar = AriMessageBar(message,
+      prefixChildren: prefixChildren,
+      suffixChildren: suffixChildren,
+      height: height,
+      widthFactor: widthFactor,
+      decoration: decoration,
+      key: key);
 
   OverlayEntry overlayEntry = OverlayEntry(
     builder: (BuildContext context) {
-      return _AnimatedOverlay(key: key);
+      return _AnimatedOverlay(key: _key, child: messageBar);
     },
   );
 
-  Overlay.of(context).insert(overlayEntry);
+  if (context != null) {
+    Overlay.of(context)!.insert(overlayEntry);
+  } else {
+    overlayState!.insert(overlayEntry);
+  }
   _OverlayInfo overlayInfo = _OverlayInfo(
     overlayEntry: overlayEntry,
-    key: key,
+    key: _key,
   );
   _overlayEntryList.add(overlayInfo);
 
@@ -64,7 +83,9 @@ void _closeOverlay(_OverlayInfo info) {
 }
 
 class _AnimatedOverlay extends StatefulWidget {
-  const _AnimatedOverlay({Key? key}) : super(key: key);
+  const _AnimatedOverlay({Key? key, required this.child}) : super(key: key);
+
+  final AriMessageBar child;
 
   @override
   _AnimatedOverlayState createState() => _AnimatedOverlayState();
@@ -83,7 +104,7 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: AriTheme.duration.long1,
     );
 
     // 不透明度动画，从 0 (完全透明) 到 1 (完全不透明)
@@ -129,7 +150,7 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
           top: _positionAnimation.value,
           left: 0,
           right: 0,
-          child: AriMessageBar("12321"),
+          child: widget.child,
         );
       },
     );
