@@ -253,7 +253,6 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
                             _draggableController.jumpTo(
                               size,
                             );
-                            print(size);
                           } else {
                             return;
                           }
