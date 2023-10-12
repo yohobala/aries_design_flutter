@@ -224,6 +224,7 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
     }
     return widget.snap
         ? DraggableScrollableSheet(
+            controller: _draggableController,
             expand: false,
             snap: widget.snap,
             snapSizes: widget.snap ? widget.snapSizes : null,
