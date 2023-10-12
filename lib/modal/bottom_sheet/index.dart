@@ -224,7 +224,6 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
     }
     return widget.snap
         ? DraggableScrollableSheet(
-            controller: _draggableController,
             expand: false,
             snap: widget.snap,
             snapSizes: widget.snap ? widget.snapSizes : null,
@@ -234,61 +233,71 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
             builder: (BuildContext context, ScrollController scrollController) {
               return RepaintBoundary(
                 child: GestureDetector(
-                  onVerticalDragUpdate: (details) {
-                    if (widget.snap) {
-                      double newPosition = _draggableController.pixels -
-                          details.delta.dy; // 1000 是一个缩放因子，你可以根据需要调整
-                      double size =
-                          _draggableController.pixelsToSize(newPosition);
-                      // newPosition = newPosition.clamp(0.0, 1.0); // 确保新位置在有效范围内
-                      _draggableController.jumpTo(
-                        size,
-                      );
-                    }
-                  },
+                  onVerticalDragUpdate: _draggableController.isAttached
+                      ? (details) {
+                          if (widget.snap) {
+                            double newPosition = _draggableController.pixels -
+                                details.delta.dy; // 1000 是一个缩放因子，你可以根据需要调整
+                            double size =
+                                _draggableController.pixelsToSize(newPosition);
+                            // newPosition = newPosition.clamp(0.0, 1.0); // 确保新位置在有效范围内
+                            _draggableController.jumpTo(
+                              size,
+                            );
+                          } else {
+                            return;
+                          }
+                        }
+                      : null,
                   // 放手后的动画
-                  onVerticalDragEnd: (details) {
-                    if (widget.snap) {
-                      double velocity = details.primaryVelocity ?? 0; // 获取速度
-                      double currentPixels =
-                          _draggableController.pixels; // 当前像素,也就是当前大小
+                  onVerticalDragEnd: _draggableController.isAttached
+                      ? (details) {
+                          if (widget.snap) {
+                            double velocity =
+                                details.primaryVelocity ?? 0; // 获取速度
+                            double currentPixels =
+                                _draggableController.pixels; // 当前像素,也就是当前大小
 
-                      // NOTE:
-                      // 创建 _SnappingSimulation
-                      // 源代码里_SnappingSimulation的速度是可滑动列表内容的滑动速度,
-                      // 所以对可滑动列表向上滑动的时候,源代码里的velocity是正数.
-                      // 但是这里获得的速度是手指移动速度,手指向上滑动,速度是负数.
-                      // 所有速度需要取反
-                      final Simulation simulation = _SnappingSimulation(
-                        position: currentPixels,
-                        initialVelocity: -velocity,
-                        pixelSnapSize: widget.snapSizes
-                            .map((size) =>
-                                _draggableController.sizeToPixels(size))
-                            .toList(),
-                        snapAnimationDuration: Duration(milliseconds: 300),
-                        tolerance: Tolerance(),
-                      );
+                            // NOTE:
+                            // 创建 _SnappingSimulation
+                            // 源代码里_SnappingSimulation的速度是可滑动列表内容的滑动速度,
+                            // 所以对可滑动列表向上滑动的时候,源代码里的velocity是正数.
+                            // 但是这里获得的速度是手指移动速度,手指向上滑动,速度是负数.
+                            // 所有速度需要取反
+                            final Simulation simulation = _SnappingSimulation(
+                              position: currentPixels,
+                              initialVelocity: -velocity,
+                              pixelSnapSize: widget.snapSizes
+                                  .map((size) =>
+                                      _draggableController.sizeToPixels(size))
+                                  .toList(),
+                              snapAnimationDuration:
+                                  Duration(milliseconds: 300),
+                              tolerance: Tolerance(),
+                            );
 
-                      // 创建 AnimationController
-                      final AnimationController controller =
-                          AnimationController.unbounded(
-                        vsync: this, // 你需要提供一个TickerProvider
-                      );
+                            // 创建 AnimationController
+                            final AnimationController controller =
+                                AnimationController.unbounded(
+                              vsync: this, // 你需要提供一个TickerProvider
+                            );
 
-                      // 监听 AnimationController
-                      controller.addListener(() {
-                        _draggableController.jumpTo(_draggableController
-                            .pixelsToSize(controller.value));
-                      });
+                            // 监听 AnimationController
+                            controller.addListener(() {
+                              _draggableController.jumpTo(_draggableController
+                                  .pixelsToSize(controller.value));
+                            });
 
-                      // 使用 _SnappingSimulation 开始动画
-                      controller.animateWith(simulation).then((_) {
-                        // 动画完成后的操作
-                        controller.dispose();
-                      });
-                    }
-                  },
+                            // 使用 _SnappingSimulation 开始动画
+                            controller.animateWith(simulation).then((_) {
+                              // 动画完成后的操作
+                              controller.dispose();
+                            });
+                          } else {
+                            return;
+                          }
+                        }
+                      : null,
                   child: Container(
                     decoration: AriThemeColor.of(context).modal.bottomSheet,
                     padding: AriTheme.modal.bottomSheetContainer.padding,
@@ -306,7 +315,9 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
                             ),
                           ),
                         ),
-                      widget.child(context, scrollController)
+                      Expanded(
+                        child: widget.child(context, scrollController),
+                      )
                     ]),
                   ),
                 ),
