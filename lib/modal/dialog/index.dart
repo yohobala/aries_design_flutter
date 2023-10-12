@@ -96,7 +96,6 @@ void showAriDialog(
   if (isOnly) {
     /// 关闭其他的dialog
     Navigator.of(context).popUntil((Route<dynamic> route) {
-      print(route);
       // 如果不是 DialogRoute 类型，就保留，否则关闭。
       return !(route is DialogRoute);
     });
