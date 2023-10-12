@@ -233,6 +233,9 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
             builder: (BuildContext context, ScrollController scrollController) {
               return RepaintBoundary(
                 child: GestureDetector(
+                  // NOTE:
+                  // 添加_draggableController.isAttached添加判断 => 避免出现
+                  // `DraggableScrollableController not Attached to any scroll views`,导致的不能滑动
                   onVerticalDragUpdate: _draggableController.isAttached
                       ? (details) {
                           if (widget.snap) {
@@ -315,6 +318,8 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
                             ),
                           ),
                         ),
+                      // NOTE:
+                      // 添加Expanded => 修复了Colum和ListView的渲染冲突
                       Expanded(
                         child: widget.child(context, scrollController),
                       )
