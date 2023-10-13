@@ -69,6 +69,7 @@ class AriDialogState extends State<AriDialog> {
 
 /// 显示一个AriDialog
 ///
+/// *参数*
 /// - `context` 上下文
 /// - `title` 标题
 /// - `content` 内容
@@ -76,6 +77,11 @@ class AriDialogState extends State<AriDialog> {
 /// - `barrierDismissible` 是否允许点击外部关闭
 /// - `isOnly` 是否关闭其他的dialog
 /// - `elevation` 高度值,会影响颜色的整体颜色,见`https://m3.material.io/styles/elevation/overview`
+///
+/// *return*
+/// 会返回一个Future，可以通过Navigator.pop/ Navigator.of(context).pop等触发,
+/// 例如在[buttonBuilder]的一个button的onPressed方法中调用`Navigator.pop(context, 'ok')`，
+/// 那么这个Future的值就是'ok'。同时会产生关闭dialog的效果
 ///
 /// buttonBuilder的示例：
 /// ```dart
@@ -92,7 +98,7 @@ class AriDialogState extends State<AriDialog> {
 ///   ];
 /// }
 /// ```
-void showAriDialog(
+Future<T?> showAriDialog<T>(
   BuildContext context, {
   Widget? title,
   Widget? content,
@@ -111,7 +117,7 @@ void showAriDialog(
     });
   }
 
-  showDialog(
+  return showDialog(
     context: context,
     barrierDismissible: barrierDismissible,
     builder: (BuildContext context) {
