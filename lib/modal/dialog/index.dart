@@ -77,9 +77,11 @@ class AriDialogState extends State<AriDialog> {
 ///     FilledButton.tonal(
 ///         onPressed: () => {},
 ///         child: Text("ok")
+///    ),
 ///     TextButton(
 ///         onPressed: () => {Navigator.pop(innerContext, 'Cancel')},
 ///         child: Text("Cancel")
+///    )
 ///   ];
 /// }
 /// ```
