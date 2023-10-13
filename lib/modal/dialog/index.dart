@@ -8,13 +8,14 @@ class AriDialog extends StatefulWidget {
   /// - `content` 内容
   /// - `buttons` 按钮
   /// - `buttonWidth` 按钮宽度，默认为0.8
-  const AriDialog(
-      {Key? key,
-      required this.title,
-      required this.content,
-      required this.buttons,
-      this.buttonWidth = 0.8})
-      : super(key: key);
+  const AriDialog({
+    Key? key,
+    required this.title,
+    required this.content,
+    required this.buttons,
+    this.buttonWidth = 0.8,
+    this.elevation = 0,
+  }) : super(key: key);
 
   //*--- 公有变量 ---*
   /// 标题
@@ -29,6 +30,8 @@ class AriDialog extends StatefulWidget {
   /// 按钮宽度
   final double buttonWidth;
 
+  final double elevation;
+
   @override
   State<StatefulWidget> createState() => AriDialogState();
 }
@@ -39,6 +42,7 @@ class AriDialogState extends State<AriDialog> {
     return FractionallySizedBox(
       widthFactor: 1,
       child: AlertDialog(
+        elevation: widget.elevation,
         title: widget.title,
         titleTextStyle: Theme.of(context)
             .textTheme
@@ -69,6 +73,9 @@ class AriDialogState extends State<AriDialog> {
 /// - `title` 标题
 /// - `content` 内容
 /// - `buttonBuilder` 按钮
+/// - `barrierDismissible` 是否允许点击外部关闭
+/// - `isOnly` 是否关闭其他的dialog
+/// - `elevation` 高度值,会影响颜色的整体颜色,见`https://m3.material.io/styles/elevation/overview`
 ///
 /// buttonBuilder的示例：
 /// ```dart
@@ -94,6 +101,7 @@ void showAriDialog(
   /// 是否允许点击外部关闭
   bool barrierDismissible = true,
   bool isOnly = true,
+  double elevation = 0,
 }) {
   if (isOnly) {
     /// 关闭其他的dialog
@@ -113,6 +121,7 @@ void showAriDialog(
           title: title,
           content: content,
           buttons: buttonBuilder != null ? buttonBuilder(innerContext) : null,
+          elevation: elevation,
         );
       });
     },
