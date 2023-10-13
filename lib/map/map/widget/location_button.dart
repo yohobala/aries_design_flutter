@@ -122,7 +122,8 @@ class AriLocationButtonState extends AriIconButtonState {
                 onPressed: () => {
                       //关闭
 
-                      Navigator.pop(innerContext, 'ok'),
+                      Navigator.pop(innerContext,
+                          AriLocalizations.of(context)!.confirm_button),
                       // 跳到系统设置里
                       //ios平台
                       AppSettings.openAppSettings(
@@ -132,7 +133,10 @@ class AriLocationButtonState extends AriIconButtonState {
                     .location_server_failed_open)),
             // 取消按钮
             TextButton(
-                onPressed: () => {Navigator.pop(innerContext, 'cancel')},
+                onPressed: () => {
+                      Navigator.pop(innerContext,
+                          AriLocalizations.of(context)!.cancel_button)
+                    },
                 child: Text(AriLocalizations.of(innerContext)!
                     .location_server_failed_cancel))
           ];

@@ -15,4 +15,10 @@ class AriLocalizationsZh extends AriLocalizations {
 
   @override
   String get location_server_failed_cancel => '下次再说';
+
+  @override
+  String get confirm_button => '确定';
+
+  @override
+  String get cancel_button => '取消';
 }

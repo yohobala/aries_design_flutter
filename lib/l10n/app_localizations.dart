@@ -116,6 +116,18 @@ abstract class AriLocalizations {
   /// In zh, this message translates to:
   /// **'下次再说'**
   String get location_server_failed_cancel;
+
+  /// 确定按钮
+  ///
+  /// In zh, this message translates to:
+  /// **'确定'**
+  String get confirm_button;
+
+  /// 取消按钮
+  ///
+  /// In zh, this message translates to:
+  /// **'取消'**
+  String get cancel_button;
 }
 
 class _AriLocalizationsDelegate extends LocalizationsDelegate<AriLocalizations> {

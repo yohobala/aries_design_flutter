@@ -15,4 +15,10 @@ class AriLocalizationsEn extends AriLocalizations {
 
   @override
   String get location_server_failed_cancel => 'No Thanks';
+
+  @override
+  String get confirm_button => 'Confirm';
+
+  @override
+  String get cancel_button => 'Cancel';
 }
