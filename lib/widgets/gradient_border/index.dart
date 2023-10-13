@@ -15,7 +15,7 @@ class AriGradientBorder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _GradientBorderPainter(strokeWidth),
+      painter: _GradientBorderPainter(strokeWidth, colors, borderRadius),
       child: child,
     );
   }
