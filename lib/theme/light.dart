@@ -20,13 +20,16 @@ final ariThemeDataLight = generateThemeData(
 /// Neutral: #959088
 final ColorScheme _colorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF7A5900),
+  // 用于图标，字体的颜色
+  primary: _prime.yellow!, //Color(0xFF7A5900),
   onPrimary: Color(0xFFFFFFFF),
+  // 用于容器的颜色
   primaryContainer: Color(0xFFFFDEA1),
   onPrimaryContainer: Color(0xFF261900),
   secondary: Color(0xFF6C5C3F),
   onSecondary: Color(0xFFFFFFFF),
-  secondaryContainer: Color(0xFFF5E0BB),
+  // 如果字体，图标使用了primary，可以使用这个颜色当背景色
+  secondaryContainer: Color(0xFFFFEFD5), //Color(0xFFF5E0BB),
   onSecondaryContainer: Color(0xFF241A04),
   tertiary: Color(0xFF1B60A5),
   onTertiary: Color(0xFFFFFFFF),
@@ -40,6 +43,7 @@ final ColorScheme _colorScheme = ColorScheme(
   onBackground: Color(0xFF1E1B16),
   surface: Color(0xFFFFFBFF),
   onSurface: Color(0xFF1E1B16),
+  // 高亮的背景色，用于与背景做区别，通常用于容器，输入框等
   surfaceVariant: _prime.grey, //Color(0xFFEDE1CF),
   onSurfaceVariant: Color(0xFF4D4639),
   outline: Color(0xFF7F7667),
@@ -57,20 +61,10 @@ AriThemeColorPrime _prime = const AriThemeColorPrime(
   blue: Color.fromARGB(255, 30, 136, 229),
   green: Color.fromARGB(255, 67, 160, 71),
   red: Color.fromARGB(255, 229, 57, 53),
-  yellow: Color(0xFFFFDF93),
+  yellow: Color(0xFFF8B00C),
   orange: Color.fromARGB(255, 251, 140, 0),
-  grey: Color.fromARGB(255, 240, 240, 240),
+  grey: Color.fromARGB(255, 241, 241, 241),
   onGrey: Color.fromARGB(255, 180, 180, 180),
   onGrey2: Color.fromARGB(255, 160, 160, 160),
   white: Color.fromARGB(255, 240, 240, 240),
 );
-
-// AriThemeColorPrime _prime = AriThemeColorPrime(
-//   blue: Colors.blue[600]!,
-//   green: Colors.green[600]!,
-//   red: Colors.red[600]!,
-//   yellow: _colorScheme.primaryContainer,
-//   orange: Colors.orange[600]!,
-//   white: Colors.white,
-//   ,
-// );

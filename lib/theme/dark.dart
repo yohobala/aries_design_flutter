@@ -20,13 +20,14 @@ final ariThemeDataDark = generateThemeData(
 /// Neutral: #a7a29c
 final ColorScheme _colorScheme = ColorScheme(
   brightness: Brightness.dark,
-  primary: Color(0xFFF4BF48),
+  primary: _prime.yellow!, // Color(0xFFF4BF48),
   onPrimary: Color(0xFF402D00),
   primaryContainer: Color(0xFF5C4300),
   onPrimaryContainer: Color(0xFFFFDEA1),
   secondary: Color(0xFFD8C4A0),
   onSecondary: Color(0xFF3B2F15),
-  secondaryContainer: Color(0xFF53452A),
+  // 黑暗模式和surfaceVariant相同
+  secondaryContainer: _prime.grey, //Color(0xFF53452A),
   onSecondaryContainer: Color(0xFFF5E0BB),
   tertiary: Color(0xFFA4C9FF),
   onTertiary: Color(0xFF00315D),
@@ -56,7 +57,7 @@ AriThemeColorPrime _prime = const AriThemeColorPrime(
   blue: Color.fromARGB(255, 144, 202, 249),
   green: Color.fromARGB(255, 165, 214, 167),
   red: Color.fromARGB(255, 239, 154, 154),
-  yellow: Color.fromARGB(255, 255, 245, 157),
+  yellow: Color(0xFFFFDEA6),
   orange: Color.fromARGB(255, 255, 204, 128),
   grey: Color.fromARGB(255, 70, 70, 70),
   onGrey: Color.fromARGB(255, 130, 130, 130),
