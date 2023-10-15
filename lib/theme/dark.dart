@@ -40,7 +40,7 @@ final ColorScheme _colorScheme = ColorScheme(
   onBackground: Color(0xFFE9E1D8),
   surface: Color(0xFF1E1B16),
   onSurface: Color(0xFFE9E1D8),
-  surfaceVariant: _prime.grey,
+  surfaceVariant: _prime.grey, //Color(0xFF4D4639),
   onSurfaceVariant: Color(0xFFD1C5B4),
   outline: Color(0xFF998F80),
   onInverseSurface: Color(0xFF1E1B16),

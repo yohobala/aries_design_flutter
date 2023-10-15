@@ -62,7 +62,7 @@ AriThemeColor generateThemeColor({
       ),
       filledIconButton: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.surfaceVariant,
+          colorScheme.secondaryContainer,
         ),
       ),
       markerIcon: colorScheme.background);
@@ -161,7 +161,7 @@ ThemeData generateThemeData(Brightness brightness,
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
-            colorTheme.colorScheme.surfaceVariant),
+            colorTheme.colorScheme.secondaryContainer),
         foregroundColor: MaterialStateProperty.all<Color>(
           colorTheme.colorScheme.onPrimaryContainer,
         ),
@@ -186,8 +186,6 @@ ThemeData generateThemeData(Brightness brightness,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(AriTheme.borderRadius.standard),
       ),
-      elevation: 1,
-      surfaceTintColor: colorTheme.prime.grey,
     ),
   );
 }
