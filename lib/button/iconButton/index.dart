@@ -16,6 +16,7 @@ class AriFilledIconButton extends StatelessWidget {
     this.width = 40,
     this.height = 40,
     this.iconSize = 24,
+    this.borderRadius,
     this.style,
     this.onPressed,
   }) : super(key: key);
@@ -28,6 +29,8 @@ class AriFilledIconButton extends StatelessWidget {
 
   final double iconSize;
 
+  final Radius? borderRadius;
+
   final ButtonStyle? style;
 
   /// 点击事件
@@ -37,6 +40,15 @@ class AriFilledIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     ButtonStyle? buttonStyle =
         style ?? AriThemeColor.of(context).button.filledIconButton;
+    if (borderRadius != null) {
+      buttonStyle = buttonStyle.copyWith(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(borderRadius!),
+          ),
+        ),
+      );
+    }
     return AriIconButton(
         icons: icons,
         style: buttonStyle,
