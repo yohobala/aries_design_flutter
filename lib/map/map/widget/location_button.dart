@@ -32,19 +32,32 @@ enum LocationButtonEnum {
 ///   AriLocationButton().build(),
 ///])
 class AriLocationButton extends AriIconButton {
-  AriLocationButton({GlobalKey<AriIconButtonState>? key})
-      : super(
+  AriLocationButton({
+    GlobalKey<AriIconButtonState>? key,
+    this.positionColor,
+    this.disabledPermissionColor,
+  }) : super(
           key: key,
-          icons: const [
+          icons: [
             Icon(
               Icons.near_me_outlined,
             ),
-            Icon(Icons.near_me),
-            Icon(Icons.near_me_disabled_outlined)
+            Icon(
+              Icons.near_me,
+              color: positionColor,
+            ),
+            Icon(
+              Icons.near_me_disabled_outlined,
+              color: disabledPermissionColor,
+            )
           ],
           selectIndex: ValueNotifier(LocationButtonEnum.offset.index),
           rotateAngle: 0,
         );
+
+  final Color? positionColor;
+
+  final Color? disabledPermissionColor;
 
   @override
   AriLocationButtonState createState() => AriLocationButtonState();
