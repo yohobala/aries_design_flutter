@@ -100,20 +100,28 @@ class AriMapMarkerModel {
   /// marker的key。如果为空，将默认为`UniqueKey().toString()`
   final Key key;
 
+  /// marker所属的层的key
   Key get layerkey => _layerkey;
 
+  /// marker的坐标
   LatLng latLng;
 
+  /// marker的所指向的方向
   double? direction;
 
+  /// marker的宽度
   double get width => _width;
 
+  /// marker的高度
   double get height => _height;
 
+  /// marker的类型
   MarkerType get type => _type;
 
+  /// marker的点击事件
   final MarkerTapCallback? onTap;
 
+  /// marker是否被选中
   bool selected;
 
   final Key _layerkey;

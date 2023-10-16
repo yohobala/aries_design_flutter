@@ -38,20 +38,36 @@ class AriMapPolylineModel {
     this.borderColor = const Color.fromARGB(255, 33, 150, 243),
     this.strokeWidth = 5.0,
     this.borderStrokeWidth = 5.0,
+    this.onTap,
+    this.selected = false,
   }) : _layerkey = layerkey ?? defalutPolylineLayerKey;
 
+  /// polyline的key
   final Key key;
+
+  /// polyline所属的layer的key
   Key get layerkey => _layerkey;
 
+  /// polyline的点
   List<LatLng> points;
 
+  /// polyline的颜色
   Color color;
 
+  /// polyline的边框颜色
   Color borderColor;
 
+  /// polyline的宽度
   double strokeWidth;
 
+  /// polyline的边框宽度
   double borderStrokeWidth;
+
+  /// 点击事件
+  final MarkerTapCallback? onTap;
+
+  /// 是否选中
+  bool selected;
 
   final Key _layerkey;
 }

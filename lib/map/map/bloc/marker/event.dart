@@ -1,4 +1,5 @@
-import 'package:aries_design_flutter/map/map/index.dart';
+import '../../model/marker.dart';
+import '../../widget/marker.dart';
 
 abstract class AriMapMarkerEvent {}
 

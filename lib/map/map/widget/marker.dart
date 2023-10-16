@@ -6,6 +6,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+typedef BuildMarker = Widget Function(AriMapMarkerModel marker);
+
 /// 初始化AriMap的依赖
 List<SingleChildWidget> ariMarkerProvider() {
   return [
@@ -16,8 +18,6 @@ List<SingleChildWidget> ariMarkerProvider() {
     ),
   ];
 }
-
-typedef BuildMarker = Widget Function(AriMapMarkerModel marker);
 
 /// 地图标记组件
 class AriMapMarker extends StatelessWidget {
