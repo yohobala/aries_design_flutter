@@ -1,5 +1,6 @@
-import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 
 abstract class AriMapEvent {}
@@ -100,15 +101,30 @@ class ChangeCompassEvent extends AriMapEvent {
   final double direction;
 }
 
-/***************  图层,标记有关事件  ***************/
+/***************  图层有关事件  ***************/
 
 /// 更新图层
-class UpdateLayerEvent extends AriMapEvent {
-  UpdateLayerEvent({
+class UpdateTileLayerEvent extends AriMapEvent {
+  UpdateTileLayerEvent({
     required this.layers,
   });
-  final List<AriLayerModel> layers;
+  final List<AriTileLayerModel> layers;
 }
+
+class UpdateGestureEvent extends AriMapEvent {
+  UpdateGestureEvent(
+      {required this.type, required this.key, this.marker, this.polyline});
+
+  final UpdateGestureType type;
+
+  final ValueKey<String> key;
+
+  final AriMapMarker? marker;
+
+  final AriMapPolyline? polyline;
+}
+
+/***************  标记有关事件  ***************/
 
 /// 移动标记状态
 ///
@@ -120,9 +136,46 @@ class MoveMarkerStatusEvent extends AriMapEvent {
     this.offset = Offset.zero,
     required this.isStart,
   });
-  final AriMapMarkerModel marker;
+  final AriMapMarker marker;
   final bool isStart;
 
   /// 地图中心点偏移量
+  /// 如果isStart = true 之前使用了[MoveToLocationEvent],同时设置了offset,则这里也要设置相同的值,否则会出现偏移.
+  ///
+  /// 因为每次移动地图,都会把当前地图中心点的坐标赋值给需要移动的marker,如果[MoveToLocationEvent],同时设置了offset,而这里没有设置,
+  /// 则此时移动地图,marker会偏移
   final Offset offset;
+}
+
+/// {@template UpdateAriMarkerEvent}
+/// 更新标记
+/// {@endtemplate}
+class UpdateAriMarkerEvent extends AriMapEvent {
+  /// {@macro UpdateMarkeEvent}
+  UpdateAriMarkerEvent({
+    required this.marker,
+  });
+  final AriMapMarker marker;
+}
+
+class SelectedAriMarkerEvent extends AriMapEvent {
+  SelectedAriMarkerEvent({
+    required this.marker,
+    required this.isSelected,
+  });
+  final AriMapMarker marker;
+  final bool isSelected;
+}
+
+/***************  线有关事件  ***************/
+
+/// {@template UpdateAriPolylineEvent}
+/// 更新曲线
+/// {@endtemplate}
+class UpdateAriPolylineEvent extends AriMapEvent {
+  /// {@macro UpdatePolylineEvent}
+  UpdateAriPolylineEvent({
+    required this.polyline,
+  });
+  final AriMapPolyline polyline;
 }

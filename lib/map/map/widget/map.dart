@@ -8,28 +8,28 @@ import 'package:provider/single_child_widget.dart';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'layer.dart';
-import 'marker.dart';
-import 'polyline.dart';
+import 'map_gesture_layer.dart';
+import 'tile_layer.dart';
 
 /// 地图无返回值的回调函数
 typedef MapVoidCallback = void Function(LatLng latLng);
 
+typedef MapTapCallback = void Function(
+  List<AriMapMarker> markers,
+  List<AriMapPolyline> polylines,
+);
+
 /// 初始化AriMap的依赖
 List<SingleChildWidget> ariMapProvider({bool openLoaction = true}) {
   return [
-    ...ariMarkerProvider(),
-    ...ariMapPolylineProvider(),
+    Provider<MapController>(create: (_) => MapController()),
     Provider<AriMapRepo>(create: (_) => AriMapRepo()),
     Provider<MapController>(create: (_) => MapController()),
-    ProxyProvider5<AriMapRepo, AriGeoLocationRepo, AriMapMarkerBloc,
-        AriMapPolylineBloc, MapController, AriMapBloc>(
-      update: (_, ariMapRepo, ariGeoLocationRepo, ariMarkerBloc, ariMapPolyline,
-              mapController, __) =>
+    ProxyProvider3<AriMapRepo, AriGeoLocationRepo, MapController, AriMapBloc>(
+      update: (_, ariMapRepo, ariGeoLocationRepo, mapController, __) =>
           AriMapBloc(
         ariMapRepo,
         ariGeoLocationRepo,
-        ariMarkerBloc,
         mapController,
         openLoaction,
       ),
@@ -62,7 +62,6 @@ List<SingleChildWidget> ariMapProvider({bool openLoaction = true}) {
 ///     final ariMapBloc = context.read<AriMapBloc>();
 ///     return BlocListener<AriMapBloc, AriMapState>(
 ///       listener: (context, state) {
-///         // Do something else
 ///       },
 ///       child: AriMap(),
 ///     );
@@ -87,6 +86,8 @@ class AriMap extends StatefulWidget {
     this.center,
     this.onLongPress,
     this.buildMarker,
+    this.onTap,
+    this.tapDistanceTolerance = 0,
   });
 
   /// 地图右下角的子组件
@@ -118,6 +119,11 @@ class AriMap extends StatefulWidget {
   /// 可以通过AriMapMarkerState的SelectdMarkerState来判断marker是否被选中
   /// 需要先调用SelectedMarkerEvent来触发,可以在AriMapMarkerModel的onTap中调用
   final BuildMarker? buildMarker;
+
+  final MapTapCallback? onTap;
+
+  /// 点击屏幕的位置和地图中元素是否产生交集的容差
+  final double tapDistanceTolerance;
 
   @override
   State<AriMap> createState() => _AriMapState();
@@ -153,7 +159,7 @@ class _AriMapState extends State<AriMap>
     WidgetsBinding.instance.addObserver(this);
 
     mapBloc = context.read<AriMapBloc>();
-    // final markerBloc = context.read<AriMapMarkerBloc>();
+    // final markerBloc = context.read<AriMapBloc>();
     mapController = mapBloc.mapController;
 
     // NOTE:
@@ -175,15 +181,12 @@ class _AriMapState extends State<AriMap>
     // 应用程序从后台切换回前台
     if (state == AppLifecycleState.resumed) {
       // 检查定位权限
-      final mapBloc = context.read<AriMapBloc>();
       mapBloc.add(CheckGeoLocationAvailableEvent());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var mapBloc = context.read<AriMapBloc>();
-
     // NOTE:
     // 获取安全区域
     // 用于对自定义的widget进行定位
@@ -255,12 +258,57 @@ class _AriMapState extends State<AriMap>
               ),
             ],
             children: [
-              AriMapLayer(),
-              AriMapMarker(buildMarker: widget.buildMarker),
-              IgnorePointer(
-                ignoring: true,
-                child: AriMapPolyline(),
-              ),
+              AriMapTileLayer(),
+              AriMapGestureLayer(
+                buildMarker: widget.buildMarker,
+                onTap: widget.onTap,
+                tapDistanceTolerance: widget.tapDistanceTolerance,
+              )
+              // Stack(
+              //   children: [
+              //     // MarkerLayer(
+              //     //   markers: [
+              //     //     Marker(
+              //     //       point: LatLng(0, 0),
+              //     //       width: 100,
+              //     //       height: 100,
+              //     //       builder: (context) => GestureDetector(
+              //     //         onTap: () {
+              //     //           print("点击图标");
+              //     //         },
+              //     //         child: Icon(Icons.abc),
+              //     //       ),
+              //     //     )
+              //     //   ],
+              //     // ),
+              //     // TappablePolylineLayer(
+              //     //   // Will only render visible polylines, increasing performance
+              //     //   polylineCulling: true,
+              //     //   pointerDistanceTolerance: 20,
+              //     //   polylines: [
+              //     //     TaggedPolyline(
+              //     //       tag: 'My Polyline',
+              //     //       // An optional tag to distinguish polylines in callback
+              //     //       points: [
+              //     //         LatLng(45.1313258, 5.5171205),
+              //     //         LatLng(47.1313258, 5.5171205)
+              //     //       ],
+              //     //       color: Colors.red,
+              //     //       strokeWidth: 9.0,
+              //     //     ),
+              //     //   ],
+              //     //   onTap: (polylines, tapPosition) => print('Tapped: ' +
+              //     //       polylines.map((polyline) => polyline.tag).join(',') +
+              //     //       ' at ' +
+              //     //       tapPosition.globalPosition.toString()),
+              //     //   onMiss: (tapPosition) {
+              //     //     print('No polyline was tapped at position ' +
+              //     //         tapPosition.globalPosition.toString());
+              //     //   },
+              //     // ),
+
+              //   ],
+              // )
             ],
           ),
         ),
@@ -322,6 +370,7 @@ class _AriMapState extends State<AriMap>
 void _addMapControllerListener(
     MapController mapController, AriMapBloc mapBloc) {
   mapController.mapEventStream.listen((evt) {
+    print(evt);
     //  事件：MapEventMoveEnd 的evt.source 是dragEnd
     if (evt.source == MapEventSource.dragEnd) {
       mapBloc.add(IsCenterOnLocationEvent(isCenter: false));
@@ -412,5 +461,7 @@ void _mapFlyToPostion(
         LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
         zoomTween.evaluate(animation),
         offset: offsetTween.evaluate(animation));
-  } catch (e) {}
+  } catch (e) {
+    assert(false, e.toString());
+  }
 }

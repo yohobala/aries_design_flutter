@@ -15,6 +15,7 @@ dependencies:
   intl: any # Use the pinned version from flutter_localizations
   latlong2: ^0.9.0 # 用于地图坐标
   flutter_map: ^5.0.0 # 用于地图
+  flutter_map_tappable_polyline: 5.0.0
   geolocator: ^9.0.2 # 用于定位
   url_launcher: ^6.1.12 # 用于打开外部链接
   app_settings: ^5.0.0 # 用于打开系统设置

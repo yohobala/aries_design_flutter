@@ -1,4 +1,4 @@
-import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
@@ -69,9 +69,80 @@ class ChangeCompassState extends AriMapState {
 /***************  图层有关状态  ***************/
 
 /// 更新图层
-class UpdateLayerState extends AriMapState {
-  UpdateLayerState({
+class UpdateTileLayerState extends AriMapState {
+  UpdateTileLayerState({
     required this.layers,
   });
-  final List<AriLayerModel> layers;
+  final List<AriTileLayerModel> layers;
+}
+
+class CreateGestureState extends AriMapState {
+  CreateGestureState({
+    required this.layer,
+  });
+  final AriMapGesture layer;
+}
+
+class UpdateGestureState extends AriMapState {
+  UpdateGestureState({
+    required this.layer,
+    required this.type,
+  });
+  final AriMapGesture layer;
+
+  final UpdateGestureType type;
+}
+
+/***************  标记有关状态  ***************/
+
+class UpdateMarkerState extends AriMapState {
+  UpdateMarkerState({
+    required this.marker,
+    required this.layerKey,
+  });
+
+  final ValueKey<String> layerKey;
+  final AriMapMarker marker;
+}
+
+class CreateMarkerState extends AriMapState {
+  CreateMarkerState({
+    required this.marker,
+    required this.layerKey,
+  });
+
+  final AriMapMarker marker;
+  final ValueKey<String> layerKey;
+}
+
+class SelectdMarkerState extends AriMapState {
+  SelectdMarkerState({
+    required this.marker,
+    required this.isSelected,
+  });
+
+  final AriMapMarker marker;
+  final bool isSelected;
+}
+
+/***************  线有关状态  ***************/
+
+class UpdatePolylineState extends AriMapState {
+  UpdatePolylineState({
+    required this.polyline,
+    required this.layerKey,
+  });
+
+  final ValueKey<String> layerKey;
+  final AriMapPolyline polyline;
+}
+
+class CreatePolylineState extends AriMapState {
+  CreatePolylineState({
+    required this.polyline,
+    required this.layerKey,
+  });
+
+  final AriMapPolyline polyline;
+  final ValueKey<String> layerKey;
 }

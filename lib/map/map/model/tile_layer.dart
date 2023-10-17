@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AriLayerModel {
-  AriLayerModel({
+class AriTileLayerModel {
+  AriTileLayerModel({
     required this.url,
     this.backgroundColor = Colors.transparent,
   });

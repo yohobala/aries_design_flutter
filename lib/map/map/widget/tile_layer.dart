@@ -5,8 +5,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class AriMapLayer extends StatelessWidget {
-  AriMapLayer({
+class AriMapTileLayer extends StatelessWidget {
+  AriMapTileLayer({
     Key? key,
   });
 
@@ -14,20 +14,19 @@ class AriMapLayer extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapBloc = context.read<AriMapBloc>();
     return Scaffold(
-      body: StreamBuilder<AriMapState>(
-        stream: mapBloc.stream,
+      body: BlocBuilder<AriMapBloc, AriMapState>(
+        bloc: mapBloc,
         builder: (context, state) {
-          if (state.data is UpdateLayerState) {
-            final s = state.data as UpdateLayerState;
+          if (state is UpdateTileLayerState) {
             return Stack(
-              children: buildLayers(s.layers),
+              children: buildTileLayers(state.layers),
             );
           } else {
             // NOTE:
             // 这里的layers是默认的图层
             // 需要用mapBloc.layers，不然当移动页面，会变成空白
             return Stack(
-              children: buildLayers(mapBloc.layers),
+              children: buildTileLayers(mapBloc.tileLayers),
             );
           }
         },
@@ -36,7 +35,7 @@ class AriMapLayer extends StatelessWidget {
   }
 }
 
-List<TileLayer> buildLayers(List<AriLayerModel> layers) {
+List<TileLayer> buildTileLayers(List<AriTileLayerModel> layers) {
   List<TileLayer> tileLayers = [];
   for (var layer in layers) {
     tileLayers.add(

@@ -1,3 +1,0 @@
-class AriMapMarkerRepo {
-  AriMapMarkerRepo();
-}

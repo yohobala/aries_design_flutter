@@ -195,7 +195,7 @@ class _AriBottomSheetState extends State<_AriBottomSheet>
     super.initState();
     // NOTE:
     // 解决了即使解决了即使_draggableController附加到widget中, _draggableController.isAttached依然为false
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {});
     });
   }

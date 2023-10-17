@@ -1,8 +1,6 @@
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
-import 'message_bar.dart';
-
 class _OverlayInfo {
   _OverlayInfo({
     required this.overlayEntry,
@@ -37,8 +35,8 @@ void showAriMessageBar(
     }
   }
 
-  // 创建一个 GlobalKey，这样我们就能访问动画状态。
-  GlobalKey<_AnimatedOverlayState> _key = GlobalKey();
+  // 创建一个 GlobalKey，访问动画状态。
+  GlobalKey<_AnimatedOverlayState> key = GlobalKey();
 
   AriMessageBar messageBar = AriMessageBar(message,
       prefixChildren: prefixChildren,
@@ -50,18 +48,18 @@ void showAriMessageBar(
 
   OverlayEntry overlayEntry = OverlayEntry(
     builder: (BuildContext context) {
-      return _AnimatedOverlay(key: _key, child: messageBar);
+      return _AnimatedOverlay(key: key, child: messageBar);
     },
   );
 
   if (context != null) {
-    Overlay.of(context)!.insert(overlayEntry);
+    Overlay.of(context).insert(overlayEntry);
   } else {
     overlayState!.insert(overlayEntry);
   }
   _OverlayInfo overlayInfo = _OverlayInfo(
     overlayEntry: overlayEntry,
-    key: _key,
+    key: key,
   );
   _overlayEntryList.add(overlayInfo);
 
@@ -116,7 +114,7 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
     );
 
     // 自动开始动画
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.forward();
     });
   }
@@ -150,7 +148,10 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
           top: _positionAnimation.value,
           left: 0,
           right: 0,
-          child: widget.child,
+          child: Opacity(
+            opacity: _opacityAnimation.value,
+            child: child,
+          ),
         );
       },
     );

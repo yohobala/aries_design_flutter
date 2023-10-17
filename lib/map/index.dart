@@ -1,4 +1,10 @@
 export 'map/index.dart'
-    hide AriMapMarker, AriMapLayer, AriMapMarkerLayer, AriMapMarkerBuider;
+    hide
+        AriMapTileLayer,
+        buildTileLayers,
+        CachedNetworkTileProvider,
+        AriMapGestureLayer,
+        AriMapMarkerLayer,
+        AriMapPolylineLayer;
 export 'geolocation/index.dart';
 export 'geojson.dart';

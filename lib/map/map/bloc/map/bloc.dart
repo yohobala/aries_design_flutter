@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -11,7 +10,6 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   AriMapBloc(
     this.mapRepo,
     this.geoLocationRepo,
-    this.markerBloc,
     this.mapController,
     this.openLocation,
   ) : super(InitAriMapBlocState()) {
@@ -28,8 +26,14 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     on<UpdateLocationMarkerEvent>(updateLocationMarkerEvent);
     on<ChangeCompassEvent>(changeCompassEvent);
 
-    on<UpdateLayerEvent>(updateLayerEvent);
+    on<UpdateTileLayerEvent>(updateTileLayerEvent);
+    on<UpdateGestureEvent>(updateGestureEvent);
+
     on<MoveMarkerStatusEvent>(moveMarkerStatusEvent);
+    on<UpdateAriMarkerEvent>(updateMarkeEvent);
+    on<SelectedAriMarkerEvent>(selectedMarkerEvent);
+
+    on<UpdateAriPolylineEvent>(updatePolylineEvent);
 
     // 派发初始化事件
     add(InitAriMapEvent());
@@ -50,8 +54,6 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /// 定位仓库
   final AriGeoLocationRepo geoLocationRepo;
 
-  final AriMapMarkerBloc markerBloc;
-
   final MapController mapController;
 
   final bool openLocation;
@@ -59,13 +61,37 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /// 是否支持定位
   bool get geoLocationAvailable => _geoLocationAvailable;
 
-  /// 图层
-  List<AriLayerModel> get layers => _layers;
+  /// 切片图层
+  List<AriTileLayerModel> get tileLayers => _tileLayers;
 
-  /***************  私有变量  ***************/
+  /// 手势图层
+  Map<ValueKey<String>, AriMapGesture> get gestureLayers =>
+      mapRepo.gestureLayers;
+
+  /// 标记
+  ///
+  /// key: 标记的key
+  /// value: 标记
+  Map<ValueKey<String>, AriMapMarker> get markers => _markers;
+
+  /// 线
+  ///
+  /// key: 线的key
+  /// value: 线
+  Map<ValueKey<String>, AriMapPolyline> get polylines => _polylines;
 
   /// 是否已经初始化
   bool isInit = false;
+
+  bool compassAvailabel = false;
+
+  /// 当前移动的标记
+  AriMapMarker? currentMoveMarker;
+
+  /// 当前移动标记的地图中心偏移量
+  Offset? currentMoveMarkerOffset;
+
+  /***************  私有变量  ***************/
 
   /// 定位流
   // ignore: unused_field
@@ -78,22 +104,20 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   // ignore: unused_field
   StreamSubscription<double>? _compassSubscription;
 
-  bool _compassAvailabel = false;
+  /// 切片图层
+  List<AriTileLayerModel> _tileLayers = [];
 
-  /// 图层
-  List<AriLayerModel> _layers = [];
+  /// 当前地图的全部标记
+  final Map<ValueKey<String>, AriMapMarker> _markers = {};
+
+  /// 线
+  final Map<ValueKey<String>, AriMapPolyline> _polylines = {};
 
   /// GPS位置标记
-  final AriMapMarkerModel _postionMarker = AriMapMarkerModel(
+  final AriMapMarker _postionMarker = AriMapMarker(
       key: defalutPositionMarkerKey,
       layerkey: defalutPositionMakerLayerKey,
       type: MarkerType.location);
-
-  /// 当前移动的标记
-  AriMapMarkerModel? currentMoveMarker;
-
-  /// 当前移动标记的地图中心偏移量
-  Offset? currentMoveMarkerOffset;
 
   /***************  初始化、权限有关事件 ***************/
 
@@ -114,6 +138,11 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       }
     } else {
       emit(InitAriMapState());
+    }
+
+    // 添加默认手势图层
+    if (!mapRepo.gestureLayers.containsKey(defalutGestureLayerKey)) {
+      mapRepo.createGesture(defalutGestureLayerKey);
     }
   }
 
@@ -138,7 +167,8 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     // offset在`flutter_map`的源代码中是`newPoint - CustomPoint(offset.dx, offset.dy)`这样操作的,
     // 但是这是对地图的偏移,通过计算地图中心点,实现地图偏移,
     // 如果offset = Offset(0, -100),那么中心点会是原来中心点`下方`100像素位置的点,
-    // 但是地图是显示的结果是地图`上移`,
+    // 但是地图是显示的结果是地图`上移`.
+    //
     // 这里我们得到的地图中心是向下偏移了100像素的点,
     // 所以我们需要`newPoint + CustomPoint(offset.dx, offset.dy)`,来还原真正的位置
 
@@ -148,7 +178,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
         MapOptions options = MapOptions();
         CustomPoint<double> newPoint =
             options.crs.latLngToPoint(event.latLng, mapController.zoom);
-        newPoint = newPoint +
+        newPoint = newPoint -
             CustomPoint(
                 currentMoveMarkerOffset!.dx, currentMoveMarkerOffset!.dy);
         latLng = options.crs.pointToLatLng(newPoint, mapController.zoom);
@@ -157,7 +187,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       }
 
       currentMoveMarker!.latLng = latLng;
-      markerBloc.add(UpdateAriMarkerEvent(marker: currentMoveMarker!));
+      add(UpdateAriMarkerEvent(marker: currentMoveMarker!));
     }
   }
 
@@ -227,7 +257,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     if (event.direction != null) {
       _postionMarker.direction = event.direction!;
     }
-    markerBloc.add(UpdateAriMarkerEvent(marker: _postionMarker));
+    add(UpdateAriMarkerEvent(marker: _postionMarker));
   }
 
   FutureOr<void> changeCompassEvent(
@@ -242,16 +272,79 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /***************  图层有关事件  ***************/
 
   /// 更新图层
-  void updateLayerEvent(
-      UpdateLayerEvent event, Emitter<AriMapState> emit) async {
-    _layers = event.layers;
-    emit(UpdateLayerState(layers: event.layers));
+  void updateTileLayerEvent(
+      UpdateTileLayerEvent event, Emitter<AriMapState> emit) async {
+    _tileLayers = event.layers;
+    emit(UpdateTileLayerState(layers: event.layers));
   }
 
+  /// 更新手势图层
+  FutureOr<void> updateGestureEvent(
+      UpdateGestureEvent event, Emitter<AriMapState> emit) {
+    var type = event.type;
+    if (type == UpdateGestureType.marker) {
+      assert(event.marker != null);
+      var marker = event.marker!;
+      GetGestureResult result = mapRepo.getGesture(marker.layerkey);
+      if (result.isNew) {
+        emit(CreateGestureState(layer: result.gesture));
+      }
+      var layer = result.gesture;
+      layer.markers[marker.key] = marker;
+      mapRepo.updateGesture(layer.key, layer);
+      emit(UpdateGestureState(layer: layer, type: type));
+    } else if (type == UpdateGestureType.polyline) {
+      assert(event.polyline != null);
+      var polyline = event.polyline!;
+      GetGestureResult result = mapRepo.getGesture(polyline.layerkey);
+      if (result.isNew) {
+        emit(CreateGestureState(layer: result.gesture));
+      }
+      var layer = result.gesture;
+      layer.polylines[polyline.key] = polyline;
+      mapRepo.updateGesture(layer.key, layer);
+      emit(UpdateGestureState(layer: layer, type: type));
+    }
+  }
+
+  /***************  标记有关事件  ***************/
+
+  /// 更新标记事件
+  ///
+  /// 会判断是否存在标记，进行不同操作：
+  /// - `存在`: 更新标记，会发起[UpdateMarkerState]
+  /// - `不存在`: 创建标记，先判断是否存在图层，如果不存在则创建图层，再发起[CreateMarkerState]
+  void updateMarkeEvent(UpdateAriMarkerEvent event, Emitter<AriMapState> emit) {
+    final AriMapMarker marker = event.marker;
+
+    add(
+      UpdateGestureEvent(
+          key: marker.layerkey, type: UpdateGestureType.marker, marker: marker),
+    );
+
+    if (!_markers.containsKey(marker.key)) {
+      _markers[marker.key] = marker;
+      emit(
+        CreateMarkerState(marker: marker, layerKey: marker.layerkey),
+      );
+    } else {
+      _markers[marker.key] = marker;
+      emit(UpdateMarkerState(marker: marker, layerKey: marker.layerkey));
+    }
+  }
+
+  FutureOr<void> selectedMarkerEvent(
+      SelectedAriMarkerEvent event, Emitter<AriMapState> emit) {
+    event.marker.selected = event.isSelected;
+    emit(
+        SelectdMarkerState(marker: event.marker, isSelected: event.isSelected));
+  }
+
+  /// 移动标记
   FutureOr<void> moveMarkerStatusEvent(
       MoveMarkerStatusEvent event, Emitter<AriMapState> emit) {
     if (event.isStart) {
-      AriMapMarkerModel marker = event.marker;
+      AriMapMarker marker = event.marker;
       assert(marker.selected);
 
       currentMoveMarker = marker;
@@ -261,6 +354,31 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     } else {
       currentMoveMarker = null;
       currentMoveMarkerOffset = null;
+    }
+  }
+
+  /***************  线有关事件  ***************/
+
+  FutureOr<void> updatePolylineEvent(
+      UpdateAriPolylineEvent event, Emitter<AriMapState> emit) {
+    final AriMapPolyline polyline = event.polyline;
+
+    add(
+      UpdateGestureEvent(
+          key: polyline.layerkey,
+          type: UpdateGestureType.polyline,
+          polyline: polyline),
+    );
+
+    if (!_polylines.containsKey(polyline.key)) {
+      _polylines[polyline.key] = polyline;
+      emit(
+        CreatePolylineState(polyline: polyline, layerKey: polyline.layerkey),
+      );
+    } else {
+      _polylines[polyline.key] = polyline;
+      emit(
+          UpdatePolylineState(polyline: polyline, layerKey: polyline.layerkey));
     }
   }
 
@@ -300,13 +418,13 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       _compassSubscription = geoLocationRepo.compassStream.listen(
         (direction) {
           add(ChangeCompassEvent(direction: direction));
-          _compassAvailabel = true;
+          compassAvailabel = true;
         },
         onError: (error) {
-          _compassAvailabel = false;
+          compassAvailabel = false;
         },
         onDone: () {
-          _compassAvailabel = false;
+          compassAvailabel = false;
         },
       );
     }
