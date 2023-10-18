@@ -131,8 +131,8 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
       listener: (context, state) {
         if (state is UpdatePolylineState &&
             state.polyline.key == widget.polyline.key) {
+          // 判断是否是points的更新,如果是执行动画
           int pointsHash = state.polyline.renderPoints;
-
           if (pointsHash != hash) {
             isRendering = true;
             bool diff = false;
@@ -161,6 +161,8 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
             polyline = state.polyline;
 
             startAnimation(progress);
+          } else {
+            setState(() {});
           }
         }
       },
