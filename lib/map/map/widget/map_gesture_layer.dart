@@ -114,26 +114,22 @@ class AriMapGestureLayer extends StatelessWidget {
 
     // 处理点
     for (AriMapMarker marker in markers) {
-      final pxPoint = mapState.project(marker.latLng);
-      final anchor = Anchor.fromPos(
-        AnchorPos.align(AnchorAlign.center),
-        marker.width,
-        marker.height,
-      );
-      final rightPortion = marker.width - anchor.left;
-      final bottomPortion = marker.height - anchor.top;
-      final pos = pxPoint - mapState.pixelOrigin;
+      if (marker.builderKey.currentContext == null) {
+        continue;
+      }
+      final RenderBox box =
+          marker.builderKey.currentContext!.findRenderObject() as RenderBox;
+      final Offset localOffset = box.globalToLocal(details.globalPosition);
 
-      _pointProximityCheck(
-        tap,
-        pos,
-        rightPortion,
-        bottomPortion,
-        marker.width,
-        marker.height,
-        marker,
-        tappedMarkers,
-      );
+      // 检查点击位置是否在 Positioned 内部
+      if (localOffset.dx >= 0 &&
+          localOffset.dx <= box.size.width &&
+          localOffset.dy >= 0 &&
+          localOffset.dy <= box.size.height) {
+        var distance = calDistance(tap, localOffset);
+        tappedMarkers[distance] ??= <AriMapMarker>[];
+        tappedMarkers[distance]!.add(marker);
+      }
     }
 
     // 处理线
@@ -167,7 +163,6 @@ class AriMapGestureLayer extends StatelessWidget {
           polyline,
           tappedPolylines,
         )) {
-          print("Polyline tapped!");
           break;
         }
       }
@@ -187,15 +182,30 @@ class AriMapGestureLayer extends StatelessWidget {
     onTap?.call(markerList, polylineList);
   }
 
-  bool _pointProximityCheck(
-      Offset tap,
-      CustomPoint<double> pos,
-      double rightPortion,
-      double bottomPortion,
-      double width,
-      double height,
-      AriMapMarker marker,
-      Map<double, List<AriMapMarker>> tappedMarkers) {
+  /// 检查点击是否在点的附近
+  ///
+  /// 但是这个有缺陷!!!
+  ///
+  /// 当[AriMapMarker]的[width]和[height]远远大于buildMarker的元素尺寸时,
+  /// 会造成即使没有点击到buildMarker的元素,也会触发点击事件
+  bool pointProximityCheck(
+    FlutterMapState mapState,
+    Offset tap,
+    AriMapMarker marker,
+    Map<double, List<AriMapMarker>> tappedMarkers,
+  ) {
+    final pxPoint = mapState.project(marker.latLng);
+    final anchor = Anchor.fromPos(
+      AnchorPos.align(AnchorAlign.center),
+      marker.width,
+      marker.height,
+    );
+    final rightPortion = marker.width - anchor.left;
+    final bottomPortion = marker.height - anchor.top;
+    final pos = pxPoint - mapState.pixelOrigin;
+    final double width = marker.width;
+    final double height = marker.height;
+
     double tapX = tap.dx;
     double tapY = tap.dy;
 

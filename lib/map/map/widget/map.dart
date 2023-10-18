@@ -264,51 +264,6 @@ class _AriMapState extends State<AriMap>
                 onTap: widget.onTap,
                 tapDistanceTolerance: widget.tapDistanceTolerance,
               )
-              // Stack(
-              //   children: [
-              //     // MarkerLayer(
-              //     //   markers: [
-              //     //     Marker(
-              //     //       point: LatLng(0, 0),
-              //     //       width: 100,
-              //     //       height: 100,
-              //     //       builder: (context) => GestureDetector(
-              //     //         onTap: () {
-              //     //           print("点击图标");
-              //     //         },
-              //     //         child: Icon(Icons.abc),
-              //     //       ),
-              //     //     )
-              //     //   ],
-              //     // ),
-              //     // TappablePolylineLayer(
-              //     //   // Will only render visible polylines, increasing performance
-              //     //   polylineCulling: true,
-              //     //   pointerDistanceTolerance: 20,
-              //     //   polylines: [
-              //     //     TaggedPolyline(
-              //     //       tag: 'My Polyline',
-              //     //       // An optional tag to distinguish polylines in callback
-              //     //       points: [
-              //     //         LatLng(45.1313258, 5.5171205),
-              //     //         LatLng(47.1313258, 5.5171205)
-              //     //       ],
-              //     //       color: Colors.red,
-              //     //       strokeWidth: 9.0,
-              //     //     ),
-              //     //   ],
-              //     //   onTap: (polylines, tapPosition) => print('Tapped: ' +
-              //     //       polylines.map((polyline) => polyline.tag).join(',') +
-              //     //       ' at ' +
-              //     //       tapPosition.globalPosition.toString()),
-              //     //   onMiss: (tapPosition) {
-              //     //     print('No polyline was tapped at position ' +
-              //     //         tapPosition.globalPosition.toString());
-              //     //   },
-              //     // ),
-
-              //   ],
-              // )
             ],
           ),
         ),
@@ -370,7 +325,6 @@ class _AriMapState extends State<AriMap>
 void _addMapControllerListener(
     MapController mapController, AriMapBloc mapBloc) {
   mapController.mapEventStream.listen((evt) {
-    print(evt);
     //  事件：MapEventMoveEnd 的evt.source 是dragEnd
     if (evt.source == MapEventSource.dragEnd) {
       mapBloc.add(IsCenterOnLocationEvent(isCenter: false));

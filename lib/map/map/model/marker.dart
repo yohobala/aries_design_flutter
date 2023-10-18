@@ -104,6 +104,42 @@ class AriMapMarker {
   /// marker所属的层的key
   final ValueKey<String> layerkey;
 
+  /// 用于构建marker的key
+  ///
+  /// 在需要识别是否点击marker的时候，需要使用这个key,否则无法识别
+  ///
+  /// 请注意!!!请把这个key放入正好需要Gesture的widget中,不要放在大尺寸的widget中
+  ///
+  /// *示例代码*
+  /// SizedBox(
+  ///    width: 150,
+  ///    height: 150,
+  ///    child: Center(
+  ///      child: Padding(
+  ///        padding: const EdgeInsets.only(bottom: 25.0),
+  ///        child: GestureDetector(
+  ///          key: marker.builderKey,
+  ///          onTap: () {}, // 空操作，确保 GestureDetector 创建一个 RenderBox
+  ///          child: Container(
+  ///            width: 50,
+  ///            height: 50,
+  ///            decoration: BoxDecoration(
+  ///              color: Colors.red,
+  ///              shape: BoxShape.circle,
+  ///            ),
+  ///            child: Center(
+  ///                child: Container(
+  ///              child: child,
+  ///            )),
+  ///          ),
+  ///        ),
+  ///      ),
+  ///    ),
+  ///  );
+  /// 上面的代码会制作150*150的容器,内部有一个居中的50*50的圆形容器,
+  /// 但是点击事件只是会在50*50的圆形容器中生效
+  final GlobalKey builderKey = GlobalKey();
+
   /// marker的坐标
   LatLng latLng;
 
