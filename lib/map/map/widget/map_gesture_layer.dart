@@ -25,30 +25,46 @@ class AriMapGestureLayer extends StatelessWidget {
 
   final double tapDistanceTolerance;
 
+  final ValueNotifier<int> rebuild = ValueNotifier(0);
+
   @override
   Widget build(BuildContext context) {
-    final mapState = FlutterMapState.maybeOf(context);
-    if (mapState == null) {
-      assert(false, 'No FlutterMapState found');
-    }
+    // final mapState = FlutterMapState.maybeOf(context);
+    // if (mapState == null) {
+    //   assert(false, 'No FlutterMapState found');
+    // }
 
     AriMapBloc mapBloc = context.read<AriMapBloc>();
 
     Map<Key, AriMapGesture> layers = mapBloc.gestureLayers;
     List<AriMapMarker> markers = [];
     List<AriMapPolyline> polylines = [];
-    var layerList = layers.values.toList();
+    List<AriMapGesture> layerList = layers.values.toList();
 
     return GestureDetector(
       onTapUp: (TapUpDetails details) {
-        _handleTap(details, onTap, markers, polylines, mapState!);
+        _handleTap(context, details, onTap, markers, polylines);
       },
-      child: Stack(
-        children: layerList
-            .where((layer) => layer.open)
-            .map((layer) =>
-                _build(context, layer, mapState!, markers, polylines))
-            .toList(),
+      child: BlocListener<AriMapBloc, AriMapState>(
+        bloc: mapBloc,
+        listener: (context, state) {
+          if (state is CreateGestureState || state is UpdateGestureState) {
+            layers = mapBloc.gestureLayers;
+            layerList = layers.values.toList();
+            rebuild.value += 1; // 修改 ValueNotifier 的值
+          }
+        },
+        child: ValueListenableBuilder<int>(
+          valueListenable: rebuild,
+          builder: (context, rebuild, child) {
+            return Stack(
+              children: layerList
+                  .where((layer) => layer.open)
+                  .map((layer) => _build(context, layer, markers, polylines))
+                  .toList(),
+            );
+          },
+        ),
       ),
     );
     // Use `mapState` as necessary, for example `mapState.zoom`
@@ -57,7 +73,6 @@ class AriMapGestureLayer extends StatelessWidget {
   Widget _build(
     BuildContext context,
     AriMapGesture layer,
-    FlutterMapState map,
     List<AriMapMarker> markers,
     List<AriMapPolyline> polylines,
   ) {
@@ -70,18 +85,14 @@ class AriMapGestureLayer extends StatelessWidget {
 
     return Stack(
       children: [
-        _buildPolyline(context, layer.key, layer.polylines, map),
-        _buildMarker(context, layer.key, layer.markers, buildMarker, map)
+        _buildPolyline(context, layer.key, layer.polylines),
+        _buildMarker(context, layer.key, layer.markers, buildMarker),
       ],
     );
   }
 
-  Widget _buildPolyline(
-    BuildContext context,
-    ValueKey<String> layerKey,
-    Map<ValueKey<String>, AriMapPolyline> polylines,
-    FlutterMapState map,
-  ) {
+  Widget _buildPolyline(BuildContext context, ValueKey<String> layerKey,
+      Map<ValueKey<String>, AriMapPolyline> polylines) {
     return AriMapPolylineLayer(
       layerKey: layerKey,
       polylines: polylines,
@@ -89,11 +100,11 @@ class AriMapGestureLayer extends StatelessWidget {
   }
 
   Widget _buildMarker(
-      BuildContext context,
-      ValueKey<String> layerKey,
-      Map<ValueKey<String>, AriMapMarker> markers,
-      BuildMarker? buildMarker,
-      FlutterMapState map) {
+    BuildContext context,
+    ValueKey<String> layerKey,
+    Map<ValueKey<String>, AriMapMarker> markers,
+    BuildMarker? buildMarker,
+  ) {
     return AriMapMarkerLayer(
       layerKey: layerKey,
       markers: markers,
@@ -102,13 +113,18 @@ class AriMapGestureLayer extends StatelessWidget {
   }
 
   void _handleTap(
+      BuildContext context,
       TapUpDetails details,
       MapTapCallback? onTap,
       List<AriMapMarker> markers,
-      List<AriMapPolyline> polylines,
-      FlutterMapState mapState) {
+      List<AriMapPolyline> polylines) {
     Map<double, List<AriMapMarker>> tappedMarkers = {};
     Map<double, List<AriMapPolyline>> tappedPolylines = {};
+
+    final mapState = FlutterMapState.maybeOf(context);
+    if (mapState == null) {
+      assert(false, 'No FlutterMapState found');
+    }
 
     var tap = details.localPosition;
 
@@ -140,7 +156,7 @@ class AriMapGestureLayer extends StatelessWidget {
         continue;
       }
       double strokeWidth = getMapStrokeWidget(
-        mapState,
+        mapState!,
         polyline.strokeWidth,
         polyline.useStrokeWidthInMeter,
         latLng: polyline.points[0],

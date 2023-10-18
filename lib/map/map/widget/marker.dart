@@ -4,6 +4,9 @@ import 'package:flutter_map/flutter_map.dart';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:aries_design_flutter/map/index.dart';
+import 'package:flutter_map/plugin_api.dart';
+
+final Map<int, Widget> markerCache = {};
 
 // ignore: must_be_immutable
 class AriMapMarkerLayer extends StatelessWidget {
@@ -22,15 +25,13 @@ class AriMapMarkerLayer extends StatelessWidget {
 
   final ValueNotifier<int> rebuild = ValueNotifier(0);
 
-  late final AriMapBloc markerBloc;
-
   @override
   Widget build(BuildContext context) {
-    markerBloc = context.read<AriMapBloc>();
+    AriMapBloc mapBloc = context.read<AriMapBloc>();
     return Stack(
       children: [
         BlocListener<AriMapBloc, AriMapState>(
-          bloc: markerBloc,
+          bloc: mapBloc,
           listener: (context, state) {
             if (state is CreateMarkerState && state.layerKey == layerKey) {
               markers[state.marker.key] = state.marker;
@@ -59,21 +60,36 @@ class AriMapMarkerLayer extends StatelessWidget {
   List<Marker> buildMarkers() {
     List<Marker> m = [];
 
+    Marker? selectedMarker;
+
     // 获得图层的所有marker
     markers.forEach((key, item) {
-      m.add(Marker(
-        point: item.latLng,
-        width: item.width,
-        height: item.height,
-        builder: (context) => _MarkerBuilder(
-          key: item.key,
-          marker: item,
-          buildMarker: buildMarker,
-        ),
-      ));
+      if (item.selected) {
+        selectedMarker = converToMarker(item);
+      } else {
+        m.add(converToMarker(item));
+      }
     });
 
+    if (selectedMarker != null) {
+      m.add(selectedMarker!);
+    }
+
     return m;
+  }
+
+  Marker converToMarker(AriMapMarker marker) {
+    return Marker(
+      key: marker.key,
+      point: marker.latLng,
+      width: marker.width,
+      height: marker.height,
+      builder: (context) => _MarkerBuilder(
+        key: marker.key,
+        marker: marker,
+        buildMarker: buildMarker,
+      ),
+    );
   }
 }
 
@@ -90,9 +106,24 @@ class _MarkerBuilder extends StatelessWidget {
 
   final BuildMarker? buildMarker;
 
+  int get hash {
+    _hash ??= marker.renderHash;
+    return _hash!;
+  }
+
+  int? _hash;
+
   @override
   Widget build(BuildContext context) {
     final markerBloc = context.read<AriMapBloc>();
+    final currentHash = marker.renderHash;
+    Widget element;
+    if (markerCache.containsKey(currentHash)) {
+      element = markerCache[currentHash]!;
+    } else {
+      markerCache[currentHash] = _buildMarker(marker);
+      element = markerCache[currentHash]!;
+    }
 
     return BlocListener<AriMapBloc, AriMapState>(
       bloc: markerBloc,
@@ -100,7 +131,7 @@ class _MarkerBuilder extends StatelessWidget {
       child: ValueListenableBuilder<int>(
         valueListenable: rebuild,
         builder: (context, rebuild, child) {
-          return _buildMarker(marker);
+          return element;
         },
       ),
     );
@@ -143,12 +174,10 @@ class _NormalWidget extends StatelessWidget {
   final AriMapMarker marker;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Icon(
       key: marker.builderKey,
-      child: Icon(
-        Icons.circle,
-        size: 15,
-      ),
+      Icons.circle,
+      size: 15,
     );
   }
 }
@@ -163,12 +192,10 @@ class _LocationWidget extends StatelessWidget {
   final AriMapMarker marker;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Icon(
       key: marker.builderKey,
-      child: Icon(
-        Icons.location_on_outlined,
-        size: 24,
-      ),
+      Icons.location_on_outlined,
+      size: 24,
     );
   }
 }

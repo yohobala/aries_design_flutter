@@ -123,4 +123,12 @@ class AriMapMarker {
   late double _height;
 
   late MarkerType _type;
+
+  int get renderHash => Object.hash(
+        key,
+        latLng,
+        width,
+        height,
+        type,
+      );
 }
