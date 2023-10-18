@@ -26,49 +26,6 @@ typedef MarkerTapCallback = void Function(AriMapMarker marker);
 
 typedef BuildMarker = Widget Function(AriMapMarker marker);
 
-// class AriMapMarkerLayerModel {
-//   AriMapMarkerLayerModel({
-//     this.key = defalutMakerLayerKey,
-//     this.initMarkers = const [],
-//     required this.name,
-//   }) {
-//     _initMarkers(initMarkers);
-//   }
-
-//   /// 标记层的key
-//   ///
-//   /// 用于标记层的唯一性
-//   ///
-//   /// 如果为空，将默认为[defalutMakerLayerKey]。
-//   final Key key;
-
-//   /// 标记层的名称
-//   final String name;
-
-//   /// 该标记层的初始标记，默认为[]
-//   final List<AriMapMarkerModel> initMarkers;
-
-//   /// 标记层的所有标记
-//   Map<Key, AriMapMarkerModel> markers = {};
-
-//   /// 更新标记
-//   ///
-//   /// 如果标记不存在，将会创建新的标记
-//   void updateMarker(AriMapMarkerModel marker) {
-//     markers[marker.key] = marker;
-//   }
-
-//   /// 初始化标记
-//   ///
-//   /// - `initMarkers`: 初始化的标记
-//   void _initMarkers(List<AriMapMarkerModel> initMarkers) {
-//     for (var m in initMarkers) {
-//       final marker = <Key, AriMapMarkerModel>{m.key: m};
-//       markers.addEntries(marker.entries);
-//     }
-//   }
-// }
-
 /// 标记的实现
 ///
 /// 如果需要添加属性,先继承AriMapMarkerModel,之后使用[as]

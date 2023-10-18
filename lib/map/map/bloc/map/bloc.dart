@@ -34,6 +34,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     on<SelectedAriMarkerEvent>(selectedMarkerEvent);
 
     on<UpdateAriPolylineEvent>(updatePolylineEvent);
+    on<SelectedAriPolylineEvent>(selectedPolylineEvent);
 
     // 派发初始化事件
     add(InitAriMapEvent());
@@ -380,6 +381,13 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       emit(
           UpdatePolylineState(polyline: polyline, layerKey: polyline.layerkey));
     }
+  }
+
+  FutureOr<void> selectedPolylineEvent(
+      SelectedAriPolylineEvent event, Emitter<AriMapState> emit) {
+    event.polyline.selected = event.isSelected;
+    emit(SelectdPolylineState(
+        polyline: event.polyline, isSelected: event.isSelected));
   }
 
   /***************  公有方法  ***************/

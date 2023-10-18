@@ -2,32 +2,7 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
-// class AriMapPolylineLayerModel {
-//   AriMapPolylineLayerModel({
-//     this.key = defalutPolylineLayerKey,
-//     required this.name,
-//     this.initPolylines = const [],
-//   }) {
-//     _initPolylines(initPolylines);
-//   }
-//   final Key key;
-
-//   final String name;
-
-//   final List<AriMapPolylineModel> initPolylines;
-
-//   Map<Key, AriMapPolylineModel> polylines = {};
-
-//   void updatePolyline(AriMapPolylineModel polyline) {
-//     polylines[polyline.key] = polyline;
-//   }
-
-//   void _initPolylines(List<AriMapPolylineModel> initPolylines) {
-//     for (final polyline in initPolylines) {
-//       polylines[polyline.key] = polyline;
-//     }
-//   }
-// }
+typedef PolylineTapCallback = void Function(AriMapPolyline polyline);
 
 class AriMapPolyline {
   AriMapPolyline({
@@ -41,6 +16,7 @@ class AriMapPolyline {
     this.useStrokeWidthInMeter = false,
     this.onTap,
     this.selected = false,
+    this.polylinePaintTime = 2000,
   });
 
   /// polyline的key
@@ -68,8 +44,22 @@ class AriMapPolyline {
   bool useStrokeWidthInMeter;
 
   /// 点击事件
-  final MarkerTapCallback? onTap;
+  final PolylineTapCallback? onTap;
 
   /// 是否选中
   bool selected;
+
+  /// 绘制线的动画的时间(milliseconds)
+  ///
+  /// 当更新polyline的points会对更新的部分执行动画
+  ///
+  /// 如果只是在points最后添加一个点,那动画只是绘制当前最后一个点和新添加的点之前的线段
+  ///
+  /// 如果改变了当前已有的点,那么会重新绘制整个线
+  final int polylinePaintTime;
+
+  int get renderPoints => Object.hash(
+        key,
+        points,
+      );
 }

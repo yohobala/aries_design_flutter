@@ -179,3 +179,12 @@ class UpdateAriPolylineEvent extends AriMapEvent {
   });
   final AriMapPolyline polyline;
 }
+
+class SelectedAriPolylineEvent extends AriMapEvent {
+  SelectedAriPolylineEvent({
+    required this.polyline,
+    required this.isSelected,
+  });
+  final AriMapPolyline polyline;
+  final bool isSelected;
+}

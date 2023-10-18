@@ -13,6 +13,11 @@ double calDistance(Offset point1, Offset point2) {
   return distance;
 }
 
+bool diffLatlng(LatLng latLng1, LatLng latLng2) {
+  return latLng1.latitude != latLng2.latitude ||
+      latLng1.longitude != latLng2.longitude;
+}
+
 /// 得到地图上元素绘制后的strokeWidth
 ///
 /// - `strokeWidth`: 原始的strokeWidth

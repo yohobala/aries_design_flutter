@@ -146,3 +146,13 @@ class CreatePolylineState extends AriMapState {
   final AriMapPolyline polyline;
   final ValueKey<String> layerKey;
 }
+
+class SelectdPolylineState extends AriMapState {
+  SelectdPolylineState({
+    required this.polyline,
+    required this.isSelected,
+  });
+
+  final AriMapPolyline polyline;
+  final bool isSelected;
+}
