@@ -21,7 +21,7 @@ class AriMapPolyline extends AriMapSort {
     this.selectedBorderStrokeWidth = 3.0,
     this.useStrokeWidthInMeter = false,
     this.onTap,
-    this.polylinePaintTime = 2000,
+    this.polylinePaintTime = 500,
     int order = 1,
     bool selected = false,
   }) : super(order: order, selected: selected);
