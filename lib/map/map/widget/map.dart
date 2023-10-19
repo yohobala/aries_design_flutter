@@ -160,9 +160,6 @@ class _AriMapState extends State<AriMap>
      */
     WidgetsBinding.instance.addObserver(this);
 
-    // final markerBloc = context.read<AriMapBloc>();
-    mapController = mapBloc.mapController;
-
     // NOTE:
     // 针对底部导航栏的监听
     AriBottonNavigationBarState? state = bottomNavigationBarKey.currentState;
@@ -189,6 +186,7 @@ class _AriMapState extends State<AriMap>
   @override
   Widget build(BuildContext context) {
     mapBloc = BlocProvider.of<AriMapBloc>(context);
+    mapController = mapBloc.mapController;
 
     // NOTE:
     // 获取安全区域
