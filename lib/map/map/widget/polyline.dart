@@ -69,10 +69,6 @@ class AriMapPolylineLayer extends StatelessWidget {
     );
     sortList(polylineWidgets);
 
-    for (var item in polylineWidgets) {
-      print(item.key);
-    }
-
     return polylineWidgets;
   }
 }

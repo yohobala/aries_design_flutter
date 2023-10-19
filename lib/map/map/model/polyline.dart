@@ -89,6 +89,6 @@ class AriMapPolyline extends AriMapSort {
         useStrokeWidthInMeter,
         order,
         selected,
-        sortIndex,
+        originalIndex,
       );
 }
