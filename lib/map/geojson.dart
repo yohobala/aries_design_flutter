@@ -8,6 +8,8 @@ class Feature<T, G extends Geometry> {
   });
 
   final String type;
+
+  /// 坐标: [Longitude,Latitude]
   final G geometry;
   final T properties;
 
