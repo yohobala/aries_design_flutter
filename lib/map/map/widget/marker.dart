@@ -47,7 +47,7 @@ class AriMapMarkerLayer extends StatelessWidget {
             builder: (context, rebuild, child) {
               return MarkerLayer(
                 key: layerKey,
-                markers: buildMarkers(),
+                markers: buildMakrerList(),
               );
             },
           ),
@@ -57,25 +57,16 @@ class AriMapMarkerLayer extends StatelessWidget {
   }
 
   /// 构建该图层的所有marker
-  List<Marker> buildMarkers() {
-    List<Marker> m = [];
-
-    List<Marker> selectedMarkers = [];
-
-    // 获得图层的所有marker
-    // 把选中的marker最后放入
+  List<Marker> buildMakrerList() {
+    List<AriMapMarker> markerList = [];
     markers.forEach((key, item) {
-      if (item.selected) {
-        selectedMarkers.add(converToMarker(item));
-      } else {
-        m.add(converToMarker(item));
-      }
+      markerList.add(item);
     });
-
-    if (selectedMarkers.isNotEmpty) {
-      m.addAll(selectedMarkers);
+    sortList(markerList);
+    List<Marker> m = [];
+    for (var item in markerList) {
+      m.add(converToMarker(item));
     }
-
     return m;
   }
 

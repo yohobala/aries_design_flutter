@@ -38,13 +38,16 @@ class AriMapPolylineLayer extends StatelessWidget {
         if (state is CreatePolylineState && state.layerKey == layerKey) {
           currentPolylines[state.polyline.key] = state.polyline;
           rebuild.value += 1;
+        } else if (state is SelectdPolylineState &&
+            state.polyline.layerkey == layerKey) {
+          rebuild.value += 1; // 修改 ValueNotifier 的值
         }
       },
       child: ValueListenableBuilder<int>(
         valueListenable: rebuild,
         builder: (context, rebuild, child) {
           return Stack(
-            children: buildPolylines(polylines)
+            children: buildPolylines(currentPolylines)
                 .map((e) => _Polyline(
                       polyline: e,
                       mapState: mapState!,
@@ -60,11 +63,15 @@ class AriMapPolylineLayer extends StatelessWidget {
       Map<ValueKey<String>, AriMapPolyline> polylines) {
     List<AriMapPolyline> polylineWidgets = [];
     polylines.forEach(
-      (key, value) {
-        AriMapPolyline polyline = value;
-        polylineWidgets.add(value);
+      (key, polyline) {
+        polylineWidgets.add(polyline);
       },
     );
+    sortList(polylineWidgets);
+
+    for (var item in polylineWidgets) {
+      print(item.key);
+    }
 
     return polylineWidgets;
   }
@@ -88,18 +95,22 @@ class _Polyline extends StatefulWidget {
 }
 
 class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
-  late int hash;
-
   late AriMapPolyline polyline;
 
   late final AnimationController controller;
 
   bool isRendering = true;
+
+  late int renderHashCode;
+
+  late int renderPointsHashCode;
   @override
   void initState() {
     super.initState();
     polyline = widget.polyline;
-    hash = widget.polyline.renderPoints;
+    renderPointsHashCode = widget.polyline.renderPointsHashCode;
+    renderHashCode = widget.polyline.renderHashCode;
+
     controller = AnimationController(
       duration: Duration(milliseconds: polyline.polylinePaintTime),
       vsync:
@@ -122,9 +133,24 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
     startAnimation(0);
   }
 
+  // 解决当上层AriMapPolylineLayer里的polylines顺序改变后,
+  // 因为polyline缓存数据,导致_Polyline和AriMapPolylineLayer对应的polyline不一致的问题
+  @override
+  void didUpdateWidget(covariant _Polyline oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.polyline.key != oldWidget.polyline.key) {
+      polyline = widget.polyline;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final polylineBloc = context.read<AriMapBloc>();
+
+    if (renderHashCode != polyline.renderHashCode) {
+      renderHashCode = polyline.renderHashCode;
+      isRendering = true;
+    }
 
     return BlocListener<AriMapBloc, AriMapState>(
       bloc: polylineBloc,
@@ -132,8 +158,7 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
         if (state is UpdatePolylineState &&
             state.polyline.key == widget.polyline.key) {
           // 判断是否是points的更新,如果是执行动画
-          int pointsHash = state.polyline.renderPoints;
-          if (pointsHash != hash) {
+          if (state.polyline.renderPointsHashCode != renderPointsHashCode) {
             isRendering = true;
             bool diff = false;
             double progress;
@@ -157,7 +182,7 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
               progress = 0;
             }
 
-            hash = pointsHash;
+            renderPointsHashCode = state.polyline.renderPointsHashCode;
             polyline = state.polyline;
 
             startAnimation(progress);
@@ -169,9 +194,12 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
       child: AnimatedBuilder(
         animation: controller,
         builder: (BuildContext context, Widget? child) {
+          Polyline paintPolyline = polyline.selected
+              ? converToPolylineWithSelected(polyline)
+              : converToPolyline(polyline);
           return CustomPaint(
-            painter: AriMapPolylinePainter(converToPolyline(polyline),
-                widget.mapState, controller.value, isRendering),
+            painter: AriMapPolylinePainter(
+                paintPolyline, widget.mapState, controller.value, isRendering),
             size: Size(widget.mapState.size.x, widget.mapState.size.y),
           );
         },
@@ -428,6 +456,17 @@ Polyline converToPolyline(AriMapPolyline polyline) {
     color: polyline.color,
     borderColor: polyline.borderColor,
     borderStrokeWidth: polyline.borderStrokeWidth,
+    useStrokeWidthInMeter: polyline.useStrokeWidthInMeter,
+  );
+}
+
+Polyline converToPolylineWithSelected(AriMapPolyline polyline) {
+  return Polyline(
+    points: polyline.points,
+    strokeWidth: polyline.selectedStrokeWidth,
+    color: polyline.selectedColor,
+    borderColor: polyline.selectedBorderColor,
+    borderStrokeWidth: polyline.selectedBorderStrokeWidth,
     useStrokeWidthInMeter: polyline.useStrokeWidthInMeter,
   );
 }

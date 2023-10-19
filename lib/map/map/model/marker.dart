@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 
+import 'sort.dart';
+
 /// 标记的类型
 enum MarkerType {
   /// 普通标记
@@ -30,7 +32,7 @@ typedef BuildMarker = Widget Function(AriMapMarker marker);
 ///
 /// 如果需要添加属性,先继承AriMapMarkerModel,之后使用[as]
 ///
-class AriMapMarker {
+class AriMapMarker extends AriMapSort {
   /// 地图中的标记
   ///
   /// - `key`: marker的key。如果为空，将默认为`UniqueKey().toString()`。
@@ -49,11 +51,16 @@ class AriMapMarker {
     double height = 150,
     MarkerType type = MarkerType.normal,
     this.onTap,
-    this.selected = false,
+    int order = 1,
+    bool selected = false,
   })  : latLng = latLng ?? LatLng(0, 0),
         _width = width,
         _height = height,
-        _type = type;
+        _type = type,
+        super(
+          order: order,
+          selected: selected,
+        );
 
   /// marker的key
   final ValueKey<String> key;
@@ -114,9 +121,6 @@ class AriMapMarker {
 
   /// marker的点击事件
   final MarkerTapCallback? onTap;
-
-  /// marker是否被选中
-  bool selected;
 
   late double _width;
 

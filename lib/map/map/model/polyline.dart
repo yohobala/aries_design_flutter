@@ -2,22 +2,29 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
+import 'sort.dart';
+
 typedef PolylineTapCallback = void Function(AriMapPolyline polyline);
 
-class AriMapPolyline {
+class AriMapPolyline extends AriMapSort {
   AriMapPolyline({
     required this.key,
     this.layerkey = defalutGestureLayerKey,
     this.points = const [],
-    this.color = const Color(0xFF90CAF9),
-    this.borderColor = const Color.fromARGB(255, 33, 150, 243),
+    this.color = const Color.fromRGBO(144, 202, 249, 1),
+    this.borderColor = const Color.fromRGBO(33, 150, 243, 1),
     this.strokeWidth = 5.0,
     this.borderStrokeWidth = 2.0,
+    this.selectedColor = const Color.fromARGB(255, 41, 137, 216),
+    this.selectedBorderColor = const Color.fromARGB(255, 4, 113, 201),
+    this.selectedStrokeWidth = 6.0,
+    this.selectedBorderStrokeWidth = 3.0,
     this.useStrokeWidthInMeter = false,
     this.onTap,
-    this.selected = false,
     this.polylinePaintTime = 2000,
-  });
+    int order = 1,
+    bool selected = false,
+  }) : super(order: order, selected: selected);
 
   /// polyline的key
   final ValueKey<String> key;
@@ -40,14 +47,23 @@ class AriMapPolyline {
   /// polyline的边框宽度
   double borderStrokeWidth;
 
+  /// polyline的选中颜色
+  Color selectedColor;
+
+  /// polyline的选中边框颜色
+  Color selectedBorderColor;
+
+  /// polyline的选中宽度
+  double selectedStrokeWidth;
+
+  /// polyline的选中边框宽度
+  double selectedBorderStrokeWidth;
+
   /// 是否使用米为单位的宽度,如果为true,会随着地图缩放而改变宽度
   bool useStrokeWidthInMeter;
 
   /// 点击事件
   final PolylineTapCallback? onTap;
-
-  /// 是否选中
-  bool selected;
 
   /// 绘制线的动画的时间(milliseconds)
   ///
@@ -58,8 +74,21 @@ class AriMapPolyline {
   /// 如果改变了当前已有的点,那么会重新绘制整个线
   final int polylinePaintTime;
 
-  int get renderPoints => Object.hash(
+  int get renderPointsHashCode => Object.hash(
         key,
         points,
+      );
+
+  int get renderHashCode => Object.hash(
+        key,
+        layerkey,
+        color,
+        borderColor,
+        strokeWidth,
+        borderStrokeWidth,
+        useStrokeWidthInMeter,
+        order,
+        selected,
+        sortIndex,
       );
 }
