@@ -134,9 +134,7 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
   @override
   void didUpdateWidget(covariant _Polyline oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.polyline.key != oldWidget.polyline.key) {
-      polyline = widget.polyline;
-    }
+    polyline = widget.polyline;
   }
 
   @override
