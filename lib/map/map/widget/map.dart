@@ -134,7 +134,7 @@ class _AriMapState extends State<AriMap>
   // mapBloc 不应该添加final关键字,同时初始化放在build中
   // 因为在热更新后全局的mapBloc已经发生变化,如果在initState初始化,会造成mapBloc不是最新的
   late AriMapBloc mapBloc;
-  late final MapController mapController;
+  late MapController mapController;
 
   late final AnimationController? controller;
   late Animation<Offset>? offset;
@@ -215,21 +215,18 @@ class _AriMapState extends State<AriMap>
               }
             else if (state is MoveToLocationState)
               {
-                if (mapBloc.openLocation)
-                  {
-                    moveLocationController = AnimationController(
-                      vsync: this,
-                      duration: AriTheme.duration.mapDuration,
-                    ),
-                    _moveToLocation(
-                      mapController: mapController,
-                      latLng: state.center,
-                      zoom: state.zoom,
-                      offset: state.offset,
-                      animationController:
-                          state.isAnimated ? moveLocationController : null,
-                    )
-                  }
+                moveLocationController = AnimationController(
+                  vsync: this,
+                  duration: AriTheme.duration.mapDuration,
+                ),
+                _moveToLocation(
+                  mapController: mapController,
+                  latLng: state.center,
+                  zoom: state.zoom,
+                  offset: state.offset,
+                  animationController:
+                      state.isAnimated ? moveLocationController : null,
+                )
               }
             else if (state is ChangeLocation)
               {}

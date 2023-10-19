@@ -204,28 +204,26 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
   /// 地图移动到当前定位
   void moveToLocationEvent(
       MoveToLocationEvent event, Emitter<AriMapState> emit) async {
-    if (_geoLocationAvailable) {
-      if (event.latLng == null) {
-        LatLng latLng = await geoLocationRepo.getLocation();
-        // NOTE: 移动地图
-        emit(MoveToLocationState(
-          center: latLng,
-          zoom: event.zoom ?? 13,
-          offset: event.offset,
-          isAnimated: event.isAnimated,
-        ));
-        // NOTE:
-        // 改变为当前位置是在地图中心
-        emit(IsCenterOnLocation(isCenter: true));
-      } else {
-        LatLng latLng = event.latLng!;
-        emit(MoveToLocationState(
-          center: latLng,
-          zoom: event.zoom,
-          offset: event.offset,
-          isAnimated: event.isAnimated,
-        ));
-      }
+    if (_geoLocationAvailable && event.latLng == null) {
+      LatLng latLng = await geoLocationRepo.getLocation();
+      // NOTE: 移动地图
+      emit(MoveToLocationState(
+        center: latLng,
+        zoom: event.zoom ?? 13,
+        offset: event.offset,
+        isAnimated: event.isAnimated,
+      ));
+      // NOTE:
+      // 改变为当前位置是在地图中心
+      emit(IsCenterOnLocation(isCenter: true));
+    } else if (event.latLng != null) {
+      LatLng latLng = event.latLng!;
+      emit(MoveToLocationState(
+        center: latLng,
+        zoom: event.zoom,
+        offset: event.offset,
+        isAnimated: event.isAnimated,
+      ));
     }
   }
 
