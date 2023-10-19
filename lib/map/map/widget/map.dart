@@ -131,7 +131,9 @@ class AriMap extends StatefulWidget {
 
 class _AriMapState extends State<AriMap>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  late final AriMapBloc mapBloc;
+  // mapBloc 不应该添加final关键字,同时初始化放在build中
+  // 因为在热更新后全局的mapBloc已经发生变化,如果在initState初始化,会造成mapBloc不是最新的
+  late AriMapBloc mapBloc;
   late final MapController mapController;
 
   late final AnimationController? controller;
@@ -158,7 +160,6 @@ class _AriMapState extends State<AriMap>
      */
     WidgetsBinding.instance.addObserver(this);
 
-    mapBloc = context.read<AriMapBloc>();
     // final markerBloc = context.read<AriMapBloc>();
     mapController = mapBloc.mapController;
 
@@ -187,6 +188,8 @@ class _AriMapState extends State<AriMap>
 
   @override
   Widget build(BuildContext context) {
+    mapBloc = BlocProvider.of<AriMapBloc>(context);
+
     // NOTE:
     // 获取安全区域
     // 用于对自定义的widget进行定位
