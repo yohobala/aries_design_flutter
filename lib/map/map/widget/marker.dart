@@ -152,10 +152,12 @@ class _NormalWidget extends StatelessWidget {
   final AriMapMarker marker;
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      key: marker.builderKey,
-      Icons.circle,
-      size: 15,
+    return Center(
+      child: Icon(
+        key: marker.builderKey,
+        Icons.circle,
+        size: 15,
+      ),
     );
   }
 }
@@ -170,10 +172,12 @@ class _LocationWidget extends StatelessWidget {
   final AriMapMarker marker;
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      key: marker.builderKey,
-      Icons.location_on_outlined,
-      size: 24,
+    return Center(
+      child: Icon(
+        key: marker.builderKey,
+        Icons.location_on_outlined,
+        size: 24,
+      ),
     );
   }
 }
