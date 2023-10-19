@@ -27,13 +27,10 @@ class AriMapGestureLayer extends StatelessWidget {
 
   final ValueNotifier<int> rebuild = ValueNotifier(0);
 
+  final GlobalKey gestureLayerKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    // final mapState = FlutterMapState.maybeOf(context);
-    // if (mapState == null) {
-    //   assert(false, 'No FlutterMapState found');
-    // }
-
     AriMapBloc mapBloc = context.read<AriMapBloc>();
 
     Map<Key, AriMapGesture> layers = mapBloc.gestureLayers;
@@ -42,6 +39,7 @@ class AriMapGestureLayer extends StatelessWidget {
     List<AriMapGesture> layerList = layers.values.toList();
 
     return GestureDetector(
+      key: gestureLayerKey,
       onTapUp: (TapUpDetails details) {
         _handleTap(context, details, onTap, markers, polylines);
       },

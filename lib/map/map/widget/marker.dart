@@ -6,9 +6,6 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:aries_design_flutter/map/index.dart';
 import 'package:flutter_map/plugin_api.dart';
 
-final Map<int, Widget> markerCache = {};
-
-// ignore: must_be_immutable
 class AriMapMarkerLayer extends StatelessWidget {
   AriMapMarkerLayer({
     ValueKey<String>? key,
@@ -19,7 +16,7 @@ class AriMapMarkerLayer extends StatelessWidget {
 
   final ValueKey<String> layerKey;
 
-  Map<ValueKey<String>, AriMapMarker> markers;
+  final Map<ValueKey<String>, AriMapMarker> markers;
 
   final BuildMarker? buildMarker;
 
@@ -39,6 +36,9 @@ class AriMapMarkerLayer extends StatelessWidget {
             } else if (state is UpdateMarkerState &&
                 state.layerKey == layerKey) {
               markers[state.marker.key] = state.marker;
+              rebuild.value += 1; // 修改 ValueNotifier 的值
+            } else if (state is SelectdMarkerState &&
+                state.marker.layerkey == layerKey) {
               rebuild.value += 1; // 修改 ValueNotifier 的值
             }
           },
@@ -63,6 +63,7 @@ class AriMapMarkerLayer extends StatelessWidget {
     Marker? selectedMarker;
 
     // 获得图层的所有marker
+    // 把选中的marker最后放入
     markers.forEach((key, item) {
       if (item.selected) {
         selectedMarker = converToMarker(item);
@@ -80,6 +81,7 @@ class AriMapMarkerLayer extends StatelessWidget {
 
   Marker converToMarker(AriMapMarker marker) {
     return Marker(
+      // 添加key保证了marker不会一直重绘
       key: marker.key,
       point: marker.latLng,
       width: marker.width,
@@ -106,24 +108,9 @@ class _MarkerBuilder extends StatelessWidget {
 
   final BuildMarker? buildMarker;
 
-  int get hash {
-    _hash ??= marker.renderHash;
-    return _hash!;
-  }
-
-  int? _hash;
-
   @override
   Widget build(BuildContext context) {
     final markerBloc = context.read<AriMapBloc>();
-    final currentHash = marker.renderHash;
-    Widget element;
-    if (markerCache.containsKey(currentHash)) {
-      element = markerCache[currentHash]!;
-    } else {
-      markerCache[currentHash] = _buildMarker(marker);
-      element = markerCache[currentHash]!;
-    }
 
     return BlocListener<AriMapBloc, AriMapState>(
       bloc: markerBloc,
@@ -131,7 +118,7 @@ class _MarkerBuilder extends StatelessWidget {
       child: ValueListenableBuilder<int>(
         valueListenable: rebuild,
         builder: (context, rebuild, child) {
-          return element;
+          return _buildMarker(marker);
         },
       ),
     );
