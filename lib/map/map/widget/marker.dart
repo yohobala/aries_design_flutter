@@ -60,20 +60,20 @@ class AriMapMarkerLayer extends StatelessWidget {
   List<Marker> buildMarkers() {
     List<Marker> m = [];
 
-    Marker? selectedMarker;
+    List<Marker> selectedMarkers = [];
 
     // 获得图层的所有marker
     // 把选中的marker最后放入
     markers.forEach((key, item) {
       if (item.selected) {
-        selectedMarker = converToMarker(item);
+        selectedMarkers.add(converToMarker(item));
       } else {
         m.add(converToMarker(item));
       }
     });
 
-    if (selectedMarker != null) {
-      m.add(selectedMarker!);
+    if (selectedMarkers.isNotEmpty) {
+      m.addAll(selectedMarkers);
     }
 
     return m;
