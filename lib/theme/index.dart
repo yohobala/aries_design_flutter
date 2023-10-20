@@ -227,10 +227,14 @@ class AriThemeColorText {
   final TextStyle messageBar;
 }
 
-/// Defines a set of custom colors, each comprised of 4 complementary tones.
+/// 自定义的色彩
 ///
-/// See also:
-///   * <https://m3.material.io/styles/color/the-color-system/custom-colors>
+/// 变量名组成: [on?]颜色名[数字]
+/// - 后缀不带数字的默认为500,例如: onGrey等于onGrey500,它代表着标准颜色
+///   - 在Ligth下,后缀数字越大,颜色越深
+///   - 在Dark下,后缀数字越大,颜色越浅
+/// - 不带on的使用在容器,背景等颜色上,
+///   带on的使用在字体,图标等颜色上
 @immutable
 class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
   const AriThemeColorPrime({
@@ -239,9 +243,11 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     required this.red,
     required this.yellow,
     required this.orange,
+    required this.purple,
     required this.grey,
     required this.onGrey,
-    required this.onGrey2,
+    required this.onGrey600,
+    required this.onGrey700,
     required this.white,
   });
 
@@ -250,9 +256,11 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
   final Color? red;
   final Color? yellow;
   final Color? orange;
+  final Color? purple;
   final Color? grey;
   final Color? onGrey;
-  final Color? onGrey2;
+  final Color? onGrey600;
+  final Color? onGrey700;
   final Color? white;
 
   @override
@@ -262,9 +270,11 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     Color? red,
     Color? yellow,
     Color? orange,
+    Color? purple,
     Color? grey,
     Color? onGrey,
-    Color? onGrey2,
+    Color? onGrey600,
+    Color? onGrey700,
     Color? white,
   }) {
     return AriThemeColorPrime(
@@ -273,9 +283,11 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       red: red ?? this.red,
       yellow: yellow ?? this.yellow,
       orange: orange ?? this.orange,
+      purple: purple ?? this.purple,
       grey: grey ?? this.grey,
       onGrey: onGrey ?? this.onGrey,
-      onGrey2: onGrey2 ?? this.onGrey2,
+      onGrey600: onGrey600 ?? this.onGrey600,
+      onGrey700: onGrey700 ?? this.onGrey700,
       white: white ?? this.white,
     );
   }
@@ -291,9 +303,11 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       red: Color.lerp(red, other.red, t),
       yellow: Color.lerp(yellow, other.yellow, t),
       orange: Color.lerp(orange, other.orange, t),
+      purple: Color.lerp(purple, other.purple, t),
       grey: Color.lerp(grey, other.grey, t),
       onGrey: Color.lerp(onGrey, other.onGrey, t),
-      onGrey2: Color.lerp(onGrey2, other.onGrey2, t),
+      onGrey600: Color.lerp(onGrey600, other.onGrey600, t),
+      onGrey700: Color.lerp(onGrey700, other.onGrey700, t),
       white: Color.lerp(white, other.white, t),
     );
   }
@@ -317,9 +331,11 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       red: red!.harmonizeWith(dynamic.primary),
       yellow: yellow!.harmonizeWith(dynamic.primary),
       orange: orange!.harmonizeWith(dynamic.primary),
+      purple: purple!.harmonizeWith(dynamic.primary),
       grey: grey!.harmonizeWith(dynamic.primary),
       onGrey: onGrey!.harmonizeWith(dynamic.primary),
-      onGrey2: onGrey2!.harmonizeWith(dynamic.primary),
+      onGrey600: onGrey600!.harmonizeWith(dynamic.primary),
+      onGrey700: onGrey700!.harmonizeWith(dynamic.primary),
       white: white!.harmonizeWith(dynamic.primary),
     );
   }

@@ -11,7 +11,7 @@ AriThemeColor generateThemeColor({
   // 阴影样式
   AriThemeColorBoxShadow boxShadow = AriThemeColorBoxShadow(
     standard: BoxShadow(
-      color: colorScheme.shadow.withOpacity(0.2), // 设置透明度
+      color: colorScheme.shadow.withOpacity(0.1), // 设置透明度
       // 扩散阴影,当为0时不扩散
       spreadRadius: 0,
       // 模仿 FloatingActionButton 的 elevation

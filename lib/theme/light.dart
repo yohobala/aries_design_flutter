@@ -58,13 +58,15 @@ final ColorScheme _colorScheme = ColorScheme(
 );
 
 AriThemeColorPrime _prime = const AriThemeColorPrime(
-  blue: Color.fromARGB(255, 30, 136, 229),
-  green: Color.fromARGB(255, 67, 160, 71),
-  red: Color.fromARGB(255, 229, 57, 53),
-  yellow: Color(0xFFF8B00C),
+  blue: Color.fromARGB(255, 55, 135, 245),
+  green: Color.fromARGB(255, 70, 187, 74),
+  red: Color.fromARGB(255, 239, 64, 64),
+  yellow: Color.fromARGB(255, 248, 176, 12),
   orange: Color.fromARGB(255, 251, 140, 0),
+  purple: Color.fromRGBO(152, 79, 255, 1),
   grey: Color.fromARGB(255, 241, 241, 241),
   onGrey: Color.fromARGB(255, 180, 180, 180),
-  onGrey2: Color.fromARGB(255, 160, 160, 160),
+  onGrey600: Color.fromARGB(255, 160, 160, 160),
+  onGrey700: Color.fromARGB(255, 140, 140, 140),
   white: Color.fromARGB(255, 240, 240, 240),
 );
