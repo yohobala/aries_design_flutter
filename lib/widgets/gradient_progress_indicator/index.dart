@@ -4,16 +4,22 @@ class GradientProgressIndicator extends StatelessWidget {
   GradientProgressIndicator({
     Key? key,
     required this.value,
+    this.valueColor = const [Colors.blue, Colors.red],
     this.height = 5,
     this.backgroundColor = Colors.grey,
+    this.borderRadius = const BorderRadius.all(Radius.circular(5)),
   }) : super(key: key);
 
   /// 进度值，从0.0到1.0
   final double value;
 
+  final List<Color> valueColor;
+
   final double height;
 
   final Color backgroundColor;
+
+  final BorderRadius borderRadius; // 圆角半径
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +27,31 @@ class GradientProgressIndicator extends StatelessWidget {
       width: double.infinity,
       height: height, // 可以调整高度
       child: CustomPaint(
-        painter: _GradientProgressPainter(value, backgroundColor),
+        painter: _GradientProgressPainter(
+            value, valueColor, backgroundColor, borderRadius),
       ),
     );
   }
 }
 
 class _GradientProgressPainter extends CustomPainter {
+  _GradientProgressPainter(
+    this.value,
+    this.valueColor,
+    this.backgroundColor,
+    this.borderRadius,
+  );
   final double value;
+  final List<Color> valueColor;
   final Color backgroundColor;
+  final BorderRadius borderRadius;
 
-  _GradientProgressPainter(this.value, this.backgroundColor);
+  int get hashCode => Object.hash(
+        value,
+        valueColor,
+        backgroundColor,
+        borderRadius,
+      );
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -39,10 +59,16 @@ class _GradientProgressPainter extends CustomPainter {
     Paint backgroundPaint = Paint()
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-    canvas.drawRect(
-      Rect.fromPoints(
-        Offset(0, 0),
-        Offset(size.width, size.height),
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromPoints(
+          Offset(0, 0),
+          Offset(size.width, size.height),
+        ),
+        topLeft: borderRadius.topLeft,
+        topRight: borderRadius.topRight,
+        bottomLeft: borderRadius.bottomLeft,
+        bottomRight: borderRadius.bottomRight,
       ),
       backgroundPaint,
     );
@@ -50,14 +76,20 @@ class _GradientProgressPainter extends CustomPainter {
     // 绘制渐变进度
     Paint progressPaint = Paint()
       ..shader = LinearGradient(
-        colors: [Colors.blue, Colors.red],
+        colors: valueColor,
       ).createShader(
           Rect.fromPoints(Offset(0, 0), Offset(size.width, size.height)))
       ..style = PaintingStyle.fill;
-    canvas.drawRect(
-      Rect.fromPoints(
-        Offset(0, 0),
-        Offset(size.width * value, size.height),
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromPoints(
+          Offset(0, 0),
+          Offset(size.width * value, size.height),
+        ),
+        topLeft: borderRadius.topLeft,
+        topRight: borderRadius.topRight,
+        bottomLeft: borderRadius.bottomLeft,
+        bottomRight: borderRadius.bottomRight,
       ),
       progressPaint,
     );
@@ -65,6 +97,6 @@ class _GradientProgressPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return oldDelegate.hashCode != hashCode;
   }
 }

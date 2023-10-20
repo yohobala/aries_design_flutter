@@ -245,6 +245,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     required this.orange,
     required this.purple,
     required this.grey,
+    required this.grey600,
     required this.onGrey,
     required this.onGrey600,
     required this.onGrey700,
@@ -258,6 +259,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
   final Color? orange;
   final Color? purple;
   final Color? grey;
+  final Color? grey600;
   final Color? onGrey;
   final Color? onGrey600;
   final Color? onGrey700;
@@ -272,6 +274,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
     Color? orange,
     Color? purple,
     Color? grey,
+    Color? grey600,
     Color? onGrey,
     Color? onGrey600,
     Color? onGrey700,
@@ -285,6 +288,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       orange: orange ?? this.orange,
       purple: purple ?? this.purple,
       grey: grey ?? this.grey,
+      grey600: grey600 ?? this.grey600,
       onGrey: onGrey ?? this.onGrey,
       onGrey600: onGrey600 ?? this.onGrey600,
       onGrey700: onGrey700 ?? this.onGrey700,
@@ -305,6 +309,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       orange: Color.lerp(orange, other.orange, t),
       purple: Color.lerp(purple, other.purple, t),
       grey: Color.lerp(grey, other.grey, t),
+      grey600: Color.lerp(grey600, other.grey600, t),
       onGrey: Color.lerp(onGrey, other.onGrey, t),
       onGrey600: Color.lerp(onGrey600, other.onGrey600, t),
       onGrey700: Color.lerp(onGrey700, other.onGrey700, t),
@@ -333,6 +338,7 @@ class AriThemeColorPrime extends ThemeExtension<AriThemeColorPrime> {
       orange: orange!.harmonizeWith(dynamic.primary),
       purple: purple!.harmonizeWith(dynamic.primary),
       grey: grey!.harmonizeWith(dynamic.primary),
+      grey600: grey600!.harmonizeWith(dynamic.primary),
       onGrey: onGrey!.harmonizeWith(dynamic.primary),
       onGrey600: onGrey600!.harmonizeWith(dynamic.primary),
       onGrey700: onGrey700!.harmonizeWith(dynamic.primary),
