@@ -156,14 +156,18 @@ class _PolylineState extends State<_Polyline> with TickerProviderStateMixin {
             isRendering = true;
             bool diff = false;
             double progress;
-
-            // 判断已有的点是否有变化,如果有变化全量更新
-            for (var i = 0; i < polyline.points.length; i++) {
-              if (diffLatlng(polyline.points[i], state.polyline.points[i])) {
-                diff = true;
-                break;
+            if (polyline.points.length != state.polyline.points.length) {
+              diff = true;
+            } else {
+              // 判断已有的点是否有变化,如果有变化全量更新
+              for (var i = 0; i < polyline.points.length; i++) {
+                if (diffLatlng(polyline.points[i], state.polyline.points[i])) {
+                  diff = true;
+                  break;
+                }
               }
             }
+
             if (!diff) {
               if (polyline.points.length < state.polyline.points.length) {
                 progress =
