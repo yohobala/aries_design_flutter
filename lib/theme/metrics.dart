@@ -93,6 +93,14 @@ class AriThemeDuration {
   final Duration mapDuration = _Duration.long4;
 }
 
+class AriThemeIconSize {
+  static double extraSmall = 20;
+  static double standard = 24;
+  static double medium = 40;
+  static double large = 40;
+  static double extraLarge = 48;
+}
+
 /// 字体大小
 class AriThemeFontSize {
   static double displayLarge = 57;
