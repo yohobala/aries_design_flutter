@@ -9,7 +9,7 @@ typedef AriIconButtonOnPressed = void Function(
     ValueNotifier<int> selectIndex, AnimationController animationController);
 
 /// 背景填充的图标按钮
-class AriFilledIconButton extends StatelessWidget {
+class AriFilledIconButton extends StatefulWidget {
   AriFilledIconButton({
     Key? key,
     required this.icons,
@@ -37,25 +37,31 @@ class AriFilledIconButton extends StatelessWidget {
   final AriIconButtonOnPressed? onPressed;
 
   @override
+  State<StatefulWidget> createState() => AriFilledIconButtonState();
+}
+
+class AriFilledIconButtonState extends State<AriFilledIconButton> {
+  @override
   Widget build(BuildContext context) {
     ButtonStyle? buttonStyle =
-        style ?? AriThemeColor.of(context).button.filledIconButton;
-    if (borderRadius != null) {
+        widget.style ?? AriThemeColor.of(context).button.filledIconButton;
+    if (widget.borderRadius != null) {
       buttonStyle = buttonStyle.copyWith(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(borderRadius!),
+            borderRadius: BorderRadius.all(widget.borderRadius!),
           ),
         ),
       );
     }
     return AriIconButton(
-        icons: icons,
-        style: buttonStyle,
-        onPressed: onPressed,
-        width: width,
-        height: height,
-        iconSize: iconSize);
+      icons: widget.icons,
+      style: buttonStyle,
+      onPressed: widget.onPressed,
+      width: widget.width,
+      height: widget.height,
+      iconSize: widget.iconSize,
+    );
   }
 }
 
@@ -149,6 +155,15 @@ class AriIconButtonState extends State<AriIconButton>
 
   ButtonStyle? _style;
 
+  int get hashCode => Object.hash(
+        widget.icons,
+        widget.selectIndex,
+        widget.rotateAngle,
+        widget.onPressed,
+        widget.borderRadius,
+        widget.style,
+      );
+
   //*--- 生命周期 ---*
   @override
   void initState() {
@@ -170,6 +185,14 @@ class AriIconButtonState extends State<AriIconButton>
     // 如果_build放到build中执行,会造成icon重新绘制
     // 会造成1.icon无法切换 2.icon放大后突然消失
     _elements = _build(widget.width, widget.height);
+  }
+
+  @override
+  void didUpdateWidget(covariant AriIconButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.hashCode != widget.hashCode) {
+      _elements = _build(widget.width, widget.height);
+    }
   }
 
   @override
