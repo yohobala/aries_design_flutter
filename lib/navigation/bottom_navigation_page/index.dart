@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 typedef BottomNavigationBarBuilder = Widget Function(
   BuildContext context,
   List<AriRouteItem> navigationItems,
-  int selectedIndex,
-  SelectIndexCallback onTap,
+  int initSelectedIndex,
+  PageChangeCallback pageChangeCallback,
 );
 
 /// 包含了底部导航栏的页面
@@ -62,7 +62,7 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
       key: bottomNavigationBarKey,
       navigationItems: widget.routeItem.children,
       initSelectedIndex: selectedIndex,
-      itemChangeCallback: (int index, String route) {
+      pageChangeCallback: (int index) {
         setState(() {
           selectedIndex = index;
         });

@@ -1,19 +1,19 @@
 import 'package:aries_design_flutter/router/index.dart';
 import 'package:flutter/material.dart';
 
-typedef ItemChangeCallback = void Function(int index, String route);
+typedef PageChangeCallback = void Function(int index);
 
 /// 导航栏
 class AriNavigationBar extends StatefulWidget {
   AriNavigationBar(
       {Key? key,
-      this.itemChangeCallback,
+      this.pageChangeCallback,
       required this.navigationItems,
       this.initSelectedIndex = 0})
       : super(key: key);
 
   /// 底部导航栏切换回调
-  final ItemChangeCallback? itemChangeCallback;
+  final PageChangeCallback? pageChangeCallback;
 
   /// 导航栏项
   final List<AriRouteItem> navigationItems;
@@ -59,9 +59,8 @@ class _AriNavigationBarState extends State<AriNavigationBar> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (widget.itemChangeCallback != null && itemRoutes.length > index) {
-        final route = itemRoutes[index].route;
-        widget.itemChangeCallback!(index, route);
+      if (widget.pageChangeCallback != null && itemRoutes.length > index) {
+        widget.pageChangeCallback!(index);
       }
     });
   }

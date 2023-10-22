@@ -12,14 +12,14 @@ class AriBottonNavigationBar extends StatefulWidget {
     Key? key,
     required this.navigationItems,
     required this.initSelectedIndex,
-    required this.itemChangeCallback,
+    required this.pageChangeCallback,
     this.navigationBar,
     this.showNavigationBar,
   }) : super(key: key);
 
   final List<AriRouteItem> navigationItems;
   final int initSelectedIndex;
-  final void Function(int index, String route) itemChangeCallback;
+  final PageChangeCallback pageChangeCallback;
 
   /// 自定义的导航栏
   final BottomNavigationBarBuilder? navigationBar;
@@ -78,11 +78,7 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
         context,
         navigationItems,
         selectedIndex,
-        (int index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
+        widget.pageChangeCallback,
       );
     } else {
       navigationBar = Visibility(
@@ -90,9 +86,9 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
         child: SlideTransition(
           position: offset,
           child: AriNavigationBar(
-            itemChangeCallback: (int index, String route) {
+            pageChangeCallback: (int index) {
               selectedIndex = index;
-              widget.itemChangeCallback(index, route);
+              widget.pageChangeCallback(index);
             },
             navigationItems: navigationItems,
             initSelectedIndex: selectedIndex,
