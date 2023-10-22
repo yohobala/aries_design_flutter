@@ -158,6 +158,7 @@ class AriThemeColorBoxShadow {
   const AriThemeColorBoxShadow({
     required this.standard,
     required this.bottomSheet,
+    required this.bottomNavigationBar,
     required this.messageBar,
   });
 
@@ -166,6 +167,9 @@ class AriThemeColorBoxShadow {
 
   /// 底部弹出框阴影
   final BoxShadow bottomSheet;
+
+  /// 底部导航栏阴影
+  final BoxShadow bottomNavigationBar;
 
   final BoxShadow messageBar;
 }
