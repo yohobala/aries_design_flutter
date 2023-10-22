@@ -1,10 +1,17 @@
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
+/// 底部导航栏
 typedef BottomNavigationBarBuilder = Widget Function(
   BuildContext context,
+
+  /// 底部导航栏项
   List<AriRouteItem> navigationItems,
+
+  /// 初始选中的导航栏index
   int initSelectedIndex,
+
+  /// 底部导航栏切换回调,调用这个才会切换页面
   PageChangeCallback pageChangeCallback,
 );
 
