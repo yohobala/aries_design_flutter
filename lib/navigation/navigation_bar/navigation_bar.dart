@@ -45,7 +45,8 @@ class _AriNavigationBarState extends State<AriNavigationBar> {
     itemRoutes = widget.navigationItems;
     final items = itemRoutes
         .map((e) => NavigationDestination(
-            icon: e.icon!, label: e.label != null ? e.label!(context) : e.name))
+            icon: Icon(e.icon!),
+            label: e.label != null ? e.label!(context) : e.name))
         .toList();
 
     return NavigationBar(

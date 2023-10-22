@@ -20,21 +20,21 @@ List<AriRouteItem> childrenRoutes = [
           name: "page1",
           route: "page1",
           widget: (context) => Text("page1"),
-          icon: Icon(Icons.home),
+          icon: Icons.home,
           hasNavigation: false,
           children: [
             AriRouteItem(
                 name: "page1-1",
                 route: "children1",
                 widget: (context) => Text("children1"),
-                icon: Icon(Icons.home),
+                icon: Icons.home,
                 hasNavigation: false,
                 children: [
                   AriRouteItem(
                     name: "page1-1-1",
                     route: "children1-1",
                     widget: (context) => Text("children1-1"),
-                    icon: Icon(Icons.home),
+                    icon: Icons.home,
                     hasNavigation: false,
                   ),
                 ]),
@@ -43,7 +43,7 @@ List<AriRouteItem> childrenRoutes = [
         name: "page2",
         route: "page2",
         widget: (context) => Text("首页2"),
-        icon: Icon(Icons.home),
+        icon: Icons.home,
         hasNavigation: false,
       ),
     ],
@@ -92,21 +92,21 @@ class TestRouterHasNavigationTrue_1 extends StatelessWidget {
             name: "page1",
             route: "page1",
             widget: (context) => Text("page1"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false,
             children: [
               AriRouteItem(
                   name: "page1-1",
                   route: "children1",
                   widget: (context) => Text("children1"),
-                  icon: Icon(Icons.home),
+                  icon: Icons.home,
                   hasNavigation: false,
                   children: [
                     AriRouteItem(
                       name: "page1-1-1",
                       route: "children1-1",
                       widget: (context) => Text("children1-1"),
-                      icon: Icon(Icons.home),
+                      icon: Icons.home,
                       hasNavigation: false,
                     ),
                   ]),
@@ -115,7 +115,7 @@ class TestRouterHasNavigationTrue_1 extends StatelessWidget {
           name: "page2",
           route: "page2",
           widget: (context) => Text("首页2"),
-          icon: Icon(Icons.home),
+          icon: Icons.home,
           hasNavigation: false,
         ),
       ],
@@ -149,21 +149,21 @@ class TestRouterHasNavigationTrue_2 extends StatelessWidget {
             name: "page1",
             route: "page1",
             widget: (context) => Text("page1"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false,
             children: [
               AriRouteItem(
                   name: "page1-1",
                   route: "children1",
                   widget: (context) => Text("children1"),
-                  icon: Icon(Icons.home),
+                  icon: Icons.home,
                   hasNavigation: false,
                   children: [
                     AriRouteItem(
                       name: "page1-1-1",
                       route: "children1-1",
                       widget: (context) => Text("children1-1"),
-                      icon: Icon(Icons.home),
+                      icon: Icons.home,
                       hasNavigation: false,
                     ),
                   ]),
@@ -172,7 +172,7 @@ class TestRouterHasNavigationTrue_2 extends StatelessWidget {
           name: "page2",
           route: "page2",
           widget: (context) => Text("首页2"),
-          icon: Icon(Icons.home),
+          icon: Icons.home,
           hasNavigation: false,
         ),
       ],
@@ -206,21 +206,21 @@ class TestRouterHasNavigationTrue_3 extends StatelessWidget {
             name: "page1",
             route: "page1",
             widget: (context) => Text("page1"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false,
             children: [
               AriRouteItem(
                   name: "page1-1",
                   route: "children1",
                   widget: (context) => Text("children1"),
-                  icon: Icon(Icons.home),
+                  icon: Icons.home,
                   hasNavigation: false,
                   children: [
                     AriRouteItem(
                       name: "page1-1-1",
                       route: "children1-1",
                       widget: (context) => Text("children1-1"),
-                      icon: Icon(Icons.home),
+                      icon: Icons.home,
                       hasNavigation: false,
                     ),
                   ]),
@@ -263,21 +263,21 @@ class TestRouterHasNavigationTrue_4 extends StatelessWidget {
             name: "page1",
             route: "page1",
             widget: (context) => Text("page1"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false,
             children: [
               AriRouteItem(
                   name: "page1-1",
                   route: "children1",
                   widget: (context) => Text("children1"),
-                  icon: Icon(Icons.home),
+                  icon: Icons.home,
                   hasNavigation: false,
                   children: [
                     AriRouteItem(
                       name: "page1-1-1",
                       route: "children1-1",
                       widget: (context) => Text("children1-1"),
-                      icon: Icon(Icons.home),
+                      icon: Icons.home,
                       hasNavigation: false,
                     ),
                   ]),
@@ -286,7 +286,7 @@ class TestRouterHasNavigationTrue_4 extends StatelessWidget {
           name: "page2",
           route: "page2",
           widget: null, //(context) => Text("首页2"),
-          icon: Icon(Icons.home),
+          icon: Icons.home,
           hasNavigation: false,
         ),
       ],
@@ -320,21 +320,21 @@ class TestRouterHasNavigationTrue_5 extends StatelessWidget {
             name: "page1",
             route: "page1",
             widget: (context) => Text("page1"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false,
             children: [
               AriRouteItem(
                   name: "page1-1",
                   route: "children1",
                   widget: (context) => Text("children1"),
-                  icon: Icon(Icons.home),
+                  icon: Icons.home,
                   hasNavigation: true,
                   children: [
                     AriRouteItem(
                       name: "page1-1-1",
                       route: "children1-1",
                       widget: (context) => Text("children1-1"),
-                      icon: Icon(Icons.home),
+                      icon: Icons.home,
                       hasNavigation: false,
                     ),
                   ]),
@@ -343,7 +343,7 @@ class TestRouterHasNavigationTrue_5 extends StatelessWidget {
           name: "page2",
           route: "page2",
           widget: (context) => Text("首页2"),
-          icon: Icon(Icons.home),
+          icon: Icons.home,
           hasNavigation: false,
         ),
       ],
@@ -376,21 +376,21 @@ class TestRouterHasNavigationTrue_5_2 extends StatelessWidget {
             name: "page1",
             route: "page1",
             widget: (context) => Text("page1"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false,
             children: [
               AriRouteItem(
                   name: "page1-1",
                   route: "children1",
                   widget: (context) => Text("children1"),
-                  icon: Icon(Icons.home),
+                  icon: Icons.home,
                   hasNavigation: false,
                   children: [
                     AriRouteItem(
                       name: "page1-1-1",
                       route: "children1-1",
                       widget: (context) => Text("children1-1"),
-                      icon: Icon(Icons.home),
+                      icon: Icons.home,
                       hasNavigation: true,
                     ),
                   ]),
@@ -399,7 +399,7 @@ class TestRouterHasNavigationTrue_5_2 extends StatelessWidget {
           name: "page2",
           route: "page2",
           widget: (context) => Text("首页2"),
-          icon: Icon(Icons.home),
+          icon: Icons.home,
           hasNavigation: false,
         ),
       ],
@@ -527,13 +527,13 @@ class TestRouterRoute extends StatelessWidget {
             name: "TestRouterRoute-page3-1",
             route: "/page1/test",
             widget: (context) => Text("页面1"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false),
         AriRouteItem(
             name: "TestRouterRoute-page3-2",
             route: "page2",
             widget: (context) => Text("页面2"),
-            icon: Icon(Icons.home),
+            icon: Icons.home,
             hasNavigation: false),
       ],
     )
@@ -572,7 +572,7 @@ class TestRouterPush extends StatelessWidget {
         widget: null,
         index: 0,
         hasNavigation: true,
-        icon: Icon(Icons.abc),
+        icon: Icons.abc,
         navigationConfig: AriRouteItemNavigationConfig(
           initialRoute: "/",
         ),
@@ -587,7 +587,7 @@ class TestRouterPush extends StatelessWidget {
                       AriRouter.pushNamed(context, 'page2-1-1');
                     },
                   ),
-              icon: Icon(Icons.abc),
+              icon: Icons.abc,
               hasNavigation: false,
               children: [
                 AriRouteItem(
@@ -600,7 +600,7 @@ class TestRouterPush extends StatelessWidget {
                             AriRouter.pushNamed(context, 'page2-1-2');
                           },
                         ),
-                    icon: Icon(Icons.abc),
+                    icon: Icons.abc,
                     hasNavigation: false),
                 AriRouteItem(
                     name: "page2-1-2",
@@ -612,7 +612,7 @@ class TestRouterPush extends StatelessWidget {
                             AriRouter.pushNamed(context, 'page1');
                           },
                         ),
-                    icon: Icon(Icons.abc),
+                    icon: Icons.abc,
                     hasNavigation: false)
               ]),
           AriRouteItem(
@@ -623,7 +623,7 @@ class TestRouterPush extends StatelessWidget {
                     key: Key('page2-2-Button'), // 给按钮添加一个 key，以便在测试中找到它
                     onPressed: () {},
                   ),
-              icon: Icon(Icons.abc),
+              icon: Icons.abc,
               hasNavigation: false),
         ]),
   ];

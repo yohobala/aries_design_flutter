@@ -62,8 +62,8 @@ class AriRouteItem {
   ///
   /// 当父路由的[hasNavigation]为true时，该值必须设置，否则出现AssertionError
   ///
-  /// 例如：Icon(Icons.home)
-  final Icon? icon;
+  /// 例如：Icons.home
+  final IconData? icon;
 
   /// 是否是导航栏
   final bool hasNavigation;
@@ -75,6 +75,8 @@ class AriRouteItem {
   final List<AriRouteItem> children;
 
   /// 路由的标签, 用于底部导航栏
+  ///
+  /// 之所以使用回调函数,是为了方便进行国际化
   ///
   /// 如果[hasNavigation]为true，但是该值为null，会使用[name]作为标签
   String Function(BuildContext)? label;
@@ -88,7 +90,7 @@ class AriRouteItem {
     Widget Function(BuildContext)? widget,
     String? route,
     int? index,
-    Icon? icon,
+    IconData? icon,
     bool? hasNavigation,
     AriRouteItemNavigationConfig? navigationConfig,
     List<AriRouteItem>? children,
