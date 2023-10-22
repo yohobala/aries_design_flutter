@@ -2,10 +2,11 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:flutter/material.dart';
 
 typedef BottomNavigationBarBuilder = Widget Function(
-    BuildContext context,
-    List<AriRouteItem> navigationItems,
-    int selectedIndex,
-    SelectIndexCallback onTap)?;
+  BuildContext context,
+  List<AriRouteItem> navigationItems,
+  int selectedIndex,
+  SelectIndexCallback onTap,
+);
 
 /// 包含了底部导航栏的页面
 ///
