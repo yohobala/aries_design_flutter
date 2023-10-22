@@ -10,16 +10,17 @@ typedef AriIconButtonOnPressed = void Function(
 
 /// 背景填充的图标按钮
 class AriFilledIconButton extends StatefulWidget {
-  AriFilledIconButton({
-    Key? key,
-    required this.icons,
-    this.width = 40,
-    this.height = 40,
-    this.iconSize = 24,
-    this.borderRadius,
-    this.style,
-    this.onPressed,
-  }) : super(key: key);
+  AriFilledIconButton(
+      {Key? key,
+      required this.icons,
+      this.width = 40,
+      this.height = 40,
+      this.iconSize = 24,
+      this.borderRadius,
+      this.style,
+      this.onPressed,
+      this.padding})
+      : super(key: key);
 
   final List<Widget?> icons;
 
@@ -35,6 +36,8 @@ class AriFilledIconButton extends StatefulWidget {
 
   /// 点击事件
   final AriIconButtonOnPressed? onPressed;
+
+  final EdgeInsetsGeometry? padding;
 
   @override
   State<StatefulWidget> createState() => AriFilledIconButtonState();
@@ -61,6 +64,7 @@ class AriFilledIconButtonState extends State<AriFilledIconButton> {
       width: widget.width,
       height: widget.height,
       iconSize: widget.iconSize,
+      padding: widget.padding,
     );
   }
 }
@@ -87,6 +91,7 @@ class AriIconButton extends StatefulWidget {
     this.width = 40,
     this.height = 40,
     this.iconSize = 24,
+    this.padding,
   })  : selectIndex = selectIndex ?? ValueNotifier<int>(0),
         rotateAngle = ValueNotifier<double>(rotateAngle),
         borderRadius = ValueNotifier<BorderRadiusGeometry?>(borderRadius),
@@ -119,6 +124,8 @@ class AriIconButton extends StatefulWidget {
   final double height;
 
   final double iconSize;
+
+  final EdgeInsetsGeometry? padding;
 
   @override
   State<StatefulWidget> createState() => AriIconButtonState();
@@ -279,7 +286,9 @@ class AriIconButtonState extends State<AriIconButton>
           // child: FractionallySizedBox(
           //   widthFactor: 1,
           //   heightFactor: 1,
-          child: widget.icons[index],
+          child: Center(
+            child: widget.icons[index],
+          ),
           // ),
         );
 
@@ -314,6 +323,7 @@ class AriIconButtonState extends State<AriIconButton>
         width: width,
         height: height,
         child: IconButton(
+          padding: widget.padding,
           onPressed: _onPressed,
           icon: animation,
           style: widget.style,
