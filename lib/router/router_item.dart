@@ -30,6 +30,7 @@ class AriRouteItem {
       required this.route,
       this.index,
       this.icon,
+      this.activeIcon,
       this.hasNavigation = false,
       this.navigationConfig,
       this.children = const [],
@@ -64,6 +65,8 @@ class AriRouteItem {
   ///
   /// 例如：Icons.home
   final IconData? icon;
+
+  final IconData? activeIcon;
 
   /// 是否是导航栏
   final bool hasNavigation;

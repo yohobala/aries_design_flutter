@@ -43,11 +43,23 @@ class _AriNavigationBarState extends State<AriNavigationBar> {
      * 然后转化为List<BottomNavigationBarItem>
      */
     itemRoutes = widget.navigationItems;
-    final items = itemRoutes
-        .map((e) => NavigationDestination(
-            icon: Icon(e.icon!),
-            label: e.label != null ? e.label!(context) : e.name))
-        .toList();
+    final items = itemRoutes.asMap().entries.map((e) {
+      Widget iconElement;
+      AriRouteItem item = e.value;
+      if (e.key == _selectedIndex) {
+        if (item.activeIcon != null) {
+          iconElement = Icon(item.activeIcon!);
+        } else {
+          iconElement = Icon(item.icon!);
+        }
+      } else {
+        iconElement = Icon(item.icon!);
+      }
+
+      return NavigationDestination(
+          icon: iconElement,
+          label: item.label != null ? item.label!(context) : item.name);
+    }).toList();
 
     return NavigationBar(
       destinations: items,
