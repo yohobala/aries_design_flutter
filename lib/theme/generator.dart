@@ -25,6 +25,11 @@ AriThemeColor generateThemeColor({
       blurRadius: 5,
       offset: Offset(0, -3),
     ),
+    bottomNavigationBar: BoxShadow(
+      color: colorScheme.shadow.withOpacity(0.1),
+      blurRadius: 5,
+      offset: Offset(0, -3),
+    ),
     messageBar: BoxShadow(
       color: colorScheme.shadow.withOpacity(0.5), // 设置透明度
       // 扩散阴影,当为0时不扩散
