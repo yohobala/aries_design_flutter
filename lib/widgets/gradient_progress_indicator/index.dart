@@ -46,6 +46,7 @@ class _GradientProgressPainter extends CustomPainter {
   final Color backgroundColor;
   final BorderRadius borderRadius;
 
+  @override
   int get hashCode => Object.hash(
         value,
         valueColor,
@@ -98,5 +99,11 @@ class _GradientProgressPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return oldDelegate.hashCode != hashCode;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    // implement ==
+    return super == other;
   }
 }

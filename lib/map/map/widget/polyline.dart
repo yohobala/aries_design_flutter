@@ -310,7 +310,7 @@ class AriMapPolylinePainter extends CustomPainter {
     }
 
     final hash = polyline.renderHashCode;
-    if (needsLayerSaving || (lastHash != null && lastHash != hash)) {
+    if (needsLayerSaving || (lastHash != hash)) {
       drawPaths();
     }
     lastHash = hash;

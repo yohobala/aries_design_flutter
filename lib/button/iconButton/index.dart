@@ -162,6 +162,7 @@ class AriIconButtonState extends State<AriIconButton>
 
   ButtonStyle? _style;
 
+  @override
   int get hashCode => Object.hash(
         widget.icons,
         widget.selectIndex,
@@ -339,5 +340,11 @@ class AriIconButtonState extends State<AriIconButton>
     setState(() {
       _style = style ?? _style;
     });
+  }
+
+  @override
+  bool operator ==(Object other) {
+    // implement ==
+    return super == other;
   }
 }
