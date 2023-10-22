@@ -96,7 +96,7 @@ class AriThemeDuration {
 class AriThemeIconSize {
   static double extraSmall = 20;
   static double standard = 24;
-  static double medium = 40;
+  static double medium = 32;
   static double large = 40;
   static double extraLarge = 48;
 }
@@ -112,25 +112,25 @@ class AriThemeFontSize {
   static double titleLarge = 22;
   static double titleMedium = 16;
   static double titleSmall = 14;
+  static double bodyLarge = 16;
+  static double bodyMedium = 14;
+  static double bodySmall = 12;
   // 按钮等默认这个大小
   static double labelLarge = 14;
   static double labelMedium = 12;
   static double labelSmall = 11;
-  static double bodyLarge = 16;
-  static double bodyMedium = 14;
-  static double bodySmall = 12;
 }
 
 /// 文本样式
 class AriThemeTextStyle {
   /// 对话框\弹出框标题
-  final TextStyle dialogTitle = TextStyle(
+  final TextStyle containerTitle = TextStyle(
     fontSize: AriThemeFontSize.headlineMedium,
     fontWeight: FontWeight.w600,
   );
 
   /// 对话框\弹出框容器标题
-  final TextStyle dialogContainerTitle = TextStyle(
+  final TextStyle containerItemTitle = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w600,
   );
@@ -148,6 +148,14 @@ class AriThemeTextStyle {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
     color: Colors.white,
+  );
+
+  /// 用于相比于正常文字,需要突出显示的文本
+  ///
+  /// 比如设置项的标题
+  final TextStyle tipTitle = TextStyle(
+    fontSize: AriThemeFontSize.titleMedium,
+    fontWeight: FontWeight.w500,
   );
 }
 
