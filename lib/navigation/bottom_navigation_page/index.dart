@@ -9,7 +9,7 @@ typedef BottomNavigationBarBuilder = Widget Function(
 
 /// 包含了底部导航栏的页面
 ///
-/// 该页面包含了一个导航栏navigationBar和 AriRouteNavigation （导航栏对应的页面）
+/// 该页面包含了一个AriBottonNavigationBar(导航栏) 和 AriNavigatorGroup （导航栏对应的页面）
 class AriBottomNavigationPage extends StatefulWidget {
   const AriBottomNavigationPage({
     super.key,
@@ -22,7 +22,7 @@ class AriBottomNavigationPage extends StatefulWidget {
   final AriRouteItem routeItem;
 
   /// 自定义的导航栏
-  final BottomNavigationBarBuilder navigationBar;
+  final BottomNavigationBarBuilder? navigationBar;
 
   /// 是否显示导航栏,只对默认导航栏有效,
   /// 如果[navigationBar]不为空,则无效

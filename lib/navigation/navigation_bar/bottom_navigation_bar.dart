@@ -22,7 +22,7 @@ class AriBottonNavigationBar extends StatefulWidget {
   final void Function(int index, String route) itemChangeCallback;
 
   /// 自定义的导航栏
-  final BottomNavigationBarBuilder navigationBar;
+  final BottomNavigationBarBuilder? navigationBar;
 
   /// 是否显示导航栏,只对默认导航栏有效,
   /// 如果[navigationBar]不为空,则无效

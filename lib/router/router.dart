@@ -42,7 +42,7 @@ class AriRouter {
   /// 2. 如果路由的[hasNavigation]为true，会重新设置widget，
   /// 3. 设置自定义的导航栏  优先使用传入的[navigationBar]
   void set(List<AriRouteItem> routeItems,
-      {BottomNavigationBarBuilder navigationBar,
+      {BottomNavigationBarBuilder? navigationBar,
       ValueNotifier<bool>? showNavigationBar}) {
     routeItemMap.addAll(
         getRouteItems(routeItems, "/", navigationBar, showNavigationBar));
@@ -103,7 +103,7 @@ class AriRouter {
 Map<String, AriRouteItem> getRouteItems(
     List<AriRouteItem> routeItems,
     String parentRoute,
-    BottomNavigationBarBuilder navigationBar,
+    BottomNavigationBarBuilder? navigationBar,
     ValueNotifier<bool>? showNavigationBar) {
   Map<String, AriRouteItem> lr = {};
   for (var routeItem in routeItems) {
@@ -156,7 +156,7 @@ bool isNameUnique(String name) {
 /// 生成底部导航栏容器
 Widget Function(BuildContext) _generateBottomNavigationContainer(
     AriRouteItem routeItem,
-    BottomNavigationBarBuilder widget,
+    BottomNavigationBarBuilder? widget,
     ValueNotifier<bool>? showNavigationBar) {
   return (context) => AriBottomNavigationPage(
         routeItem: routeItem,
