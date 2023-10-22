@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 
-class GradientButton extends StatelessWidget {
-  //*--- 构造函数 ---*
-  /// 渐变按钮
-  const GradientButton({
+/// 背景渐变的按钮
+class AriGradientButton extends StatelessWidget {
+  const AriGradientButton({
     Key? key,
     required this.child,
     required this.gradient,
     required this.onPressed,
     this.width,
     this.height,
+    this.shape = BoxShape.rectangle,
+    this.borderRadius,
+    this.style,
+    this.padding,
   }) : super(key: key);
 
   //*--- 公有变量 ---*
@@ -26,6 +29,15 @@ class GradientButton extends StatelessWidget {
   /// 按钮的高度
   final double? height;
 
+  /// 按钮的形状
+  final BoxShape shape;
+
+  final BorderRadius? borderRadius;
+
+  final ButtonStyle? style;
+
+  final MaterialStateProperty<EdgeInsetsGeometry?>? padding;
+
   /// 按钮的点击事件
   final void Function() onPressed;
 
@@ -35,6 +47,13 @@ class GradientButton extends StatelessWidget {
    */
   @override
   Widget build(BuildContext context) {
+    ButtonStyle? buttonStyle =
+        style ?? AriThemeColor.of(context).button.gradientButton;
+    if (padding != null) {
+      buttonStyle = buttonStyle.copyWith(
+        padding: padding!,
+      );
+    }
     return Container(
       width: width ?? AriTheme.button.buttonSize.resolve({}).width,
       height: height ?? AriTheme.button.buttonSize.resolve({}).height,
@@ -47,11 +66,12 @@ class GradientButton extends StatelessWidget {
               blurRadius: 1.5,
             ),
           ],
-          borderRadius: BorderRadius.all(AriTheme.borderRadius.standard)),
+          borderRadius: borderRadius,
+          shape: shape),
       child: FilledButton(
         onPressed: () => {},
         child: child,
-        style: AriThemeColor.of(context).button.gradientButton,
+        style: buttonStyle,
       ),
     );
   }
