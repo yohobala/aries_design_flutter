@@ -94,7 +94,8 @@ class AriThemeDuration {
 }
 
 class AriThemeIconSize {
-  static double extraSmall = 20;
+  static double extraSmall = 16;
+  static double small = 20;
   static double standard = 24;
   static double medium = 32;
   static double large = 40;
