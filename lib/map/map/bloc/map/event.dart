@@ -167,6 +167,13 @@ class SelectedAriMarkerEvent extends AriMapEvent {
   final bool isSelected;
 }
 
+class RemoveAriMarkerEvent extends AriMapEvent {
+  RemoveAriMarkerEvent({
+    required this.marker,
+  });
+  final AriMapMarker marker;
+}
+
 /***************  线有关事件  ***************/
 
 /// {@template UpdateAriPolylineEvent}

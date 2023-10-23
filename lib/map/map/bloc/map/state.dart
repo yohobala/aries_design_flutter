@@ -125,6 +125,14 @@ class SelectdMarkerState extends AriMapState {
   final bool isSelected;
 }
 
+class RemoveMarkerState extends AriMapState {
+  RemoveMarkerState({
+    required this.marker,
+  });
+
+  final AriMapMarker marker;
+}
+
 /***************  线有关状态  ***************/
 
 class UpdatePolylineState extends AriMapState {

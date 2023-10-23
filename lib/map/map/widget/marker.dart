@@ -40,6 +40,10 @@ class AriMapMarkerLayer extends StatelessWidget {
             } else if (state is SelectdMarkerState &&
                 state.marker.layerkey == layerKey) {
               rebuild.value += 1; // 修改 ValueNotifier 的值
+            } else if (state is RemoveMarkerState &&
+                state.marker.layerkey == layerKey) {
+              markers.remove(state.marker.key);
+              rebuild.value += 1; // 修改 ValueNotifier 的值
             }
           },
           child: ValueListenableBuilder<int>(

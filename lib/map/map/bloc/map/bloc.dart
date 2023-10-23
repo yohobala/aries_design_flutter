@@ -32,6 +32,7 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
     on<MoveMarkerStatusEvent>(moveMarkerStatusEvent);
     on<UpdateAriMarkerEvent>(updateMarkeEvent);
     on<SelectedAriMarkerEvent>(selectedMarkerEvent);
+    on<RemoveAriMarkerEvent>(removeMarkerEvent);
 
     on<UpdateAriPolylineEvent>(updatePolylineEvent);
     on<SelectedAriPolylineEvent>(selectedPolylineEvent);
@@ -354,6 +355,11 @@ class AriMapBloc extends Bloc<AriMapEvent, AriMapState> {
       currentMoveMarker = null;
       currentMoveMarkerOffset = null;
     }
+  }
+
+  FutureOr<void> removeMarkerEvent(
+      RemoveAriMarkerEvent event, Emitter<AriMapState> emit) {
+    emit(RemoveMarkerState(marker: event.marker));
   }
 
   /***************  线有关事件  ***************/
