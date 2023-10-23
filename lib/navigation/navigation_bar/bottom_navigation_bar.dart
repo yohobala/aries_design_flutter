@@ -74,11 +74,17 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
     /// 底部导航栏
     Widget navigationBar;
     if (widget.navigationBar != null) {
-      navigationBar = widget.navigationBar!(
-        context,
-        navigationItems,
-        selectedIndex,
-        widget.pageChangeCallback,
+      navigationBar = Visibility(
+        visible: widget.showNavigationBar?.value ?? true,
+        child: SlideTransition(
+          position: offset,
+          child: widget.navigationBar!(
+            context,
+            navigationItems,
+            selectedIndex,
+            widget.pageChangeCallback,
+          ),
+        ),
       );
     } else {
       navigationBar = Visibility(
