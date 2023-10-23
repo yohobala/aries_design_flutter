@@ -16,7 +16,6 @@ export 'map/index.dart';
 export 'navigation/index.dart';
 export 'modal/index.dart';
 export 'button/index.dart';
-export 'icons/index.dart';
 export 'form/index.dart';
 export 'widgets/index.dart';
 export 'tabs/index.dart';
