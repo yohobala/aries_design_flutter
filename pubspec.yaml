@@ -42,10 +42,4 @@ dev_dependencies:
 flutter:
   generate: true
 
-  assets:
-    - fonts/icon/iconfont.ttf
 
-  fonts:
-      - family: AriIcons
-        fonts:
-          - asset: fonts/icon/iconfont.ttf
