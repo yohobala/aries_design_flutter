@@ -37,6 +37,8 @@ void showAriMessageBar(
 
   // 创建一个 GlobalKey，访问动画状态。
   GlobalKey<_AnimatedOverlayState> key = GlobalKey();
+  GlobalKey messageBarKey = GlobalKey();
+  GlobalKey overlayInfoKey = GlobalKey();
 
   AriMessageBar messageBar = AriMessageBar(message,
       prefixChildren: prefixChildren,
@@ -44,7 +46,7 @@ void showAriMessageBar(
       height: height,
       widthFactor: widthFactor,
       decoration: decoration,
-      key: key);
+      key: messageBarKey);
 
   OverlayEntry overlayEntry = OverlayEntry(
     builder: (BuildContext context) {
@@ -143,6 +145,7 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
     }
     return AnimatedBuilder(
       animation: _controller,
+      child: widget.child,
       builder: (context, child) {
         return Positioned(
           top: _positionAnimation.value,
