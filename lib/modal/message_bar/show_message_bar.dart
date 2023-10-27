@@ -38,7 +38,6 @@ void showAriMessageBar(
   // 创建一个 GlobalKey，访问动画状态。
   GlobalKey<_AnimatedOverlayState> key = GlobalKey();
   GlobalKey messageBarKey = GlobalKey();
-  GlobalKey overlayInfoKey = GlobalKey();
 
   AriMessageBar messageBar = AriMessageBar(message,
       prefixChildren: prefixChildren,
