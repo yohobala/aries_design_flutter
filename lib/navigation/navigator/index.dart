@@ -9,28 +9,31 @@ import 'package:flutter/material.dart';
 /// 会触发index改变，从而触发页面切换
 class AriNavigatorGroup extends StatefulWidget {
   const AriNavigatorGroup({
-    Key? key,
+    GlobalKey<AriNavigatorGroupState>? key,
     required this.selectedIndex,
     required this.routeItems,
     required this.initialRoute,
   }) : super(key: key);
 
   /// 当前选中的导航栏项的索引
-  final int selectedIndex;
+  final ValueNotifier<int> selectedIndex;
 
   /// 导航栏项
   final List<AriRouteItem> routeItems;
 
   final String initialRoute;
   @override
-  State<AriNavigatorGroup> createState() => _AriNavigatorGroupState();
+  State<AriNavigatorGroup> createState() => AriNavigatorGroupState();
 }
 
-class _AriNavigatorGroupState extends State<AriNavigatorGroup>
+class AriNavigatorGroupState extends State<AriNavigatorGroup>
     with TickerProviderStateMixin<AriNavigatorGroup> {
   @override
   void initState() {
     super.initState();
+    widget.selectedIndex.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -52,7 +55,7 @@ class _AriNavigatorGroupState extends State<AriNavigatorGroup>
 
       // widget是否显示
       bool offstage = false;
-      if (i == widget.selectedIndex) {
+      if (i == widget.selectedIndex.value) {
         faders[i].forward();
       } else {
         faders[i].reverse();

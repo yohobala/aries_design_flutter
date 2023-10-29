@@ -42,7 +42,7 @@ class AriBottomNavigationPage extends StatefulWidget {
 }
 
 class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
-  int selectedIndex = 0;
+  ValueNotifier<int> selectedIndex = ValueNotifier(0);
   String initialRoute = "/";
 
   @override
@@ -53,7 +53,7 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
     initialRoute = navigationConfig != null
         ? navigationConfig.initialRoute
         : AriRouteItemNavigationConfig().initialRoute;
-    selectedIndex = navigationConfig != null
+    selectedIndex.value = navigationConfig != null
         ? navigationConfig.initialIndex
         : AriRouteItemNavigationConfig().initialIndex;
   }
@@ -61,6 +61,7 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
   @override
   Widget build(BuildContext context) {
     AriNavigatorGroup group = AriNavigatorGroup(
+      key: navigatorGroupKey,
       initialRoute: initialRoute,
       routeItems: widget.routeItem.children,
       selectedIndex: selectedIndex,
@@ -68,11 +69,12 @@ class __AriBottomNavigationPageState extends State<AriBottomNavigationPage> {
     AriBottonNavigationBar navigationBar = AriBottonNavigationBar(
       key: bottomNavigationBarKey,
       navigationItems: widget.routeItem.children,
-      initSelectedIndex: selectedIndex,
+      initSelectedIndex: selectedIndex.value,
       pageChangeCallback: (int index) {
-        setState(() {
-          selectedIndex = index;
-        });
+        selectedIndex.value = index;
+        // setState(() {
+
+        // });
       },
       navigationBar: widget.navigationBar,
       showNavigationBar: widget.showNavigationBar,

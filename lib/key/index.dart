@@ -1,2 +1,2 @@
 export 'map.dart';
-export 'navigation_bar.dart';
+export 'navigation.dart';
