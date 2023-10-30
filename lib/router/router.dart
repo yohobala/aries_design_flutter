@@ -35,7 +35,7 @@ class AriRouter {
   ///
   /// - `routeItems`: 需要设置的路由
   /// - `navigationBar`: 导航栏
-  /// - `showNavigationBar`: 是否显示导航栏,只对默认的导航栏有效,如果navigationBar不为空,则无效
+  /// - `showNavigationBar`: 是否显示导航栏
   ///
   /// *说明*
   /// 1. 会根据父路由,重新设置route
