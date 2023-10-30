@@ -48,18 +48,18 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
       duration: AriTheme.duration.medium1,
       vsync: this,
     );
+
     offset = Tween<Offset>(begin: Offset.zero, end: Offset(0, 1))
         .animate(controller);
 
-    if (widget.navigationBar == null) {
-      if (widget.showNavigationBar?.value ?? true) {
-        controller.reverse();
-      } else {
-        controller.forward();
-      }
-      widget.showNavigationBar
-          ?.addListener(handleNavigationBarVisibilityChange);
+    if (widget.showNavigationBar?.value ?? true) {
+      controller.reverse();
+    } else {
+      controller.forward();
     }
+    widget.showNavigationBar?.addListener(() {
+      handleNavigationBarVisibilityChange();
+    });
   }
 
   @override
@@ -74,8 +74,8 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
     /// 底部导航栏
     Widget navigationBar;
     if (widget.navigationBar != null) {
-      navigationBar = Visibility(
-        visible: widget.showNavigationBar?.value ?? true,
+      navigationBar = Offstage(
+        offstage: false,
         child: SlideTransition(
           position: offset,
           child: widget.navigationBar!(
@@ -87,8 +87,10 @@ class AriBottonNavigationBarState extends State<AriBottonNavigationBar>
         ),
       );
     } else {
-      navigationBar = Visibility(
-        visible: widget.showNavigationBar?.value ?? true,
+      navigationBar = Offstage(
+        offstage: widget.showNavigationBar != null
+            ? !widget.showNavigationBar!.value
+            : false,
         child: SlideTransition(
           position: offset,
           child: AriNavigationBar(
