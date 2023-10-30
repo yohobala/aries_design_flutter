@@ -157,6 +157,7 @@ class AriThemeColor {
 class AriThemeColorBoxShadow {
   const AriThemeColorBoxShadow({
     required this.standard,
+    required this.surfaceVariant,
     required this.bottomSheet,
     required this.bottomNavigationBar,
     required this.messageBar,
@@ -164,6 +165,9 @@ class AriThemeColorBoxShadow {
 
   /// 标准阴影
   final BoxShadow standard;
+
+  /// 背景高亮时的阴影
+  final BoxShadow surfaceVariant;
 
   /// 底部弹出框阴影
   final BoxShadow bottomSheet;

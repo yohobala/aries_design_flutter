@@ -20,6 +20,16 @@ AriThemeColor generateThemeColor({
       // 模仿 FloatingActionButton 的阴影偏移
       offset: Offset(0, 3),
     ),
+    surfaceVariant: BoxShadow(
+      color: colorScheme.shadow.withOpacity(0.2), // 设置透明度
+      // 扩散阴影,当为0时不扩散
+      spreadRadius: 2,
+      // 模仿 FloatingActionButton 的 elevation
+      // 但是在滑动的时候会造成阴影和背景分离
+      blurRadius: 6,
+      // 模仿 FloatingActionButton 的阴影偏移
+      offset: Offset(0, 4),
+    ),
     bottomSheet: BoxShadow(
       color: colorScheme.shadow.withOpacity(0.2),
       blurRadius: 5,
