@@ -70,6 +70,25 @@ class AriRouter {
     }
   }
 
+  static void pushReplacementNamed(
+    BuildContext context,
+    String routeName, {
+    Object? arguments,
+  }) {
+    try {
+      if (routeItemMap.containsKey(routeName)) {
+        String route = routeItemMap[routeName]!.route;
+        Navigator.of(context, rootNavigator: true)
+            .pushReplacementNamed(route, arguments: arguments);
+      } else {
+        Navigator.of(context)
+            .pushReplacementNamed(routeName, arguments: arguments);
+      }
+    } catch (e) {
+      assert(false, "pushReplacementNamed error: $e");
+    }
+  }
+
   /// 清空路由表
   static void clear() {
     routeItemMap.clear();
