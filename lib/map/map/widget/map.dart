@@ -163,15 +163,15 @@ class _AriMapState extends State<AriMap>
     // NOTE:
     // 针对底部导航栏的监听
     AriBottonNavigationBarState? state = bottomNavigationBarKey.currentState;
-    controller = state?.controller;
+    // controller = state?.controller;
     offset = state?.offset;
-    state?.widget.showNavigationBar?.addListener(() {
-      if (state.widget.showNavigationBar?.value ?? true) {
-        controller?.reverse();
-      } else {
-        controller?.forward();
-      }
-    });
+    // state?.widget.showNavigationBar?.addListener(() {
+    //   if (state.widget.showNavigationBar?.value ?? true) {
+    //     controller?.reverse();
+    //   } else {
+    //     controller?.forward();
+    //   }
+    // });
   }
 
   @override
