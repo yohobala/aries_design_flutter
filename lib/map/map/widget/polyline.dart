@@ -8,7 +8,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:latlong2/latlong.dart';
 
-class AriMapPolylineLayer extends StatelessWidget {
+class AriMapPolylineLayer extends StatefulWidget {
   AriMapPolylineLayer({
     Key? key,
     required this.layerKey,
@@ -19,7 +19,21 @@ class AriMapPolylineLayer extends StatelessWidget {
 
   final Map<ValueKey<String>, AriMapPolyline> polylines;
 
+  @override
+  State<AriMapPolylineLayer> createState() => _AriMapPolylineLayerState();
+}
+
+class _AriMapPolylineLayerState extends State<AriMapPolylineLayer> {
   final ValueNotifier<int> rebuild = ValueNotifier(0);
+
+  late AriMapBloc mapBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    rebuild.value += 1;
+    mapBloc = context.read<AriMapBloc>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +42,16 @@ class AriMapPolylineLayer extends StatelessWidget {
       assert(false, 'No FlutterMapState found');
     }
 
-    final polylineBloc = context.read<AriMapBloc>();
-
-    Map<ValueKey<String>, AriMapPolyline> currentPolylines = polylines;
+    Map<ValueKey<String>, AriMapPolyline> currentPolylines = widget.polylines;
 
     return BlocListener<AriMapBloc, AriMapState>(
-      bloc: polylineBloc,
+      bloc: mapBloc,
       listener: (context, state) {
-        if (state is CreatePolylineState && state.layerKey == layerKey) {
+        if (state is CreatePolylineState && state.layerKey == widget.layerKey) {
           currentPolylines[state.polyline.key] = state.polyline;
           rebuild.value += 1;
         } else if (state is SelectdPolylineState &&
-            state.polyline.layerkey == layerKey) {
+            state.polyline.layerkey == widget.layerKey) {
           rebuild.value += 1; // 修改 ValueNotifier 的值
         }
       },

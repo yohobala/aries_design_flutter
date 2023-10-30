@@ -11,7 +11,7 @@ import 'map.dart';
 import 'marker.dart';
 import 'polyline.dart';
 
-class AriMapGestureLayer extends StatelessWidget {
+class AriMapGestureLayer extends StatefulWidget {
   AriMapGestureLayer({
     Key? key,
     this.buildMarker,
@@ -25,14 +25,25 @@ class AriMapGestureLayer extends StatelessWidget {
 
   final double tapDistanceTolerance;
 
+  @override
+  State<AriMapGestureLayer> createState() => _AriMapGestureLayer();
+}
+
+class _AriMapGestureLayer extends State<AriMapGestureLayer> {
   final ValueNotifier<int> rebuild = ValueNotifier(0);
 
   final GlobalKey gestureLayerKey = GlobalKey();
 
+  late AriMapBloc mapBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    mapBloc = context.read<AriMapBloc>();
+  }
+
   @override
   Widget build(BuildContext context) {
-    AriMapBloc mapBloc = context.read<AriMapBloc>();
-
     Map<Key, AriMapGesture> layers = mapBloc.gestureLayers;
     List<AriMapMarker> markers = [];
     List<AriMapPolyline> polylines = [];
@@ -41,7 +52,7 @@ class AriMapGestureLayer extends StatelessWidget {
     return GestureDetector(
       key: gestureLayerKey,
       onTapUp: (TapUpDetails details) {
-        _handleTap(context, details, onTap, markers, polylines);
+        _handleTap(context, details, widget.onTap, markers, polylines);
       },
       child: BlocListener<AriMapBloc, AriMapState>(
         bloc: mapBloc,
@@ -84,7 +95,7 @@ class AriMapGestureLayer extends StatelessWidget {
     return Stack(
       children: [
         _buildPolyline(context, layer.key, layer.polylines),
-        _buildMarker(context, layer.key, layer.markers, buildMarker),
+        _buildMarker(context, layer.key, layer.markers, widget.buildMarker),
       ],
     );
   }
@@ -234,7 +245,7 @@ class AriMapGestureLayer extends StatelessWidget {
         tapY <= bottomBoundary;
 
     if (inside) {
-      var minimum = min(height, tapDistanceTolerance + width);
+      var minimum = min(height, widget.tapDistanceTolerance + width);
       tappedMarkers[minimum] ??= <AriMapMarker>[];
       tappedMarkers[minimum]!.add(marker);
     }
@@ -278,9 +289,9 @@ class AriMapGestureLayer extends StatelessWidget {
     // 这个可以判断垂线点是否在线段中
     var lengthDToOriginalSegment = newTriangleBase - a;
 
-    if (height < tapDistanceTolerance + width &&
-        lengthDToOriginalSegment < tapDistanceTolerance + width) {
-      var minimum = min(height, tapDistanceTolerance + width);
+    if (height < widget.tapDistanceTolerance + width &&
+        lengthDToOriginalSegment < widget.tapDistanceTolerance + width) {
+      var minimum = min(height, widget.tapDistanceTolerance + width);
 
       tappedPolylines[minimum] ??= <AriMapPolyline>[];
       tappedPolylines[minimum]!.add(polyline);

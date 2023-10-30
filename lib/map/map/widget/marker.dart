@@ -6,9 +6,9 @@ import 'package:aries_design_flutter/aries_design_flutter.dart';
 import 'package:aries_design_flutter/map/index.dart';
 import 'package:flutter_map/plugin_api.dart';
 
-class AriMapMarkerLayer extends StatelessWidget {
+class AriMapMarkerLayer extends StatefulWidget {
   AriMapMarkerLayer({
-    ValueKey<String>? key,
+    Key? key,
     required this.layerKey,
     required this.markers,
     this.buildMarker,
@@ -20,29 +20,42 @@ class AriMapMarkerLayer extends StatelessWidget {
 
   final BuildMarker? buildMarker;
 
+  @override
+  State<AriMapMarkerLayer> createState() => _AriMapMarkerLayer();
+}
+
+class _AriMapMarkerLayer extends State<AriMapMarkerLayer> {
   final ValueNotifier<int> rebuild = ValueNotifier(0);
+
+  late AriMapBloc mapBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    mapBloc = context.read<AriMapBloc>();
+  }
 
   @override
   Widget build(BuildContext context) {
-    AriMapBloc mapBloc = context.read<AriMapBloc>();
     return Stack(
       children: [
         BlocListener<AriMapBloc, AriMapState>(
           bloc: mapBloc,
           listener: (context, state) {
-            if (state is CreateMarkerState && state.layerKey == layerKey) {
-              markers[state.marker.key] = state.marker;
+            if (state is CreateMarkerState &&
+                state.layerKey == widget.layerKey) {
+              widget.markers[state.marker.key] = state.marker;
               rebuild.value += 1; // 修改 ValueNotifier 的值
             } else if (state is UpdateMarkerState &&
-                state.layerKey == layerKey) {
-              markers[state.marker.key] = state.marker;
+                state.layerKey == widget.layerKey) {
+              widget.markers[state.marker.key] = state.marker;
               rebuild.value += 1; // 修改 ValueNotifier 的值
             } else if (state is SelectdMarkerState &&
-                state.marker.layerkey == layerKey) {
+                state.marker.layerkey == widget.layerKey) {
               rebuild.value += 1; // 修改 ValueNotifier 的值
             } else if (state is RemoveMarkerState &&
-                state.marker.layerkey == layerKey) {
-              markers.remove(state.marker.key);
+                state.marker.layerkey == widget.layerKey) {
+              widget.markers.remove(state.marker.key);
               rebuild.value += 1; // 修改 ValueNotifier 的值
             }
           },
@@ -50,7 +63,7 @@ class AriMapMarkerLayer extends StatelessWidget {
             valueListenable: rebuild,
             builder: (context, rebuild, child) {
               return MarkerLayer(
-                key: layerKey,
+                key: widget.layerKey,
                 markers: buildMakrerList(),
               );
             },
@@ -63,7 +76,7 @@ class AriMapMarkerLayer extends StatelessWidget {
   /// 构建该图层的所有marker
   List<Marker> buildMakrerList() {
     List<AriMapMarker> markerList = [];
-    markers.forEach((key, item) {
+    widget.markers.forEach((key, item) {
       markerList.add(item);
     });
     sortList(markerList);
@@ -84,7 +97,7 @@ class AriMapMarkerLayer extends StatelessWidget {
       builder: (context) => _MarkerBuilder(
         key: marker.key,
         marker: marker,
-        buildMarker: buildMarker,
+        buildMarker: widget.buildMarker,
       ),
     );
   }

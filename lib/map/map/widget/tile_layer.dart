@@ -5,14 +5,26 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class AriMapTileLayer extends StatelessWidget {
-  AriMapTileLayer({
+class AriMapTileLayer extends StatefulWidget {
+  const AriMapTileLayer({
     Key? key,
-  });
+  }) : super(key: key);
+
+  @override
+  State<AriMapTileLayer> createState() => _AriMapTileLayer();
+}
+
+class _AriMapTileLayer extends State<AriMapTileLayer> {
+  late AriMapBloc mapBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    mapBloc = BlocProvider.of<AriMapBloc>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final mapBloc = context.read<AriMapBloc>();
     return Scaffold(
       body: BlocBuilder<AriMapBloc, AriMapState>(
         bloc: mapBloc,

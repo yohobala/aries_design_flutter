@@ -161,17 +161,11 @@ class _AriMapState extends State<AriMap>
     WidgetsBinding.instance.addObserver(this);
 
     // NOTE:
-    // 针对底部导航栏的监听
+    // 获得底部导航栏高度
     AriBottonNavigationBarState? state = bottomNavigationBarKey.currentState;
-    // controller = state?.controller;
     offset = state?.offset;
-    // state?.widget.showNavigationBar?.addListener(() {
-    //   if (state.widget.showNavigationBar?.value ?? true) {
-    //     controller?.reverse();
-    //   } else {
-    //     controller?.forward();
-    //   }
-    // });
+
+    mapBloc = BlocProvider.of<AriMapBloc>(context);
   }
 
   @override
@@ -185,7 +179,6 @@ class _AriMapState extends State<AriMap>
 
   @override
   Widget build(BuildContext context) {
-    mapBloc = BlocProvider.of<AriMapBloc>(context);
     mapController = mapBloc.mapController;
 
     // NOTE:
