@@ -83,6 +83,12 @@ class AriNavigatorGroupState extends State<AriNavigatorGroup>
       children: elements,
     );
   }
+
+  @override
+  void dispose() {
+    widget.selectedIndex.removeListener(() {});
+    super.dispose();
+  }
 }
 
 /// 生成和管理一个Navigator，处理页面的导航
