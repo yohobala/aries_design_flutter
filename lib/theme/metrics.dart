@@ -91,6 +91,8 @@ class AriThemeDuration {
 
   /// 地图动画时间
   final Duration mapDuration = _Duration.long4;
+
+  final Duration heroDuration = _Duration.long2;
 }
 
 class AriThemeIconSize {
