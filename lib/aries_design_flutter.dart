@@ -19,6 +19,7 @@ export 'button/index.dart';
 export 'form/index.dart';
 export 'widgets/index.dart';
 export 'tabs/index.dart';
+export 'container/index.dart';
 
 import 'package:logger/logger.dart';
 
