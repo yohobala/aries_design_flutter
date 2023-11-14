@@ -26,6 +26,7 @@ migrate_working_dir/
 *.lock
 generated_plugin_registrant.*
 .metadata
+.test/
 
 # 符号相关
 app.*.symbols
